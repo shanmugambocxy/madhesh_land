@@ -1,0 +1,939 @@
+<div class="stepperAlign">
+  <mat-card style="width: 80%;">
+    <mat-stepper [linear]="isLinear" #mystepper [selectedIndex]="index">
+      <mat-step [stepControl]="personalInfoFormGroup">
+        <ng-template matStepLabel>
+          Enter Land Details</ng-template>
+
+        <form [formGroup]="personalInfoFormGroup">
+          <div class="row mb-3" *ngIf="edit || view">
+            <label class="col-sm-9 col-form-label" style="font-weight: bold">Unique Id:</label>
+            <div class="col-sm-10">
+              <input matInput type="text" class="form-control" formControlName="unique_code" required />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-5 col-form-label" style="font-weight: bold">Type of Division:</label>
+            <div class="col-sm-10">
+              <mat-select formControlName="citynrural" class="form-control">
+                <mat-option *ngFor="let row of types" [value]="row.value">{{row.label}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="submitted && personalInfoFormGroup.get('citynrural')?.errors?.required">{{'Division type
+                is
+                required'}}</mat-error>
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label class="col-sm-5 col-form-label" style="font-weight: bold">Name of the Circle:</label>
+
+            <div class="col-sm-10 mb-1">
+              <input matInput type="text" class="form-control" formControlName="circle" required />
+            </div>
+            <mat-error *ngIf="submitted && personalInfoFormGroup.get('circle')?.errors?.required">{{'Circle is
+              required'}}</mat-error>
+
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-9 col-form-label" style="font-weight: bold">Name of the Division:</label>
+            <div class="col-sm-10 mb-1">
+              <input matInput type="text" class="form-control" formControlName="division" required />
+            </div>
+            <mat-error *ngIf="submitted && personalInfoFormGroup.get('division')?.errors?.required">{{'Division is
+              required'}}</mat-error>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-9 col-form-label" style="font-weight: bold">Name of the Village:</label>
+            <div class="col-sm-10 mb-1">
+              <input matInput type="text" class="form-control" formControlName="village" required />
+            </div>
+            <mat-error *ngIf="submitted && personalInfoFormGroup.get('village')?.errors?.required">{{'Village is
+              required'}}</mat-error>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-9 col-form-label" style="font-weight: bold">Name of the Land:</label>
+            <div class="col-sm-10 mb-1">
+              <input matInput type="text" class="form-control" formControlName="land_name" required />
+            </div>
+            <mat-error *ngIf="submitted && personalInfoFormGroup.get('land_name')?.errors?.required">{{'Land is
+              required'}}</mat-error>
+          </div>
+
+
+          <div class="row mb-3">
+            <label class="col-sm-9 col-form-label" style="font-weight: bold">Geo Tagging:
+            </label>
+            <div class="col-sm-10 mb-1">
+              <a *ngIf="edit || view" [href]="personalInfoFormGroup.get('geo_tagging_geo_fencing').value"
+                target="_blank"><i class="bi bi-geo-alt-fill" style="color: red;font-size: 32px;"></i></a>
+              <input matInput type="text" *ngIf="!edit && !view" class="form-control"
+                formControlName="geo_tagging_geo_fencing" required />
+            </div>
+            <mat-error
+              *ngIf="submitted && personalInfoFormGroup.get('geo_tagging_geo_fencing')?.errors?.required">{{'Geo
+              Tagging is
+              required'}}</mat-error>
+          </div>
+
+          <div class="mb-1 flex-b">
+            <button mat-flat-button class="primary" [disabled]="" (click)="getformone(mystepper,1)">Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="LPSFormGroup">
+        <ng-template matStepLabel>LPS</ng-template>
+        <form [formGroup]="LPSFormGroup">
+          <div formArrayName="files">
+            <div *ngFor="let fileGroup of filesArrayOne.controls; let i = index" [formGroupName]="i" class="file-group">
+              {{"File:"}} {{i+1}}
+              {{filrGroup}}
+              <div class="upload-wrapper row">
+                <div class="col-4">
+                  <label class="file-label">
+                    <input type="file" class="file-input" (change)="onFileChange($event, i,'lps')">
+                    <span class="file-text">{{getFileName(i,'lps')}}</span>
+                  </label>
+                </div>
+                <div class="col">
+                  <i class="bi bi-upload" *ngIf="!view" style="color: red; font-size: 32px;"
+                    (click)="triggerUpload(i,'lps')"></i>
+                  <i class="bi bi-patch-plus-fill add-icon" style="font-size: 32px;" (click)="addNewFileGroup('lps')"
+                    *ngIf="!view"></i>
+                  <span *ngIf="!view"><i *ngIf="filesArrayOne.length > 1 && i!==0" class="bi bi-trash-fill delete-icon"
+                      style="font-size: 30px;" (click)="deleteFileGroup(i,'lps')"></i></span>&nbsp;&nbsp;&nbsp;
+                  <a *ngIf="view"><i class="bi bi-box-arrow-up-right" style="color: #3FB8DE;font-size: 21px;"
+                      (click)="getData(fileGroup,'lps')"></i></a>
+                  <a [href]="getFileUrl(i,'lps')" matTooltip="Download File" *ngIf="view"
+                    download="{{getFileName(i,'lps')}}">&nbsp;&nbsp;
+                    <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="mb-1 flex-b">
+          <button mat-flat-button class="warn" [disabled]="" matStepperPrevious>Previous</button>
+
+          <button mat-flat-button class="primary" [disabled]="" matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="FMBInfoFormGroup">
+        <ng-template matStepLabel>FMB</ng-template>
+        <form [formGroup]="FMBInfoFormGroup">
+          <div formArrayName="files">
+            <div *ngFor="let fileGroup of filesArrayTwo.controls; let i = index" [formGroupName]="i" class="file-group">
+              {{"File:"}} {{i+1}}
+              <div class="upload-wrapper row">
+                <div class="col-4">
+                  <label class="file-label">
+                    <input type="file" *ngIf="!view" class="file-inputfmb" (change)="onFileChange($event, i,'fmb')">
+                    <span class="file-text">{{getFileName(i,'fmb')}}</span>
+                  </label>
+                </div>
+                <div class="col">
+                  <i class="bi bi-upload" *ngIf="!view" style="color: red; font-size: 32px;"
+                    (click)="triggerUpload(i,'fmb')"></i>
+                  <i class="bi bi-patch-plus-fill add-icon" style="font-size: 32px;" (click)="addNewFileGroup('fmb')"
+                    *ngIf="!view"></i>
+                  <span *ngIf="!view"><i *ngIf="filesArrayTwo.length > 1 && i!==0" class="bi bi-trash-fill delete-icon"
+                      style="font-size: 32px;" (click)="deleteFileGroup(i,'fmb')"></i></span>&nbsp;&nbsp;
+                  <a *ngIf="view"><i class="bi bi-box-arrow-up-right" style="color: #3FB8DE;font-size: 21px;"
+                      (click)="getData(fileGroup,'fmb')"></i></a>&nbsp;
+                  <a [href]="getFileUrl(i,'fmb')" matTooltip="Download File" *ngIf="view"
+                    download="{{getFileName(i,'fmb')}}">
+                    <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+        <div class="mb-1 flex-b">
+          <button mat-flat-button class="warn" [disabled]="" matStepperPrevious>Previous</button>
+
+          <button mat-flat-button class="primary" [disabled]="" matStepperNext>Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="FourOneFormGroup">
+        <ng-template matStepLabel>4(1)</ng-template>
+        <form [formGroup]="FourOneFormGroup">
+          <div formArrayName="files">
+            <div *ngFor="let fileGroup of filesArrayThree.controls; let i = index" [formGroupName]="i"
+              class="file-group">
+              {{"File:"}} {{i+1}}
+              <div class="upload-wrapper row">
+                <div class="col-4">
+                  <label class="file-label">
+                    <input type="file" *ngIf="!view" class="file-input4One" (change)="onFileChange($event, i,'4One')">
+                    <span class="file-text">{{getFileName(i,'4One')}}</span>
+                  </label>
+                </div>
+                <div class="col">
+                  <i class="bi bi-upload" *ngIf="!view" style="color: red; font-size: 32px;"
+                    (click)="triggerUpload(i,'4One')"></i>
+                  <i class="bi bi-patch-plus-fill add-icon" style="font-size: 32px;" (click)="addNewFileGroup('4One')"
+                    *ngIf="!view"></i>
+                  <span *ngIf="!view"><i *ngIf="filesArrayThree.length > 1 && i!==0"
+                      class="bi bi-trash-fill delete-icon" style="font-size: 32px;"
+                      (click)="deleteFileGroup(i,'4One')"></i></span>&nbsp;&nbsp;
+                  <a *ngIf="view"><i class="bi bi-box-arrow-up-right" style="color: #3FB8DE;font-size: 21px;"
+                      (click)="getData(fileGroup,'fmb')"></i></a>&nbsp;
+                  <a [href]="getFileUrl(i,'4One')" matTooltip="Download File" *ngIf="view"
+                    download="{{getFileName(i,'4One')}}">
+                    <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+        <div class="mb-1 flex-b">
+          <button mat-flat-button class="warn" [disabled]="" matStepperPrevious>Previous</button>
+
+          <button mat-flat-button class="primary" [disabled]="" matStepperNext>Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="SixDDFormGroup">
+        <ng-template matStepLabel>6DD</ng-template>
+        <form [formGroup]="SixDDFormGroup">
+          <div formArrayName="files">
+            <div *ngFor="let fileGroup of filesArrayFour.controls; let i = index" [formGroupName]="i"
+              class="file-group">
+              {{"File:"}} {{i+1}}
+              <div class="upload-wrapper row">
+                <div class="col-4">
+                  <label class="file-label">
+                    <input type="file" *ngIf="!view" class="file-input6DD" (change)="onFileChange($event, i,'6DD')">
+                    <span class="file-text">{{getFileName(i,'6DD')}}</span>
+                  </label>
+                </div>
+                <div class="col">
+                  <i class="bi bi-upload" *ngIf="!view" style="color: red; font-size: 32px;"
+                    (click)="triggerUpload(i,'6DD')"></i>
+                  <i class="bi bi-patch-plus-fill add-icon" style="font-size: 32px;" (click)="addNewFileGroup('6DD')"
+                    *ngIf="!view"></i>
+                  <span *ngIf="!view"><i *ngIf="filesArrayFour.length > 1 && i!==0" class="bi bi-trash-fill delete-icon"
+                      style="font-size: 32px;" (click)="deleteFileGroup(i,'6DD')"></i></span>&nbsp;&nbsp;
+                  <a *ngIf="view"><i class="bi bi-box-arrow-up-right" style="color: #3FB8DE;font-size: 21px;"
+                      (click)="getData(fileGroup,'fmb')"></i></a>&nbsp;
+                  <a [href]="getFileUrl(i,'6DD')" matTooltip="Download File" *ngIf="view"
+                    download="{{getFileName(i,'6DD')}}">
+                    <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="mb-1 flex-b">
+          <button mat-flat-button class="warn" [disabled]="" matStepperPrevious>Previous</button>
+
+          <button mat-flat-button class="primary" [disabled]="" matStepperNext>Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="leftOverGroup">
+        <ng-template matStepLabel>Left over</ng-template>
+
+        <mat-accordion>
+          <mat-expansion-panel  *ngFor="let item of leftOver">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Left over Between &nbsp;&nbsp;{{item.file1}}&nbsp;&nbsp; and
+                &nbsp;&nbsp;{{item.file2}}&nbsp;&nbsp;</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <form [formGroup]="leftOverGroup">
+              <mat-label>Survey No:</mat-label>
+              <mat-form-field>
+                <mat-chip-list>
+                  <mat-chip *ngFor="let number of item.surveyNumber" [removable]="true"
+                    (removed)="removeSurveyNumber(number)">
+                    {{ number }}
+                    <!-- <mat-icon matChipRemove>cancel</mat-icon> -->
+                  </mat-chip>
+                  <input matInput [(ngModel)]="newSurveyNumber" (keydown.enter)="addSurveyNumber()">
+                </mat-chip-list>
+              </mat-form-field>&nbsp;&nbsp;
+              <mat-label>Extent No:</mat-label>
+
+              <mat-form-field>
+
+                <mat-chip-list>
+                  <mat-chip *ngFor="let extent of item.extent" [removable]="true" (removed)="removeExtent(extent)">
+                    {{ extent }}
+                    <!-- <mat-icon matChipRemove>cancel</mat-icon> -->
+                  </mat-chip>
+                  <input matInput [(ngModel)]="newExtent" (keydown.enter)="addExtent()">
+                </mat-chip-list>
+              </mat-form-field>
+
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div class="mb-1 flex-b" style="margin-top: 15px;">
+          <button mat-flat-button class="warn" [disabled]="" matStepperPrevious>Previous</button>
+
+          <button mat-flat-button class="primary" [disabled]="" matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="awardInfoFormGroup">
+        <ng-template matStepLabel>Award Information</ng-template>
+
+        <mat-accordion>
+          <ng-container *ngFor="let item of awardLists; let i = index">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Award Details: {{i+1}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <form [formGroup]="awardInfoFormGroup">
+                <div formArrayName="awardsDet">
+                  <div [formGroupName]="i">
+                   
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Award Amount:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_award_amount">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Award Date:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_date">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Civil Court Deposit:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_disbursement_civil_court_deposit">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Direct Payment:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_disbursement_direct_payment">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Revenue Deposit:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_disbursement_revenue_deposit">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Extent:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_extent">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Award Number:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_no">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Award Notified Person:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_notified_person">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Survey Number:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="award_details_survey_nos">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Land Name:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="landname">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Available Extent:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extavailable_extent">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Available  Survey:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extavailable_survey_nos">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Court Case:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_court_case">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Encroachment:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_encroachment">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Extent:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_extent">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession issued:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_noc_issued">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Quashed:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_quashed">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Reconveyed:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_reconveyed">
+                      </div>
+                    </div> 
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Scattered:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_scattered">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession not survey number:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_survey_nos">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession want-of-approach:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_wantofapproach">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Extent number:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extent">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Scheme Extent:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_schimpl_extent">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession SCheme survey number:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_schimpl_survey_nos">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession Scattered:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_scattered">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession not survey number:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pho_extcannot_survey_nos">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Possession Not Handed Over Case:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pnho_court_case">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession not Handed Encroachment:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pnho_encroachment">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Possession Not Handed Quashed:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pnho_quashed">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession not Handed Encumbrance:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pnho_without_encumbrance">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="section-b col-md-6">
+                        <mat-label>Possession Not Handed Extend:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pnho_extent">
+                      </div>
+                      <div class="section-b col-md-6">
+                        <mat-label>Pocession not Handed Survey:</mat-label>
+                        <input class="input" type="text" name="Search" matInput formControlName="pnho_survey_nos">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+
+
+              <!-- Display values from files array -->
+              <div *ngFor="let file of item.awardOtherDetailsList;let i = index" style="margin: 5px;">
+                <div class="row">
+                  <span style="margin: 10px 0px 10px 0px !important;">File:{{i+1}}</span>
+                  <div class="col-6">
+                    {{ file.fileName }}&nbsp;&nbsp;
+                  </div>
+                  <div class="col-6">
+                    <a [href]="" matTooltip="Download File" *ngIf="view">
+                      <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+          <!-- <mat-expansion-panel [expanded]="isPanel4Expanded" (opened)="togglePanel4()" (closed)="togglePanel4()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Award Information</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <form [formGroup]="awardInfoFormGroup">
+              <ng-template matStepLabel>Award Information</ng-template>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Number:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Date:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="12-12-2012" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Survey Numbers:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent(in acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+
+                <div class="col-sm-10">
+                  <label class="col-sm-9 col-form-label" style="font-weight: bold">Boundary PDF File:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Notified Person:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="Ramesh" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Award Amount_Direct Payment:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Award Amount_Revenue Deposit:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Award Amount_Civil Court
+                  Deposit:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-9 col-form-label" style="font-weight: bold;">Possession Taken Over:</label>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Survey Numbers:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent (in acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Scheme Implemented_Survey
+                  Numbers:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Scheme Implemented_Extent (in
+                  acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent cannot be utilized for Scheme
+                  Implemented_Survey Numbers:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent cannot be utilized for Scheme
+                  Implemented_Extent (in acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered by Court Case(in
+                  acres)</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">court case - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Court Case - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered under Want of approach
+                  road:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Want of approach road - Legal
+                  Proceedings Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Want of approach road -
+                    Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered under
+                  Encroachment:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Encroachment - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Encroachment - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered under Scattered:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Scattered - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Scattered - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered under Quashed:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Quashed - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Quashed - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered under
+                  Reconveyed:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Reconveyed - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Reconveyed - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent covered under NOC
+                  Issued:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">NOC Issued - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">NOC Issued - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent available for scheme
+                  implementation_Survey Numbers:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent available for scheme
+                  implementation_Extent (in acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-9 col-form-label" style="font-weight: bold;">Possession Not Handed Over:</label>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-9 col-form-label" style="font-weight: bold">Survey Numbers:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent (in acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered by court case(in
+                  acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">court case - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Court Case - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered under encroachment(in
+                  acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Encroachment - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Encroachment - Document:</label>
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered under quashed(in
+                  acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Quashed - Legal Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Quashed - Document:</label>
+
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+
+
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered under Without
+                  encumbrance(in acres):</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="1234" disabled />
+
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-sm-10 col-form-label" style="font-weight: bold">Without encumbrance - Legal
+                  Proceedings
+                  Status:</label>
+                <div class="col-sm-10">
+                  <input matInput type="text" class="form-control" value="O.S" disabled />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Without encumbrance -
+                    Document:</label>
+
+                  <i class="icon-copy bi bi-file-earmark-pdf-fill" style=color:red> Download Attachment</i>
+                </div>
+
+              </div>
+
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </form>
+          </mat-expansion-panel> -->
+        </mat-accordion>
+        <div class="mb-1 flex-b" style="margin-top: 15px;">
+          <button mat-flat-button class="warn" [disabled]="" matStepperPrevious>Previous</button>
+
+          <button mat-flat-button class="primary" [disabled]="" (click)="back()">Back</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</div>

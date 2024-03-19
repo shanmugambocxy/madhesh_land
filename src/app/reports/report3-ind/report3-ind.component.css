@@ -1,0 +1,114 @@
+/* Table-2 CSS */
+.table-2 tr.mat-mdc-footer-row td {
+    font-weight: 600;
+    font-size: 12px;
+    text-wrap: nowrap;
+  }
+  
+  .btn-light {
+    background-color: rgba(63, 184, 222, 0.28);
+    border-color: rgba(63, 184, 222, 0.28);
+    width: 241.8px;
+    height: 69px;
+    border-radius: 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 137.5%;
+  }
+  
+  .doh {
+    pointer-events: none;
+  }
+  
+  th {
+    background-color: #3FB8DE;
+    padding: 7px;
+    border: 1px solid rgb(136, 134, 134);
+    text-align: center;
+  
+  }
+  
+  table tr:nth-child(odd) td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 1px solid rgb(136, 134, 134);
+    border-radius: 50px;
+  }
+  
+  table tr:nth-child(even) td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 1px solid rgb(136, 134, 134);
+  
+    background-color: #f2f2f2;
+  }
+  
+  td a i {
+    padding-right: 15px;
+  }
+  
+  
+  #example2 {
+    display: block;
+    width: 20%;
+  }
+  
+  #example1 {
+    display: block;
+    width: 25%;
+  }
+  
+  .cdk-overlay-connected-position-bounding-box {
+  
+    .cdk-overlay-pane {
+      transform: none !important;
+      overflow-x: hidden;
+      box-sizing: content-box;
+      /* padding: 4px 4px 10px 5px;
+      margin-left: -5px;
+      margin-top: -2px; */
+  
+      .mat-select-panel {
+        /* margin-top: 27px; */
+        background: #fff;
+        max-height: 100px;
+        min-width: 100% !important;
+      }
+    }
+  }
+
+  .card-stat {
+    background-color: #fff;
+    height: 90%;
+    border-radius: 18px;
+    /* border: 1px solid #ddd; */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    text-align: center;
+    margin: 10px;
+  
+  }
+
+  .title {
+    text-align: center;
+    font-weight: 600;
+  }
+  .rate {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .doh {
+    pointer-events: none;
+  }
+
+  .nodata{
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+  }

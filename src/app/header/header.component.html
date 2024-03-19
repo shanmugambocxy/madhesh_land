@@ -1,0 +1,35 @@
+<!--Header Starts -->
+<header id="header" class="header d-flex align-items-center">
+
+  <div class="row d-flex align-items-center justify-content-between" style="width: 100%;z-index: 999999999;">
+    <span class="col">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img [routerLink]="['']" src="../../assets/img/tnhb_logo.png" alt="">
+      </a>
+    </span>
+    <span class="col" style="display: flex;justify-content: space-around;">
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a [routerLink]="['/land/home']" routerLinkActive="active">Home</a></li>
+          <li><a [routerLink]="['/land/addver2']" routerLinkActive="active">New Land Record</a></li>
+          <li class="dropdown"><a [routerLink]="[]" routerLinkActive="active"><span>Report</span>
+              <i class="bi bi-chevron-down dropdown-indicator"></i><a [routerLink]="['/report2LP']"
+                routerLinkActive="active"></a></a>
+            <ul>
+              <li><a [routerLink]="['/report1LA']">Land Acquired</a></li>
+              <li><a [routerLink]="['/report2LP']">Legal Proceedings</a></li>
+              <li><a [routerLink]="['/report3']">Individual</a></li>
+            </ul>
+          </li>
+          <li><a [routerLink]="['']" (click)="logout()">Logout</a></li>
+
+        </ul>
+      </nav><!-- .navbar -->
+    </span>
+    <!-- <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i> -->
+  </div>
+</header>
+<!-- End Header -->
+
+<img [src]="image" />

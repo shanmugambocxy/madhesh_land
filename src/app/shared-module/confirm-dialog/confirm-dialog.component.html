@@ -1,0 +1,38 @@
+<ng-container *ngIf="data.from === 'delete'">
+    <mat-dialog-content>
+      <p class="fs_14 text-center mb-3 ">{{'Are you sure want to delete?'}}</p>
+      <div class="row w-100 mx-0 justify-content-center" style="display: flex;justify-content: center;">
+        <button mat-flat-button color="primary"  (click)="confirmDelete()" class="mr-2">
+          {{'Yes' }}
+        </button>
+        <button mat-flat-button color="warn"  (click)="cancelDelete()">
+          {{'No'}}
+        </button>
+      </div>
+    </mat-dialog-content>
+  </ng-container>
+ 
+  
+  <ng-container *ngIf="data.from==='viewfileDet'">
+    <mat-dialog-content >
+      <div class="row">
+        <div class="section-b col-md-12">
+            <mat-label>Ref No:</mat-label>
+            <input class="input" type="text" name="Search" matInput [readonly]="data.from==='viewfileDet' ? true : false" [value]="data.data.refNo" >
+       </div>
+       <div class="section-b col-md-12">
+        <mat-label>Survey No:</mat-label>
+        <input class="input" type="text" name="Search" matInput [readonly]="data.from==='viewfileDet' ? true : false" [value]="data.data.surveyerNo" >
+   </div>
+   <div class="section-b col-md-12">
+    <mat-label>Extent No:</mat-label>
+    <input class="input" type="text" name="Search" matInput [value]="data.data.extent" [readonly]="data.from==='viewfileDet' ? true : false">
+</div>
+        </div>
+              <div class="row w-100 mx-0 justify-content-center" style="margin: 10px;">
+        <button mat-flat-button color="primary" (click)="cancelDelete()" class="mr-2">
+          {{'Ok' }}
+        </button>
+      </div>
+    </mat-dialog-content>
+  </ng-container>

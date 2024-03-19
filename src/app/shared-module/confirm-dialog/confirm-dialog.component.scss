@@ -1,0 +1,22 @@
+::ng-deep .mat-mdc-unelevated-button.mat-primary {
+    width: 100px!important;
+    height: 40px;
+}
+::ng-deep .mat-mdc-unelevated-button.mat-warn {
+    width: 100px!important;
+    height: 40px;
+}
+.disflex{
+    display: flex;
+justify-content: center;
+gap: 12px;}
+
+.section-b .input {
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #f3f3f9;
+    width: 100%;
+    line-height: 24px;
+    margin: 10px;
+}

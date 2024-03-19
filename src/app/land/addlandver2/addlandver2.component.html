@@ -1,0 +1,2909 @@
+<div class="stepperAlign ">
+  <div class="loader" *ngIf="isLoader"></div>
+  <mat-card>
+    <!-- <button *ngIf="edit" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+    (click)="saveApi()">Update</button> -->
+    <mat-stepper>
+
+      <!-- First Tab Rendering Done - Edit - Update Todo -->
+
+      <mat-step [stepControl]="personalInfoFormGroup">
+        <form [formGroup]="personalInfoFormGroup">
+
+          <ng-template matStepLabel>Enter Land Details</ng-template>
+
+          <div class="row" style="margin-top: 2rem;">
+            <div class="row">
+
+              <div class="col-6">
+                <mat-form-field class="example-full-width" *ngIf="!this.view">
+                  <mat-label>Name of the Circle:</mat-label>
+                  <mat-select formControlName="v_NAME_OF_CIRCLE" (ngModelChange)="getCirDivDisVil()">
+                    <mat-option value="">Select</mat-option>
+                    <mat-option *ngFor="let circle of allCircleDropdown" [value]="circle"> {{ circle }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" *ngIf="this.view">
+                  <mat-label>Name of the Circle:</mat-label>
+                  <input matInput type="text" formControlName="v_NAME_OF_CIRCLE" [readonly]="this.view">
+                  <mat-error *ngIf="personalInfoFormGroup.controls['v_NAME_OF_CIRCLE'].errors?.required">
+                    Circle is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class=" col-6">
+                <mat-form-field class="example-full-width" *ngIf="!this.view">
+                  <mat-label>Name of the Division:</mat-label>
+                  <!-- [diabled]="personalInfoFormGroup.controls['v_NAME_OF_CIRCLE'].value=='' " -->
+                  <mat-select formControlName="v_NAME_OF_DIVISION" (ngModelChange)="getDistrict()">
+                    <mat-option *ngFor="let division of allCircleDivisionDdr" [value]="division">
+                      {{ division }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="personalInfoFormGroup.controls['v_NAME_OF_DIVISION'].errors?.required">
+                    Division is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" *ngIf="this.view">
+                  <mat-label>Name of the Division:</mat-label>
+                  <input matInput type="text" formControlName="v_NAME_OF_DIVISION" [readonly]="this.view">
+                </mat-form-field>
+              </div>
+              <!-- <div class="col-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Geo Tagging:</mat-label>
+                    <input matInput type="text" formControlName="v_NAME_OF_GEO_TAGGING" [readonly]="this.view">
+                  </mat-form-field>
+                </div> -->
+
+              <div class=" col-6">
+                <mat-form-field class="example-full-width" *ngIf="!this.view">
+                  <mat-label>Name of the District:</mat-label>
+                  <mat-select formControlName="v_NAME_OF_DISTRICT" (ngModelChange)="getVillage()">
+                    <mat-option *ngFor="let district of districtSelectList" [value]="district">
+                      {{ district }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].errors?.required">
+                    District is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" *ngIf="this.view">
+                  <mat-label>Name of the District:</mat-label>
+                  <input matInput type="text" formControlName="v_NAME_OF_DISTRICT" [readonly]="this.view">
+                </mat-form-field>
+              </div>
+
+              <div class=" col-6">
+                <mat-form-field class="example-full-width" *ngIf="!this.view">
+                  <mat-label>Name of the Village:</mat-label>
+                  <mat-select formControlName="v_VILLAGE">
+                    <mat-option *ngFor="let village of villageSelectList" [value]="village">
+                      {{ village }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="personalInfoFormGroup.controls['v_VILLAGE'].errors?.required">
+                    Village is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" *ngIf="this.view">
+                  <mat-label>Name of the Village::</mat-label>
+                  <input matInput type="text" formControlName="v_VILLAGE" [readonly]="this.view">
+                </mat-form-field>
+              </div>
+
+              <div class=" col-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Name of the Scheme:</mat-label>
+                  <input matInput type="text" formControlName="v_NAME_OF_SCHEME" placeholder="" [readonly]="this.view">
+                  <mat-error *ngIf="personalInfoFormGroup.controls['v_NAME_OF_SCHEME'].errors?.required">
+                    Scheme is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+
+
+            <!-- <div class="row">
+              <div class="col-md-4">
+                <mat-label>Image and Video Upload:</mat-label>
+
+                <div>
+                  <div id="images">
+                    <div id="main-img-holder">
+                      <img id="main-img" [src]="mainImageSrc" alt="main-img" style="width:'340px';height:300px"
+                        *ngIf="mainImageSrc && !videoSelect " />
+                      <video id="main-video" style="width:'299px';height:300px" [src]="video"
+                        *ngIf="video && videoSelect" controls></video>
+                    </div>
+                    <div style="display:flex;flex-direction:row;width:100%;gap: 10px;">
+                      <div *ngFor="let image of images">
+                        <img class="sub-images" [src]="image" style="width:50px;height:50px;border: 1px solid #b5b0b0;
+                        border-radius: 5px;" alt="sub-img" (click)="selectImage(image)" />
+                        <mat-icon *ngIf="!view" style="position: relative;
+                            right:16px;
+                            bottom: 1rem;" (click)="removeImage(images.indexOf(image))">cancel</mat-icon>
+                      </div>
+                      <span *ngIf="video">
+                        <video id="main-video" style="width:52px;height:50px;border: 1px solid #b5b0b0;
+                        border-radius: 5px;" [src]="video" (click)="selectVideo(video)"></video><mat-icon *ngIf="!view"
+                          style="position: relative;
+                          right:15px;
+                          bottom: 2.5rem;" (click)="removeVideo()">cancel</mat-icon></span>
+                    </div>
+                    <div id="img-catalogue">
+                      <div class="image-upload" *ngIf="images?.length < 4">
+                        <label for="image-upload-input">
+                          <span class="cursor-pointer"><mat-icon *ngIf="!view">upload</mat-icon></span>
+                          <input type="file" accept="image/*,video/*" multiple (change)="onFileChangeimg($event)"
+                            #imageUploadInput id="image-upload-input" style="display:none">
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+
+            <div class="container row">
+              <!-- <div class="col-md-6">
+                <input type="file" (change)="onFileChanged($event)">
+
+              </div> -->
+
+
+              <!-- Upload Main Functionality -->
+              <!-- <div class="col-md-6">
+                <input type="button" (click)="onUpload()" value="upload">
+              </div> -->
+            </div>
+
+
+            <!-- <div class="container row">
+              <div class="col-md-6">
+                  <input type="file" (change)="onFileChanged($event)">
+
+              </div>
+              <div class="col-md-6">
+                  <input type="button" (click)="onUpload()" value="upload">
+              </div>
+          </div> -->
+
+
+
+
+            <!-- SINGLE CODE -->
+
+            <!-- <div class="container row">
+              <div class="col-md-6">
+                  <input type="file" (change)="onFileChanged($event)">
+
+              </div>
+              <div class="col-md-6">
+                  <input type="button" (click)="onUpload()" value="upload">
+              </div>
+          </div>
+
+          <div class="form-group">
+            <input type="button" (click)="getImage()" value="View Image" class="btn1">
+
+        </div>
+        <img [src]="imageSource">  -->
+
+
+
+
+
+
+
+
+          </div>
+          <button matStepperNext mat-button style="background-color: #3FB8DE;color: white;" class="float-end"
+            [disabled]="personalInfoFormGroup.invalid">Next</button>
+        </form>
+      </mat-step>
+
+      <!-- Second Tab -->
+
+      <!-- <mat-step [stepControl]="LPSFormGroup">
+        <mat-accordion>
+          <form [formGroup]="LPSFormGroup">
+            <ng-template matStepLabel>LPS1</ng-template>
+
+            <div formArrayName="expansionPanels">
+              <mat-expansion-panel [expanded]="true" *ngFor="let panel of expansionPanelsArray.controls; let i = index">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <label class="col-6 col-form-label" style="font-weight: bold;font-size: x-large">LPS File - {{i +
+                      1}}</label>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div [formGroup]="panel">
+                  <div class="row" style="margin:2px 0px 1rem 0px">
+                    <mat-label class="mb-2 sub-header">File Upload</mat-label>
+                    <div class="col-6">
+                      <input *ngIf="!view" type="file" class="form-control alignForms"
+                        (change)="onFileSelectedlps($event, i, 'file')">
+                      <div style="margin: 10px 0px 10px 0px;">
+                        <h5>File {{i+1}}</h5>
+                        <div *ngIf="view || edit">
+                          <span class="filename">{{ panel.get('v_FILE_NAME')?.value }} &nbsp;&nbsp;
+                            <a [href]="panel.get('v_FILE_PATH')?.value ? panel.get('v_FILE_PATH')?.value : 'javascript:void(0)'"
+                              matTooltip="Download File">&nbsp;&nbsp;
+                              <mat-icon
+                                style="color: red;font-size: 14px;position: relative;top: 10px;">get_app</mat-icon>Download
+                              Attachment
+                            </a>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div formArrayName="lpsFileDynamicValuesDetails">
+                    <label class="col-6 sub-header"
+                      *ngIf="panel.get('lpsFileDynamicValuesDetails').controls.length > 0">Add Files </label>
+                    <div *ngFor="let field of panel.get('lpsFileDynamicValuesDetails').controls; let j = index"
+                      [formGroupName]="j">
+                      <div class="displayFlex">
+                        <div class="col-6">
+
+                          <input *ngIf="!view" type="file" class="form-control mb-3 alignForm" id="inputGroupFile04"
+                            (change)="onLpsFileSelected($event, i, j)" aria-describedby="inputGroupFileAddon04"
+                            aria-label="Upload">
+                          <div style="margin: 10px;">
+                            <h5>Added File {{j+1}}</h5>
+                            <span class="filename">{{ field.get('v_FILE_NAME').value }} &nbsp;&nbsp;
+                              <a [href]="field.get('v_FILE_PATH').value ? field.get('v_FILE_PATH').value : 'javascript:void(0)'"
+                                matTooltip="Download File">&nbsp;&nbsp;
+                                <mat-icon
+                                  style="color: red;font-size: 14px;position: relative;top: 10px;">get_app</mat-icon>Download
+                                Attachment
+                              </a></span>
+                          </div>
+
+                        </div>
+                        <span>
+                          <mat-icon style="color: #3FB8DE;" *ngIf="!view" (click)="addFiles(i,'lps')"
+                            matTooltip="Add Files">add_circle</mat-icon>&nbsp;
+                          <mat-icon *ngIf="!view" style="color: red;"
+                            (click)="removeFiles(i, j,'lps','LPSFormGroup',i,'lpsFileDynamicValuesDetails')"
+                            matTooltip="Remove Files">cancel</mat-icon>&nbsp;&nbsp;
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-2" *ngIf="panel.get('lpsFileDynamicValuesDetails').controls.length === 0 && !view">
+                    <button (click)="addFiles(i,'lps')" mat-flat-button type="button" class="btn ms-2"
+                      color="primary">Add Files</button>
+                  </div>
+
+                 
+                  <div class="row col-7">
+
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Ref. No</mat-label>
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_REF_NO">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="row col-7">
+
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Extent</mat-label>
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                    </mat-form-field>
+                  </div>
+
+                  <div formArrayName="dynamicValuesDetails">
+                    <label class="col-6 sub-header" *ngIf="panel.get('dynamicValuesDetails').controls.length > 0">Custom
+                      Fields </label>
+                    <div *ngFor="let field of panel.get('dynamicValuesDetails').controls; let j = index"
+                      [formGroupName]="j">
+                      <div class="displayFlex">
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Field name</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_COLUMN_NAME"
+                              placeholder="Ex. Country">
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Field Value</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_VALUE_NAME"
+                              placeholder="Ex. India">
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-icon style="color: #3FB8DE;" *ngIf="!view" (click)="addRepeatedField(i,'lps')"
+                            matTooltip="Add Custom Field">add_circle</mat-icon>&nbsp;
+                          <mat-icon *ngIf="!view" style="color: red;"
+                            (click)="removeRepeatedField(i, j,'lps','LPSFormGroup',i,'dynamicValuesDetails')"
+                            matTooltip="Remove Custom Field">cancel</mat-icon>&nbsp;&nbsp;
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-2" *ngIf="panel.get('dynamicValuesDetails').controls.length === 0 && !view">
+                    <button (click)="addRepeatedField(i,'lps')" mat-flat-button type="button" class="btn ms-2"
+                      color="primary">Add Custom Fields</button>
+                  </div>
+
+
+
+                  <div formArrayName="lpsVillageDetails">
+                    <mat-label class="col-6 sub-header"
+                      *ngIf="panel.get('lpsVillageDetails').controls.length > 0">Village
+                      Details </mat-label>
+
+                    <div *ngFor="let field of panel.get('lpsVillageDetails').controls; let k = index"
+                      [formGroupName]="k">
+
+
+                      <label class="col-6 col-form-label"
+                        style="font-weight: bold;font-size:medium;position: relative;left: 17px;">Village Fields - {{k +
+                        1}}
+                        &nbsp; <mat-icon *ngIf="!view" style="color: #3FB8DE;" (click)="addVillageLps(i)"
+                          matTooltip="Add Viilage Field">add_circle</mat-icon>&nbsp;<mat-icon *ngIf="!view"
+                          style="color: red;"
+                          (click)="removeVillageLps(i, k,'lps','LPSFormGroup',i,'lpsVillageDetails')"
+                          matTooltip="Remove Village Field">cancel</mat-icon></label>
+
+
+                      <div class="row col-7">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Name of the Village:</mat-label>
+                          <mat-select formControlName="v_NAME_OF_VILLAGE">
+                            <mat-option *ngFor="let village of villages" [value]="village">{{ village }}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+
+                      <div class="displayFlex">
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Survey No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Extend No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                          </mat-form-field>
+                        </span>
+                      
+                      </div>
+                      
+
+                    </div>
+                  </div>
+                  <div class="mb-2" *ngIf="panel.get('lpsVillageDetails').controls.length === 0 && !view">
+                    <button (click)="addVillageLps(i)" mat-flat-button type="button" class="btn ms-2"
+                      color="primary">Add Village</button>
+                  </div>
+
+                </div>
+              </mat-expansion-panel>
+            </div>
+
+
+
+
+            <div class="row col-7" style="margin-top: 5px;" *ngIf="!view">
+              <button (click)="addExpansionPanel()" type="button" class="btn ms-2"
+                style="width: auto;background-color: #3FB8DE;color: white;">Add </button>
+              <button *ngIf="expansionPanelsArray.length > 1" (click)="removeLastRepeatedField('lps')" type="button"
+                class="btn ms-2" style="width: auto;background-color: red;color: white;">Remove</button>
+            </div>
+          </form>
+
+
+
+        </mat-accordion>
+        <div class="d-flex justify-content-end">
+          <button mat-button matStepperPrevious class="border">Previous</button>
+          <button mat-button matStepperNext style="background-color: #3FB8DE;color: white;" class="ms-2">Next</button>
+
+
+        </div>
+      </mat-step> -->
+
+
+
+
+      <!-- Third Tab -->
+
+
+      <mat-step [stepControl]="fourOneFormGroup">
+        <ng-template matStepLabel>4(1) && 6DD</ng-template>
+
+        <div style="display: flex;">
+
+
+          <section class="col-12 col-sm-12 col-md-6 col-lg-6" style="padding-top: 15px;">
+
+
+            <mat-accordion>
+
+              <form [formGroup]="fourOneFormGroup">
+
+                <div formArrayName="expansionPanels4">
+                  <mat-expansion-panel [expanded]="true"
+                    *ngFor="let panel of expansionPanelsArray4.controls; let i = index">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <label class="col-12 col-form-label" style="font-weight: bold;font-size: x-large;">4(1)
+                          Notification - {{i
+                          +
+                          1}}</label>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div [formGroup]="panel">
+                      <div class="row">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width4_1">
+                            <mat-label>Gazette Notification Ref. No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-5 mx-auto" *ngIf="!view" style="align-self: center;">
+                          <!-- <button class="file-upload-button ">
+                            <input type="file" #fileInput (change)="onFileSelected($event, i, 'file1')" />
+
+                          </button> -->
+                          <button class="btn btn-primary btn-width file-upload-button" type="button">
+                            <input type="file" #fileInput
+                              (change)="awsFileSelected($event, i, 'v_FILE_1_FILENAME','fourOne','file1')" />
+                          </button>
+                          <!-- <label class="file_name_style">&nbsp;&nbsp; File Upload 1</label><br>
+                          <br> -->
+
+                          <label style="margin-bottom: 0px;">&nbsp;&nbsp;
+                            {{panel.get('v_FILE_1_FILENAME')?.value}}</label>
+                          <!-- <mat-icon style="color: red;position: relative;z-index: 99999;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_1_FILENAME')?.value"
+                            (click)="removeFile(i,'fourOne','file1','v_FILE_1_FILENAME')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp; -->
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_1_FILENAME')?.value"
+                            (click)="removeFile(i,'fourOne','file1','v_FILE_1_FILENAME')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+
+                          <br>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_1_FILEPATH')?.value " target="_blank"
+                            *ngIf="panel.get('v_FILE_1_FILEPATH')?.value && (edit ||view)">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+
+
+                        </div>
+                        <div class="col-5 mx-auto" *ngIf="view">
+
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_1_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_1_FILEPATH')?.value && (edit ||view)">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                        <br>
+                        <!-- <div class="col-12">
+                          <label style="float: right;">{{panel.get('v_FILE_1_FILENAME')?.value}}</label>
+
+                        </div> -->
+
+                      </div>
+
+
+                      <!-- <div class="row col-12">
+                      <mat-form-field class="example-full-width4_1">
+                        <mat-label>4(1) Ref. No</mat-label>
+                        <input matInput [readonly]="this.view" type="text" formControlName="v_4_ONE_GO_REF_NO">
+                      </mat-form-field>
+                    </div> -->
+                      <div class="row " *ngIf="!view && !edit">
+                        <div class="col-7">
+
+                          <mat-form-field class="example-full-width4_1">
+                            <mat-label>4(1) G.O</mat-label>
+                            <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_4_ONE_GO">
+
+                          </mat-form-field>
+                        </div>
+                        <div class="col-5" style="align-self: center;">
+
+                          <button class="btn btn-primary btn-width file-upload-button" type="button">
+                            <input type="file" #fileInput2
+                              (change)="awsFileSelected($event, i, 'v_FILE_2_FILENAME','fourOne','file2')" />
+
+                          </button>
+                          <!-- <label class="file_name_style">&nbsp;&nbsp;File Upload 2</label> -->
+
+                          <label style="margin-bottom: 0px;">&nbsp;&nbsp;
+                            {{panel.get('v_FILE_2_FILENAME')?.value}}</label>
+                          <!-- <mat-icon style="color: red;position: relative;z-index: 999999;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value "
+                            (click)="removeFile(i,'fourOne','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp; -->
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value "
+                            (click)="removeFile(i,'fourOne','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+
+
+                        </div>
+
+
+                      </div>
+                      <div class="row " *ngIf="view">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width4_1">
+                            <mat-label> 4(1) G.O</mat-label>
+                            <input matInput type="text" formControlName="d_DATE_OF_4_ONE_GO" readonly>
+                          </mat-form-field>
+
+
+
+                        </div>
+                        <div class="col-5">
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_2_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_2_FILEPATH')?.value ">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+                      <div class="row " *ngIf="edit">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width4_1">
+                            <mat-label>4(1) G.O</mat-label>
+                            <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_4_ONE_GO">
+                          </mat-form-field>
+                          <br>
+
+
+                        </div>
+                        <div class="col-5" style="align-self: center;">
+
+                          <button class="btn btn-primary btn-width file-upload-button" type="button">
+                            <input type="file" #fileInput2
+                              (change)="awsFileSelected($event, i, 'v_FILE_2_FILENAME','fourOne','file2')" />
+
+                          </button>
+                          <!-- <label class="file_name_style">&nbsp;&nbsp;File Upload 2</label> -->
+
+                          <label style="margin-bottom: 0px;">&nbsp;&nbsp;
+                            {{panel.get('v_FILE_2_FILENAME')?.value}}</label>
+                          <!-- <mat-icon style="color: red;position: relative;z-index: 999999;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value"
+                            (click)="removeFile(i,'fourOne','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp; -->
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value"
+                            (click)="removeFile(i,'fourOne','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                          <br>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_2_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_2_FILEPATH')?.value">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+
+                        </div>
+
+                      </div>
+                      <!-- <div class="row col-7 py-2">
+                    <div class="row col-7" style="background-color: #f3f3f9;border-radius: 10px; width: 75%;">
+                      <label>Date of 4(1) G.O</label>
+                      <input type="date" formControlName="d_DATE_OF_4_ONE_GO" style="background-color: transparent;">
+                    </div>
+                  </div> -->
+                      <!-- <div class="row col-7" *ngIf="!view && !edit">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Date of Gazette Notification</mat-label>
+                      <input matInput [readonly]="this.view" [matDatepicker]="gazette"
+                        formControlName="d_DATE_OF_GAZETTE_NOTIFICATION">
+                      <mat-datepicker-toggle matIconSuffix [for]="gazette"></mat-datepicker-toggle>
+                      <mat-datepicker #gazette color="primary"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-7" *ngIf="view ">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Date of Gazette Notification</mat-label>
+                      <input matInput formControlName="d_DATE_OF_GAZETTE_NOTIFICATION" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-7" *ngIf="edit">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Date of Gazette Notification</mat-label>
+                      <input matInput [readonly]="this.view" formControlName="d_DATE_OF_GAZETTE_NOTIFICATION">
+                    </mat-form-field>
+                  </div> -->
+                      <!-- <div class="row col-12" *ngIf="!view && !edit">
+                      <mat-form-field class="example-full-width4_1">
+                        <mat-label>Date of Locality</mat-label>
+                        <input matInput [readonly]="this.view" [matDatepicker]="locality"
+                          formControlName="d_DATE_OF_LOCALITY">
+                        <mat-datepicker-toggle matIconSuffix [for]="locality"></mat-datepicker-toggle>
+                        <mat-datepicker #locality color="primary"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="row col-12" *ngIf="view">
+                      <mat-form-field class="example-full-width4_1">
+                        <mat-label>Date of Locality</mat-label>
+                        <input matInput formControlName="d_DATE_OF_LOCALITY" readonly>
+                      </mat-form-field>
+                    </div>
+                    <div class="row col-12" *ngIf="edit">
+                      <mat-form-field class="example-full-width4_1">
+                        <mat-label>Date of Locality</mat-label>
+                        <input matInput [readonly]="this.view" formControlName="d_DATE_OF_LOCALITY">
+                      </mat-form-field>
+                    </div> -->
+
+                      <!-- <div *ngIf="view || edit">
+                        <div
+                          *ngIf="fourOneTabDeatils?.length > 0 && fourOneTabDeatils[i]?.v_FILE_1_FILEPATH && fourOneTabDeatils[i]?.v_FILE_1_FILEPATH.length > 0">
+                          <div class="row col-12">
+                            <div class="col-sm-12">
+                              <mat-label style="font-weight: bold;font-size: large;">File 1</mat-label>
+                              <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                [href]="fourOneTabDeatils[i].v_FILE_1_FILEPATH" target="_blank">
+                                <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          *ngIf="fourOneTabDeatils?.length > 0 && fourOneTabDeatils[i]?.v_FILE_2_FILEPATH && fourOneTabDeatils[i]?.v_FILE_2_FILEPATH.length >0">
+                          <div class="row col-12">
+                            <div class="col-sm-12">
+                              <mat-label style="font-weight: bold;font-size: large;">File 2</mat-label>
+                              <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                [href]="fourOneTabDeatils[i].v_FILE_2_FILEPATH" target="_blank">
+                                <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+                      <!-- <button class="file-upload-button">
+                        <input type="file" #fileInput />
+                       
+                      </button> -->
+                      <!-- <div *ngIf="!view">
+                        <div class="row" style="margin:2px 0px 1rem 0px">
+                          <mat-label class="mb-2 sub-header">File Upload 1</mat-label>
+                          <div class="col-12">
+                            <input type="file" class="form-control alignForms4_1"
+                              (change)="onFileSelected($event, i, 'file1')">
+                          </div>
+                        </div>
+                        <div class="row" style="margin:2px 0px 1rem 0px">
+                          <mat-label class="mb-2 sub-header">File Upload 2</mat-label>
+                          <div class="col-12">
+                            <input type="file" class="form-control alignForms4_1"
+                              (change)="onFileSelected($event, i, 'file2')">
+                          </div>
+                        </div>
+                      </div> -->
+                      <!-- <div class="row col-12">
+                        <mat-form-field class="example-full-width4_1">
+                          <mat-label>Ref. No</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_REF_NO">
+                        </mat-form-field>
+                      </div> -->
+                      <div class="row ">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width4_1" style="padding-left: 0px;">
+                            <mat-label>Total Extent (in acres)</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT"
+                              (keypress)="numberValidateWithDecimal($event)">
+                          </mat-form-field>
+                        </div>
+
+                      </div>
+
+                      <!-- Add button for repeated fields -->
+                      <!-- <div formArrayName="dynamicValuesDetails">
+                        <label class="col-6 sub-header"
+                          *ngIf="panel.get('dynamicValuesDetails').controls.length > 0">Custom
+                          Fields
+                        </label>
+                        <div *ngFor="let field of panel.get('dynamicValuesDetails').controls; let j = index"
+                          [formGroupName]="j">
+                          <div class="displayFlex">
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Field name</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_COLUMN_NAME"
+                                  placeholder="Ex. Country">
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Field Value</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_VALUE_NAME"
+                                  placeholder="Ex. India">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addRepeatedField(i,'4(1)')"
+                                matTooltip="Add Custom Field">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;"
+                                (click)="removeRepeatedField(i, j,'4(1)','fourOneFormGroup',i,'dynamicValuesDetails')"
+                                matTooltip="Remove Custom Field">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6 mb-2" *ngIf="panel.get('dynamicValuesDetails').controls.length === 0 && !view">
+                        <button (click)="addRepeatedField(i,'4(1)')" mat-flat-button type="button" color="primary">Add
+                          Custom
+                          Fields</button>
+                      </div> -->
+
+
+                      <div formArrayName="fourOneDynamicFileEntityDetails">
+                        <mat-label class="col-6 sub-header"
+                          *ngIf="panel.get('fourOneDynamicFileEntityDetails').controls.length > 0">Owner
+                          Fields
+                        </mat-label>
+                        <div *ngFor="let field of panel.get('fourOneDynamicFileEntityDetails').controls; let k = index"
+                          [formGroupName]="k" class="row mb-3">
+                          <label class="col-6 col-form-label"
+                            style="font-weight: bold;font-size:medium;position: relative;left: 17px;">Owner Fields -
+                            {{k +
+                            1}}
+                            &nbsp; <mat-icon *ngIf="!view" style="color: #3FB8DE;" class="mat-icon-style"
+                              (click)="addOwner4one(i)"
+                              matTooltip="Add Owner Field">add_circle</mat-icon>&nbsp;<mat-icon class="mat-icon-style"
+                              *ngIf="!view" style="color: red;"
+                              (click)="removeOwner4one(i, k,'fourOneFormGroup','fourOneDynamicFileEntityDetails')"
+                              matTooltip="Remove Owner Field">cancel</mat-icon></label>
+                          <div class="input-group mb-3">
+                            <div class="col-6">
+                              <mat-form-field class="example-full-width1">
+                                <mat-label>Name of the Village:</mat-label>
+                                <mat-select formControlName="v_VILLAGE">
+                                  <mat-option *ngFor="let village of villages" [value]="village">{{ village
+                                    }}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                              <mat-form-field class="example-full-width1">
+                                <mat-label>Survey No</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                              </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                              <mat-form-field class="example-full-width1">
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="tel" formControlName="v_EXTENT_NO"
+                                  (keypress)="numberValidateWithDecimal($event)">
+                              </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                              <mat-form-field class="example-full-width1">
+                                <mat-label>Name of the Owner</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_NAME_OF_OWNER">
+                              </mat-form-field>
+                            </div>
+                            <!-- <div class="col-6">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>East Boundaries</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_EAST">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6">
+
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>West Boundaries</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_WEST">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6">
+
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>North Boundaries</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_NORTH">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>South Boundaries</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_SOUTH">
+                            </mat-form-field>
+                          </div> -->
+                            <!-- <div *ngIf="view || edit">
+                              <div
+                                *ngIf="fourOneTabDeatils?.length > 0 && fourOneTabDeatils[i]?.fourOneDynamicFileEntityDetails[k]?.v_FILE_PATH?.length > 0">
+
+                                <div class="col-12">
+                                  <div>
+                                    <mat-label style="font-weight: bold;font-size: large;">FMD File</mat-label>
+                                    <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                      [href]="fourOneTabDeatils[i].fourOneDynamicFileEntityDetails[k].v_FILE_PATH"
+                                      target="_blank">
+                                      <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12" *ngIf="!view">
+                              <div>
+                                <input type="file" class="col-12 form-control"
+                                  (change)="onOwnerFileSelected($event, i, k)">
+                              </div>
+                            </div> -->
+
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="col-6 mb-2"
+                        *ngIf="panel.get('fourOneDynamicFileEntityDetails').controls.length === 0 && !view">
+                        <button (click)="addOwner4oneButton(i)" [disabled]="addOwner4oneButtonDisable" mat-flat-button
+                          type="button" color="primary">Add Owner
+                          Fields</button>
+                      </div> -->
+
+
+
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+                <div class="row col-12" style="margin-top: 5px;" *ngIf="!view">
+                  <button (click)="addExpansionPanel4One()" type="button" class="btn ms-2"
+                    style="width: auto;background-color: #3FB8DE;color: white;">Add </button>
+                  <button *ngIf="expansionPanelsArray4.length > 1" (click)="removeLastRepeatedField('4(1)')"
+                    type="button" class="btn ms-2"
+                    style="width: auto;background-color: red;color: white;">Remove</button>
+                </div>
+              </form>
+            </mat-accordion>
+
+
+            <!-- <div class="d-flex justify-content-end">
+              <button mat-button matStepperPrevious class="border">Previous</button>
+              <button mat-button matStepperNext style="background-color: #3FB8DE;color: white;"
+                class="ms-2">Next</button>
+
+
+            </div> -->
+
+
+
+
+          </section>
+          <section class="col-12 col-sm-12 col-md-6 col-lg-6" style="padding-top: 15px;">
+
+            <mat-accordion>
+
+              <form [formGroup]="sixDDFormGroup">
+                <!-- <ng-template matStepLabel>6DD</ng-template> -->
+
+                <div formArrayName="expansionPanelsSix">
+                  <mat-expansion-panel [expanded]="true"
+                    *ngFor="let panel of expansionPanelsSixDD.controls; let i = index">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <label class="col-12 col-form-label" style="font-weight: bold;font-size: x-large">6DD - {{i +
+                          1}}</label>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div [formGroup]="panel">
+                      <div class="row ">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Gazette Notification Ref. No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-5 mx-auto" *ngIf="!view" style="align-self: center;">
+                          <button class="btn btn-primary btn-width file-upload-button" type="button">
+                            <!-- <input type="file" #fileInput3 (change)="onFileSelectedsixdd($event, i, 'file1')"> -->
+                            <input type="file" #fileInput3
+                              (change)="awsFileSelected($event, i, 'v_FILE_1_FILENAME','sixDD','file1')">
+
+
+                          </button>
+                          <label style="margin-bottom: 0px;">&nbsp;&nbsp;
+                            {{panel.get('v_FILE_1_FILENAME')?.value}}</label>
+                          <!-- <mat-icon style="color: red;position: relative;z-index: 9999;" class="mat-icon-style"
+                            (click)="removeFile(i,'sixDD','file1','v_FILE_1_FILENAME')"
+                            matTooltip="Remove Survey & Extend"
+                            *ngIf="panel.get('v_FILE_1_FILENAME')?.value">cancel</mat-icon>&nbsp;&nbsp; -->
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            (click)="removeFile(i,'sixDD','file1','v_FILE_1_FILENAME')"
+                            matTooltip="Remove Survey & Extend"
+                            *ngIf="panel.get('v_FILE_1_FILENAME')?.value">cancel</mat-icon>&nbsp;&nbsp;
+                          <br>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_1_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_1_FILEPATH')?.value && (edit || view)">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+
+                        </div>
+                        <div class="col-5 mx-auto" *ngIf="view">
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_1_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_1_FILEPATH')?.value && (edit || view)">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+                      <!-- <div class="row col-12">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>6DD G.O Ref. No</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_6DD_GO_REF_NO">
+                        </mat-form-field>
+                      </div> -->
+                      <div class="row " *ngIf="!view && !edit">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>6DD G.O</mat-label>
+                            <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_6DD_GO">
+
+                          </mat-form-field>
+                        </div>
+                        <div class="col-5 mx-auto" *ngIf="!view" style="align-self: center;">
+                          <button class="btn btn-primary btn-width file-upload-button" type="button">
+                            <!-- <input type="file" #fileInput4 (change)="onFileSelectedsixdd($event, i, 'file2')"> -->
+                            <input type="file" #fileInput4
+                              (change)="awsFileSelected($event, i, 'v_FILE_2_FILENAME','sixDD','file2')">
+
+
+                          </button>
+
+                          <label style="margin-bottom: 0px;">&nbsp;&nbsp;
+                            {{panel.get('v_FILE_2_FILENAME')?.value}}</label>
+                          <!-- <mat-icon style="color: red;position: relative;z-index: 9999;" class="mat-icon-style"
+                            (click)="removeFile(i,'sixDD','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value">cancel</mat-icon>&nbsp;&nbsp; -->
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            (click)="removeFile(i,'sixDD','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value">cancel</mat-icon>&nbsp;&nbsp;
+
+
+
+                        </div>
+                      </div>
+                      <div class="row " *ngIf="view">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>6DD G.O</mat-label>
+                            <input matInput type="text" formControlName="d_DATE_OF_6DD_GO" readonly>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-5">
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_2_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+                      <div class="row " *ngIf="edit">
+                        <div class="col-7">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>6DD G.O</mat-label>
+                            <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_6DD_GO">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-5 mx-auto" *ngIf="!view" style="align-self: center;">
+                          <button class="btn btn-primary btn-width file-upload-button" type="button">
+                            <!-- <input type="file" #fileInput4 (change)="onFileSelectedsixdd($event, i, 'file2')"> -->
+                            <input type="file" #fileInput4
+                              (change)="awsFileSelected($event, i, 'v_FILE_2_FILENAME','sixDD','file2')">
+                          </button>
+
+                          <label style="margin-bottom: 0px;">&nbsp;&nbsp;
+                            {{panel.get('v_FILE_2_FILENAME')?.value}}</label>
+                          <!-- <mat-icon style="color: red;position: relative;z-index: 9999;" class="mat-icon-style"
+                            (click)="removeFile(i,'sixDD','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value">cancel</mat-icon>&nbsp;&nbsp; -->
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            (click)="removeFile(i,'sixDD','file2','v_FILE_2_FILENAME')"
+                            matTooltip="Remove Survey & Extend"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value">cancel</mat-icon>&nbsp;&nbsp;
+                          <br>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="panel.get('v_FILE_2_FILEPATH')?.value" target="_blank"
+                            *ngIf="panel.get('v_FILE_2_FILENAME')?.value">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+
+                      <!-- <div class="row col-12" *ngIf="!view && !edit">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Date of Gazette Notification</mat-label>
+                          <input matInput [readonly]="this.view" [matDatepicker]="gazette"
+                            formControlName="d_DATE_OF_GAZETTE_NOTIFICATION">
+                          <mat-datepicker-toggle matIconSuffix [for]="gazette"></mat-datepicker-toggle>
+                          <mat-datepicker #gazette color="primary"></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div class="row col-12" *ngIf="view">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Date of Gazette Notification</mat-label>
+                          <input matInput formControlName="d_DATE_OF_GAZETTE_NOTIFICATION" readonly>
+                        </mat-form-field>
+                      </div>
+                      <div class="row col-12" *ngIf="edit">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Date of Gazette Notification</mat-label>
+                          <input matInput [readonly]="this.view" formControlName="d_DATE_OF_GAZETTE_NOTIFICATION">
+                        </mat-form-field>
+                      </div> -->
+                      <!-- <div class="row col-12" *ngIf="!view && !edit">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Date of Locality</mat-label>
+                          <input matInput [readonly]="this.view" [matDatepicker]="locality"
+                            formControlName="d_DATE_OF_LOCALITY">
+                          <mat-datepicker-toggle matIconSuffix [for]="locality"></mat-datepicker-toggle>
+                          <mat-datepicker #locality color="primary"></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div class="row col-12" *ngIf="view">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Date of Locality</mat-label>
+                          <input matInput formControlName="d_DATE_OF_LOCALITY" readonly>
+                        </mat-form-field>
+                      </div>
+                      <div class="row col-12" *ngIf="edit">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Date of Locality</mat-label>
+                          <input matInput [readonly]="this.view" formControlName="d_DATE_OF_LOCALITY">
+                        </mat-form-field>
+                      </div> -->
+
+                      <!-- <div *ngIf="view || edit">
+                        <div
+                          *ngIf="sixDDDeatils?.length > 0 && sixDDDeatils[i]?.v_FILE_1_FILEPATH && sixDDDeatils[i]?.v_FILE_1_FILEPATH.length > 0">
+                          <div class="row col-12">
+                            <div class="col-sm-10">
+                              <mat-label style="font-weight: bold;font-size: large;">File 1</mat-label>
+                              <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                [href]="sixDDDeatils[i].v_FILE_1_FILEPATH" target="_blank">
+                                <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          *ngIf="sixDDDeatils?.length > 0 && sixDDDeatils[i]?.v_FILE_2_FILEPATH && sixDDDeatils[i]?.v_FILE_2_FILEPATH > 0">
+                          <div class="row col-12">
+                            <div class="col-sm-10">
+                              <mat-label style="font-weight: bold;font-size: large;">File 2</mat-label>
+                              <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                [href]="sixDDDeatils[i].v_FILE_2_FILEPATH" target="_blank">
+                                <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+                      <!-- <div *ngIf="!view">
+                        <div class="row" style="margin:2px 0px 1rem 0px">
+                          <mat-label class="mb-2 sub-header">File Upload 1</mat-label>
+                          <div class="col-12">
+                            <input type="file" class="form-control  alignForms"
+                              (change)="onFileSelectedsixdd($event, i, 'file1')">
+                          </div>
+                        </div>
+                        <div class="row" style="margin:2px 0px 1rem 0px">
+                          <mat-label class="mb-2 sub-header">File Upload 2</mat-label>
+                          <div class="col-12">
+                            <input type="file" class="form-control  alignForms"
+                              (change)="onFileSelectedsixdd($event, i, 'file2')">
+                          </div>
+                        </div>
+                      </div> -->
+                      <!-- <div class="row col-12">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Ref. No</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_REF_NO">
+                        </mat-form-field>
+                      </div> -->
+                      <div class="row ">
+                        <div class="col-7">
+
+
+                          <mat-form-field class="example-full-width1" style="padding-left: 0px;">
+                            <mat-label>Total Extent (in acres)</mat-label>
+                            <input matInput [readonly]="this.view" type="tel" formControlName="v_TOTAL_EXTENT"
+                              (keypress)="numberValidateWithDecimal($event)">
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <!-- <div formArrayName="dynamicValuesDetails">
+                        <label class="col-12 sub-header"
+                          *ngIf="panel.get('dynamicValuesDetails').controls.length > 0">Custom
+                          Fields
+                        </label>
+                        <div *ngFor="let field of panel.get('dynamicValuesDetails').controls; let j = index"
+                          [formGroupName]="j">
+                          <div class="displayFlex">
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Field name</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_COLUMN_NAME"
+                                  placeholder="Ex. Country">
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Field Value</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_VALUE_NAME"
+                                  placeholder="Ex. India">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addRepeatedField(i,'6DD')"
+                                matTooltip="Add Custom Field">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;"
+                                (click)="removeRepeatedField(i, j,'6DD','sixDDFormGroup',i,'dynamicValuesDetails')"
+                                matTooltip="Remove Custom Field">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 mb-2" *ngIf="panel.get('dynamicValuesDetails').controls.length === 0 && !view">
+                        <button (click)="addRepeatedField(i,'6DD')" mat-flat-button type="button" color="primary">Add
+                          Custom
+                          Fields</button>
+                      </div> -->
+
+                      <div formArrayName="sixDdDynamicFileEntityValuesDetails">
+                        <label class="col-12 sub-header"
+                          *ngIf="panel.get('sixDdDynamicFileEntityValuesDetails').controls.length > 0">Survey & Extend
+                          Field
+                          <mat-icon class="mat-icon-style" style="color: #3FB8DE;" (click)="addsixdd(i)"
+                            matTooltip="Add Survey & Extend" *ngIf="!view">add_circle</mat-icon>&nbsp;
+                          <mat-icon style="color: red;" class="mat-icon-style"
+                            (click)="removesixdd(i, k,'sixDDFormGroup',i,'sixDdDynamicFileEntityValuesDetails')"
+                            matTooltip="Remove Survey & Extend" *ngIf="!view">cancel</mat-icon>&nbsp;&nbsp;
+                        </label>
+                        <div
+                          *ngFor="let field of panel.get('sixDdDynamicFileEntityValuesDetails').controls; let k = index"
+                          [formGroupName]="k">
+                          <!-- displayFlex -->
+                          <div class="row ">
+                            <div class="col-6">
+
+                              <mat-form-field class="example-full-width11">
+                                <mat-label>Name of the Village:</mat-label>
+                                <mat-select formControlName="v_VILLAGE">
+                                  <mat-option *ngFor="let village of villages" [value]="village">{{ village
+                                    }}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-3" style="padding-left: 0px;
+                            padding-right: 0px;">
+
+                              <mat-form-field style="width: 75%;">
+                                <mat-label>Survey No</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                              </mat-form-field>
+                            </div>
+                            <div class="col-3" style="padding-left: 0px;
+                            padding-right: 0px;">
+
+                              <mat-form-field style="width: 75%;">
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="tel" formControlName="v_EXTENT"
+                                  (keypress)="numberValidateWithDecimal($event)">
+                              </mat-form-field>
+                            </div>
+                            <!-- <div class="col-6" *ngIf="!view">
+
+                              <mat-icon style="color: #3FB8DE;" (click)="addsixdd(i)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;"
+                                (click)="removesixdd(i, k,'sixDDFormGroup',i,'sixDdDynamicFileEntityValuesDetails')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </div> -->
+
+                          </div>
+
+
+                        </div>
+                      </div>
+                      <!-- <div class="col-12 mb-2"
+                        *ngIf="panel.get('sixDdDynamicFileEntityValuesDetails').controls.length === 0 && !view">
+                        <button (click)="addsixdd(i)" mat-flat-button type="button" color="primary">Add Survey &
+                          Extend</button>
+                      </div> -->
+
+
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+                <div class="row col-12" style="margin-top: 5px;" *ngIf="!view">
+                  <button (click)="addExpansionPanelSixDD()" type="button" class="btn ms-2"
+                    style="width: auto;background-color: #3FB8DE;color: white;">Add </button>
+                  <button *ngIf="expansionPanelsSixDD.length > 1" (click)="removeLastRepeatedField('6DD')" type="button"
+                    class="btn ms-2" style="width: auto;background-color: red;color: white;">Remove</button>
+                </div>
+              </form>
+            </mat-accordion>
+            <!-- <div class="d-flex justify-content-end">
+              <button mat-button matStepperPrevious class="border">Previous</button>
+              <button mat-button matStepperNext style="background-color: #3FB8DE;color: white;"
+                class="ms-2">Next</button>
+
+
+            </div> -->
+          </section>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button mat-button matStepperPrevious class="border">Previous</button>
+          <button mat-button matStepperNext style="background-color: #3FB8DE;color: white;" class="ms-2">Next</button>
+
+
+        </div>
+
+
+      </mat-step>
+
+      <!--  -->
+
+      <!-- <mat-step [stepControl]="sixDDFormGroup">
+        <ng-template matStepLabel>6DD</ng-template>
+        <mat-accordion>
+
+          <form [formGroup]="sixDDFormGroup">
+            <ng-template matStepLabel>6DD</ng-template>
+
+            <div formArrayName="expansionPanelsSix">
+              <mat-expansion-panel [expanded]="true" *ngFor="let panel of expansionPanelsSixDD.controls; let i = index">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <label class="col-6 col-form-label" style="font-weight: bold;font-size: x-large">6DD - {{i +
+                      1}}</label>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div [formGroup]="panel">
+                  <div class="row col-12">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Gazette Notification Ref. No</mat-label>
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO">
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>6DD G.O Ref. No</mat-label>
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_6DD_GO_REF_NO">
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="!view && !edit">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of 6DD G.O</mat-label>
+                      <input matInput [readonly]="this.view" [matDatepicker]="date" formControlName="d_DATE_OF_6DD_GO">
+                      <mat-datepicker-toggle matIconSuffix [for]="date"></mat-datepicker-toggle>
+                      <mat-datepicker #date color="primary"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="view">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of 6DD G.O</mat-label>
+                      <input matInput formControlName="d_DATE_OF_6DD_GO" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="edit">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of 6DD G.O</mat-label>
+                      <input matInput [readonly]="this.view" formControlName="d_DATE_OF_6DD_GO">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="row col-12" *ngIf="!view && !edit">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of Gazette Notification</mat-label>
+                      <input matInput [readonly]="this.view" [matDatepicker]="gazette"
+                        formControlName="d_DATE_OF_GAZETTE_NOTIFICATION">
+                      <mat-datepicker-toggle matIconSuffix [for]="gazette"></mat-datepicker-toggle>
+                      <mat-datepicker #gazette color="primary"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="view">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of Gazette Notification</mat-label>
+                      <input matInput formControlName="d_DATE_OF_GAZETTE_NOTIFICATION" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="edit">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of Gazette Notification</mat-label>
+                      <input matInput [readonly]="this.view" formControlName="d_DATE_OF_GAZETTE_NOTIFICATION">
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="!view && !edit">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of Locality</mat-label>
+                      <input matInput [readonly]="this.view" [matDatepicker]="locality"
+                        formControlName="d_DATE_OF_LOCALITY">
+                      <mat-datepicker-toggle matIconSuffix [for]="locality"></mat-datepicker-toggle>
+                      <mat-datepicker #locality color="primary"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="view">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of Locality</mat-label>
+                      <input matInput formControlName="d_DATE_OF_LOCALITY" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12" *ngIf="edit">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Date of Locality</mat-label>
+                      <input matInput [readonly]="this.view" formControlName="d_DATE_OF_LOCALITY">
+                    </mat-form-field>
+                  </div>
+
+                  <div *ngIf="view || edit">
+                    <div
+                      *ngIf="sixDDDeatils?.length > 0 && sixDDDeatils[i]?.v_FILE_1_FILEPATH && sixDDDeatils[i]?.v_FILE_1_FILEPATH.length > 0">
+                      <div class="row col-12">
+                        <div class="col-sm-10">
+                          <mat-label style="font-weight: bold;font-size: large;">File 1</mat-label>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="sixDDDeatils[i].v_FILE_1_FILEPATH" target="_blank">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="sixDDDeatils?.length > 0 && sixDDDeatils[i]?.v_FILE_2_FILEPATH && sixDDDeatils[i]?.v_FILE_2_FILEPATH > 0">
+                      <div class="row col-12">
+                        <div class="col-sm-10">
+                          <mat-label style="font-weight: bold;font-size: large;">File 2</mat-label>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="sixDDDeatils[i].v_FILE_2_FILEPATH" target="_blank">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="!view">
+                    <div class="row" style="margin:2px 0px 1rem 0px">
+                      <mat-label class="mb-2 sub-header">File Upload 1</mat-label>
+                      <div class="col-6">
+                        <input type="file" class="form-control  alignForms"
+                          (change)="onFileSelectedsixdd($event, i, 'file1')">
+                      </div>
+                    </div>
+                    <div class="row" style="margin:2px 0px 1rem 0px">
+                      <mat-label class="mb-2 sub-header">File Upload 2</mat-label>
+                      <div class="col-6">
+                        <input type="file" class="form-control  alignForms"
+                          (change)="onFileSelectedsixdd($event, i, 'file2')">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row col-12">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Ref. No</mat-label>
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_REF_NO">
+                    </mat-form-field>
+                  </div>
+                  <div class="row col-12">
+                    <mat-form-field class="example-full-width1">
+                      <mat-label>Total Extent</mat-label>
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                    </mat-form-field>
+                  </div> 
+
+                  <div formArrayName="dynamicValuesDetails">
+                    <label class="col-6 sub-header" *ngIf="panel.get('dynamicValuesDetails').controls.length > 0">Custom
+                      Fields
+                    </label>
+                    <div *ngFor="let field of panel.get('dynamicValuesDetails').controls; let j = index"
+                      [formGroupName]="j">
+                      <div class="displayFlex">
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Field name</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_COLUMN_NAME"
+                              placeholder="Ex. Country">
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Field Value</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_VALUE_NAME"
+                              placeholder="Ex. India">
+                          </mat-form-field>
+                        </span>
+                        <span *ngIf="!view">
+                          <mat-icon style="color: #3FB8DE;" (click)="addRepeatedField(i,'6DD')"
+                            matTooltip="Add Custom Field">add_circle</mat-icon>&nbsp;
+                          <mat-icon style="color: red;"
+                            (click)="removeRepeatedField(i, j,'6DD','sixDDFormGroup',i,'dynamicValuesDetails')"
+                            matTooltip="Remove Custom Field">cancel</mat-icon>&nbsp;&nbsp;
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2" *ngIf="panel.get('dynamicValuesDetails').controls.length === 0 && !view">
+                    <button (click)="addRepeatedField(i,'6DD')" mat-flat-button type="button" color="primary">Add
+                      Custom
+                      Fields</button>
+                  </div>
+
+                  <div formArrayName="sixDdDynamicFileEntityValuesDetails">
+                    <label class="col-6 sub-header"
+                      *ngIf="panel.get('sixDdDynamicFileEntityValuesDetails').controls.length > 0">Survey & Extend
+                      Field </label>
+                    <div *ngFor="let field of panel.get('sixDdDynamicFileEntityValuesDetails').controls; let k = index"
+                      [formGroupName]="k">
+                      <div class="displayFlex">
+                        <span>
+                          <mat-form-field class="example-full-width11">
+                            <mat-label>Name of the Village:</mat-label>
+                            <mat-select formControlName="v_VILLAGE">
+                              <mat-option *ngFor="let village of villages" [value]="village">{{ village }}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Survey No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Extent</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                          </mat-form-field>
+                        </span>
+                        <span *ngIf="!view">
+                          <mat-icon style="color: #3FB8DE;" (click)="addsixdd(i)"
+                            matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                          <mat-icon style="color: red;"
+                            (click)="removesixdd(i, k,'sixDDFormGroup',i,'sixDdDynamicFileEntityValuesDetails')"
+                            matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2"
+                    *ngIf="panel.get('sixDdDynamicFileEntityValuesDetails').controls.length === 0 && !view">
+                    <button (click)="addsixdd(i)" mat-flat-button type="button" color="primary">Add Survey &
+                      Extend</button>
+                  </div>
+
+
+                </div>
+              </mat-expansion-panel>
+            </div>
+            <div class="row col-12" style="margin-top: 5px;" *ngIf="!view">
+              <button (click)="addExpansionPanelSixDD()" type="button" class="btn ms-2"
+                style="width: auto;background-color: #3FB8DE;color: white;">Add </button>
+              <button *ngIf="expansionPanelsArray4.length > 1" (click)="removeLastRepeatedField('6DD')" type="button"
+                class="btn ms-2" style="width: auto;background-color: red;color: white;">Remove</button>
+            </div>
+          </form>
+        </mat-accordion>
+        <div class="d-flex justify-content-end">
+          <button mat-button matStepperPrevious class="border">Previous</button>
+          <button mat-button matStepperNext style="background-color: #3FB8DE;color: white;" class="ms-2">Next</button>
+
+
+        </div>
+      </mat-step> -->
+      <mat-step [stepControl]="awardInfoFormGroup">
+        <ng-template matStepLabel>Award</ng-template>
+        <mat-accordion>
+
+          <form [formGroup]="awardInfoFormGroup">
+            <ng-template matStepLabel>Award</ng-template>
+
+            <div formArrayName="expansionPanelsAward">
+              <mat-expansion-panel [expanded]="true" *ngFor="let panel of expansionPanelsAward.controls; let i = index">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <label class="col-6 col-form-label" style="font-weight: bold;font-size: x-large">Award File - {{i +
+                      1}}</label>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div [formGroup]="panel">
+
+                  <div class="awardrow">
+                    <div>
+                      <mat-form-field>
+                        <mat-label>Award Number</mat-label>
+                        <input matInput [readonly]="this.view" type="text" formControlName="v_AWARD_NO">
+                      </mat-form-field>
+                    </div>
+
+                    <div *ngIf="!view && !edit">
+                      <mat-form-field class="dateAward">
+                        <mat-label>Date</mat-label>
+                        <input matInput [readonly]="this.view" [matDatepicker]="awardDate"
+                          formControlName="d_AWARD_DATE">
+                        <mat-datepicker-toggle matIconSuffix [for]="awardDate"></mat-datepicker-toggle>
+                        <mat-datepicker #awardDate color="primary"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div *ngIf="view">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Date</mat-label>
+                        <input matInput formControlName="d_AWARD_DATE" readonly>
+                      </mat-form-field>
+                      <div *ngIf="edit">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Date</mat-label>
+                          <input matInput [readonly]="this.view" formControlName="d_AWARD_DATE">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div>
+                      <mat-form-field>
+                        <mat-label>Total Extent (in acres)</mat-label>
+                        <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                      </mat-form-field>
+                    </div>
+                    <!-- id="totalAwardAmount" -->
+                    <div>
+                      <mat-form-field>
+                        <mat-label>Total Award Amount</mat-label>
+                        <input matInput [readonly]="this.view" type="text" formControlName="n_TOTAL_AWARD_AMOUNT">
+                      </mat-form-field>
+
+
+                    </div>
+                    <!-- <div *ngIf="!view" class="fileAward"> -->
+
+                    <div *ngIf="!view" class="row" style="margin-top: 0px;">
+
+                      <div class="col-12">
+                        <mat-label class="mb-2 sub-header">Award File</mat-label>
+
+                        <button class="btn btn-primary btn-width file-upload-button" type="button">
+                          <input type="file" #fileInputaward1
+                            (change)="awsFileSelectedAwardFile($event, i, 'v_FILE_NAME')" style="    height: 80px;
+                            width: 210px;" />
+
+                        </button>
+                        <!-- <label class="file_name_style">&nbsp;&nbsp;File Upload 2</label> -->
+
+                        <label style="margin-bottom: 0px;    display: ruby-text;">
+                          <mat-icon style="color: red;position: relative;z-index: 99;" class="mat-icon-style"
+                            *ngIf="panel.get('v_FILE_NAME')?.value" (click)="removeFileAward(i,'v_FILE_NAME')"
+                            matTooltip="Remove Award File">cancel</mat-icon>&nbsp;&nbsp;
+                          {{panel.get('v_FILE_NAME')?.value}}</label>
+
+
+                        <br>
+                        <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                          [href]="panel.get('v_FILE_PATH')?.value" target="_blank"
+                          *ngIf="edit && panel.get('v_FILE_PATH')?.value">
+                          <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                        </a>
+                        <!-- <button class="btn btn-primary  file-upload-button" id="btnAwardFile" type="button"
+                          >
+                          <input type="file" #fileInputaward (change)="awsFileSelectedAwardFile($event, i, 'v_FILE_NAME')" />
+                        </button> -->
+                        <!-- <input type="file" class="form-control alignForms" id="inputGroupFile04"
+                        aria-describedby="inputGroupFileAddon04" aria-label="Upload"
+                        (change)="onFileSelectedaward($event, i, 'file')"> -->
+                        <!-- <input type="file" class="form-control alignForms" id="inputGroupFile04"
+                        aria-describedby="inputGroupFileAddon04" aria-label="Upload"
+                        (change)="awsFileSelectedAwardFile($event, i, 'v_FILE_NAME')"> -->
+                      </div>
+                    </div>
+
+                    <div *ngIf="view" class="row" style="margin-top: 0px;">
+                      <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                        [href]="panel.get('v_FILE_PATH')?.value" target="_blank"
+                        *ngIf="view && panel.get('v_FILE_PATH')?.value">
+                        <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- <div *ngIf="view || edit">
+                    <div
+                      *ngIf="awardDeatils?.length > 0 && awardDeatils[i]?.v_FILE_PATH && awardDeatils[i]?.v_FILE_PATH.length > 0">
+                      <div class="row col-7">
+                        <div class="col-sm-10">
+                          <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                          <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                            [href]="awardDeatils[i].v_FILE_PATH" target="_blank">
+                            <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <!-- <div *ngIf="!view">
+                    <div>
+                      <mat-label class="mb-2 sub-header">Award File</mat-label>
+                      <div class="col-2">
+                        <button class="btn btn-primary btn-width file-upload-button" type="button">
+                          <input type="file" #fileInput (change)="awsFileSelectedAwardFile($event, i, 'v_FILE_NAME')" />
+                        </button>
+                        <input type="file" class="form-control alignForms" id="inputGroupFile04"
+                          aria-describedby="inputGroupFileAddon04" aria-label="Upload"
+                          (change)="onFileSelectedaward($event, i, 'file')">
+                        <input type="file" class="form-control alignForms" id="inputGroupFile04"
+                          aria-describedby="inputGroupFileAddon04" aria-label="Upload"
+                          (change)="awsFileSelectedAwardFile($event, i, 'v_FILE_NAME')">
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- <div formArrayName="dynamicValuesDetails" style="margin: 1rem 0 2px 0;">
+                    <label class="col-6 sub-header" *ngIf="panel.get('dynamicValuesDetails').controls.length > 0">Survey
+                      No. & Extent
+                    </label>
+                    <div *ngFor="let field of panel.get('dynamicValuesDetails').controls; let j = index"
+                      [formGroupName]="j">
+                      <div class="displayFlex">
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Survey No.</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_COLUMN_NAME"
+                              placeholder="Survey No.">
+                          </mat-form-field>
+                        </span>
+                        <span>
+                          <mat-form-field>
+                            <mat-label>Extent</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_VALUE_NAME"
+                              placeholder="Extent">
+                          </mat-form-field>
+                        </span>
+                        <span *ngIf="!view">
+                          <mat-icon style="color: #3FB8DE;" (click)="addRepeatedField(i,'Award')"
+                            matTooltip="Add Custom Field">add_circle</mat-icon>&nbsp;
+                          <mat-icon style="color: red;"
+                            (click)="removeRepeatedField(i, j,'Award','awardInfoFormGroup',i,'dynamicValuesDetails')"
+                            matTooltip="Remove Custom Field">cancel</mat-icon>&nbsp;&nbsp;
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2" *ngIf="panel.get('dynamicValuesDetails').controls.length === 0 && !view">
+                    <button (click)="addRepeatedField(i,'Award')" mat-flat-button type="button" color="primary">Add
+                      Survey No. & Extent</button>
+                  </div> -->
+
+
+                  <div class="awardBtns mt-2">
+                    <div formArrayName="awardDirectPaymentEntityValuesDetails" style="margin: 1rem 0 2px 0;">
+                      <label class="sub-header"
+                        *ngIf="panel.get('awardDirectPaymentEntityValuesDetails').controls.length > 0">Direct
+                        payment </label>
+                      <div
+                        *ngFor="let field of panel.get('awardDirectPaymentEntityValuesDetails').controls; let j = index"
+                        [formGroupName]="j">
+                        <div class="displayFlex">
+                          <span class="">
+                            <mat-form-field class="inputDeposit">
+                              <mat-label>Amount</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT">
+                            </mat-form-field>
+                          </span>
+                          <span class="">
+                            <mat-form-field class="inputPerson">
+                              <mat-label>Notified Person</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_NOTIFIED_PERSON">
+                            </mat-form-field>
+                          </span>
+                          <span *ngIf="!view">
+                            <mat-icon style="color: #3FB8DE;" (click)="adddirectpay(i)"
+                              matTooltip="Add Direct Payment">add_circle</mat-icon>&nbsp;
+                            <mat-icon style="color: red;"
+                              (click)="removedirectpay(i, k ,Award ,'awardInfoFormGroup',i,'awardDirectPaymentEntityValuesDetails')"
+                              matTooltip="Remove Direct Payment">cancel</mat-icon>&nbsp;&nbsp;
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4 mb-2"
+                      *ngIf="panel.get('awardDirectPaymentEntityValuesDetails').controls.length === 0 && !view">
+                      <button (click)="adddirectpay(i)" mat-flat-button type="button" color="primary">Add Direct Payment
+                      </button>
+                    </div>
+
+                    <div formArrayName="awardRevenuePaymentEntityValuesDetails" style="margin: 1rem 0 2px 0;">
+                      <label class="sub-header"
+                        *ngIf="panel.get('awardRevenuePaymentEntityValuesDetails').controls.length > 0">Revenue
+                        deposit </label>
+                      <div
+                        *ngFor="let field of panel.get('awardRevenuePaymentEntityValuesDetails').controls; let k = index"
+                        [formGroupName]="k">
+                        <div class="displayFlex">
+                          <span>
+                            <mat-form-field class="inputDeposit">
+                              <mat-label>Amount</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT">
+                            </mat-form-field>
+                          </span>
+                          <span>
+                            <mat-form-field class="inputPerson">
+                              <mat-label>Notified Person</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_NOTIFIED_PERSON">
+                            </mat-form-field>
+                          </span>
+                          <span *ngIf="!view">
+                            <mat-icon style="color: #3FB8DE;" (click)="addrevenuepay(i)"
+                              matTooltip="Add Revenue Deposit">add_circle</mat-icon>&nbsp;
+                            <mat-icon style="color: red;"
+                              (click)="removerevenuepay(i, k,Award ,'awardInfoFormGroup',i,'awardRevenuePaymentEntityValuesDetails' )"
+                              matTooltip="Remove Revenue Deposit">cancel</mat-icon>&nbsp;&nbsp;
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4 mb-2"
+                      *ngIf="panel.get('awardRevenuePaymentEntityValuesDetails').controls.length === 0 && !view">
+                      <button (click)="addrevenuepay(i)" mat-flat-button type="button" color="primary">Add Revenue
+                        Deposit
+                      </button>
+                    </div>
+
+                    <div formArrayName="awardCourtDepositPaymentEntityValuesDetails" style="margin: 1rem 0 2px 0;">
+                      <label class="sub-header"
+                        *ngIf="panel.get('awardCourtDepositPaymentEntityValuesDetails').controls.length > 0">Civil
+                        Court Deposit </label>
+                      <div
+                        *ngFor="let field of panel.get('awardCourtDepositPaymentEntityValuesDetails').controls; let k = index"
+                        [formGroupName]="k">
+                        <div class="displayFlex">
+                          <span>
+                            <mat-form-field class="inputDeposit">
+                              <mat-label>Amount</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT">
+                            </mat-form-field>
+                          </span>
+                          <span>
+                            <mat-form-field class="inputPerson">
+                              <mat-label>Notified Person</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_NOTIFIED_PERSON">
+                            </mat-form-field>
+                          </span>
+                          <span *ngIf="!view">
+                            <mat-icon style="color: #3FB8DE;" (click)="addcivilpay(i)"
+                              matTooltip="Add Civil Deposit">add_circle</mat-icon>&nbsp;
+                            <mat-icon style="color: red;"
+                              (click)="removecivilpay(i, k ,Award ,'awardInfoFormGroup',i,'awardCourtDepositPaymentEntityValuesDetails')"
+                              matTooltip="Remove Civil Deposit">cancel</mat-icon>&nbsp;&nbsp;
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4 mb-2"
+                      *ngIf="panel.get('awardCourtDepositPaymentEntityValuesDetails').controls.length === 0 && !view">
+                      <button (click)="addcivilpay(i)" mat-flat-button type="button" color="primary">Add Civil Deposit
+                      </button>
+                    </div>
+                  </div>
+
+
+
+
+
+                  <div class="row" style="margin: 1rem 0 2px 0;">
+                    <div class="possessionTakenTotal">
+                      <div class="mt-3">
+                        <mat-label class="mb-3 sub-header1">I. Possession Taken Over</mat-label>
+                      </div>
+                      <div class="col-6 mb-2">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Total Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_PHO_TOTAL_EXTENT">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row col-12">
+                      <div formArrayName="awardPossessionTakenOverEntityValuesDetails">
+                        <label class="col-6 sub-header"
+                          *ngIf="panel.get('awardPossessionTakenOverEntityValuesDetails').controls.length > 0">Survey &
+                          Extend
+                          Field </label>
+                        <div
+                          *ngFor="let field of panel.get('awardPossessionTakenOverEntityValuesDetails').controls; let k = index"
+                          [formGroupName]="k">
+                          <div class="displayFlex">
+                            <span>
+                              <mat-form-field class="example-full-width1">
+                                <mat-label>Name of the Village:</mat-label>
+                                <mat-select formControlName="v_VILLAGE">
+                                  <mat-option *ngFor="let village of villages" [value]="village">{{ village
+                                    }}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Survey No</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addpho(i)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;"
+                                (click)="removepho(i, k ,Award ,'awardInfoFormGroup',i,'awardPossessionTakenOverEntityValuesDetails')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                        <!-- <div class="col-6 mb-2"
+                          *ngIf="panel.get('awardPossessionTakenOverEntityValuesDetails').controls.length === 0 && !view">
+                          <button (click)="addpho(i)" mat-flat-button type="button" color="primary">Add Survey &
+                            Extend</button>
+                        </div> -->
+                      </div>
+
+                    </div>
+                    <div>
+                      <h4>Extent covered under</h4>
+                    </div>
+                    <div class="row extendCoverCount">
+
+                      <div class="col-3 mb-2">
+                        <label class=" sub-header">1.Court Case :</label>
+                        <div class=" px-0">
+                          <div>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="court_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="court_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+
+                          <div class="col-4">
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && court_file_PATH">
+                                <div class="col-12">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="court_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="court_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'court_file')">
+                                <input type="file" class="col-12 form-control" formControlName="court_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'court_file')">
+
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                      <div class="col-3 mb-2">
+                        <label class="sub-header">2. Want of approach road :</label>
+                        <div class=" px-0">
+                          <div>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="road_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="road_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+                          <div>
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && road_file_PATH">
+                                <div class="">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="road_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="road_file"
+                              (change)="onFileSelectedawarddynamic($event, i, 'road_file')">
+                                <input type="file" class="col-12 form-control" formControlName="road_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'road_file')">
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                      <div class="col-3 mb-2">
+                        <label class=" sub-header">3.Encroachment:</label>
+                        <div class="px-0">
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="enchro_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="enchro_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-4">
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && enchro_file_PATH">
+                                <div class="col-12">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="enchro_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- <div *ngIf="!view">
+                              <div class="col-4">
+                                <div>
+                                  <input type="file" class="col-12 form-control" formControlName="enchro_file"
+                                    (change)="onFileSelectedawarddynamic($event, i, 'enchro_file')">
+                                  <input type="file" class="col-12 form-control" formControlName="enchro_file"
+                                    (change)="awsFileSelectedAwardMultipleFile($event, i, 'enchro_file')">
+                                </div>
+                              </div>
+                            </div> -->
+                        </div>
+                      </div>
+
+                      <div class="col-3 mb-2">
+                        <label class="sub-header"> 4.Scattered:</label>
+                        <div class="px-0">
+                          <div>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="scatt_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="scatt_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-4">
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && scatt_file_PATH">
+                                <div class="col-12">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="scatt_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="scatt_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'scatt_file')">
+                                <input type="file" class="col-12 form-control" formControlName="scatt_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'scatt_file')">
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                      <div class="col-3 mb-2">
+                        <label class="sub-header">5.Quashed:</label>
+                        <div class="px-0">
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="quash_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="quash_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-4">
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && quash_file_PATH">
+                                <div class="col-12">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="quash_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="quash_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'quash_file')">
+                                <input type="file" class="col-12 form-control" formControlName="quash_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'quash_file')">
+
+
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                      <div class="col-3 mb-2">
+                        <label class=" sub-header">6.Reconveyed:</label>
+                        <div class="px-0">
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="recon_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="recon_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+                          <div class="">
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && recon_file_PATH">
+                                <div class="">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="recon_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="recon_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'recon_file')">
+                                <input type="file" class="col-12 form-control" formControlName="recon_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'recon_file')">
+
+
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                      <div class=" col-3 mb-2">
+                        <label class="sub-header">7. NOC issued:</label>
+                        <div class=" px-0">
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Extent (in acres)</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="noc_v_extent">
+                            </mat-form-field>
+                          </div>
+                          <div class="">
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Legal Proceeding Status</mat-label>
+                              <input matInput [readonly]="this.view" type="text"
+                                formControlName="noc_v_legal_proceeding">
+                            </mat-form-field>
+                          </div>
+                          <div class="">
+                            <div *ngIf="view || edit">
+                              <div *ngIf="awardDeatils?.length > 0 && noc_file_PATH">
+                                <div class="col-12">
+                                  <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                  <a mat-flat-button style="color: #3FB8DE;font-size: medium;" [href]="noc_file_PATH"
+                                    target="_blank">
+                                    <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="noc_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'noc_file')">
+                                <input type="file" class="col-12 form-control" formControlName="noc_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'noc_file')">
+
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                    </div>
+
+
+
+
+                    <div class="row col-12">
+                      <div formArrayName="awardPossessionExtentAvailableEntityValuesDetails">
+                        <label class="col-6 sub-header"
+                          *ngIf="panel.get('awardPossessionExtentAvailableEntityValuesDetails').controls.length > 0">Survey
+                          & Extend Field </label>
+                        <div
+                          *ngFor="let field of panel.get('awardPossessionExtentAvailableEntityValuesDetails').controls; let k = index"
+                          [formGroupName]="k">
+                          <div class="displayFlex">
+                            <span>
+                              <mat-form-field class="example-full-width1">
+                                <mat-label>Name of the Village:</mat-label>
+                                <mat-select formControlName="v_VILLAGE">
+                                  <mat-option *ngFor="let village of villages" [value]="village">{{ village
+                                    }}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Survey No</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addphoscheme(i)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;"
+                                (click)="removephoscheme(i, k ,Award ,'awardInfoFormGroup',i,'awardPossessionExtentAvailableEntityValuesDetails')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                        <!-- <div class="col-6 mb-2"
+                          *ngIf="panel.get('awardPossessionExtentAvailableEntityValuesDetails').controls.length === 0 && !view">
+                          <button (click)="addphoscheme(i)" mat-flat-button type="button" color="primary">Add Survey &
+                            Extend</button>
+                        </div> -->
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="mt-3 col-4">
+                      <mat-label class="sub-header1">II. Possession Not Handed Over</mat-label>
+                    </div>
+                    <div class="col-6">
+                      <mat-form-field class="example-full-width1">
+                        <mat-label>Total Extent</mat-label>
+                        <input matInput [readonly]="this.view" type="text" formControlName="v_PNHO_TOTAL_EXTENT">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4>Extent covered under</h4>
+                  </div>
+
+                  <div class="row">
+
+                    <div formArrayName="awardPossessionNotTakenOverEntityValuesDetails">
+                      <label class="col-6 sub-header"
+                        *ngIf="panel.get('awardPossessionNotTakenOverEntityValuesDetails').controls.length > 0">Survey &
+                        Extend Field </label>
+                      <div
+                        *ngFor="let field of panel.get('awardPossessionNotTakenOverEntityValuesDetails').controls; let k = index"
+                        [formGroupName]="k">
+                        <div class="displayFlex">
+                          <span>
+                            <mat-form-field class="example-full-width1">
+                              <mat-label>Name of the Village:</mat-label>
+                              <mat-select formControlName="v_VILLAGE">
+                                <mat-option *ngFor="let village of villages" [value]="village">{{ village
+                                  }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </span>
+                          <span>
+                            <mat-form-field>
+                              <mat-label>Survey No</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                            </mat-form-field>
+                          </span>
+                          <span>
+                            <mat-form-field>
+                              <mat-label>Extent</mat-label>
+                              <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                            </mat-form-field>
+                          </span>
+                          <span *ngIf="!view">
+                            <mat-icon style="color: #3FB8DE;" (click)="addpnho(i)"
+                              matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                            <mat-icon style="color: red;"
+                              (click)="removepnho(i, k,Award ,'awardInfoFormGroup',i,'awardPossessionNotTakenOverEntityValuesDetails')"
+                              matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                          </span>
+                        </div>
+                      </div>
+                      <!-- <div class="col-6 mb-2"
+                          *ngIf="panel.get('awardPossessionNotTakenOverEntityValuesDetails').controls.length === 0 && !view">
+                          <button (click)="addpnho(i)" mat-flat-button type="button" color="primary">Add Survey &
+                            Extend</button>
+                        </div> -->
+                    </div>
+
+                  </div>
+                  <div class="row">
+
+                    <div class="mb-2 col-3">
+                      <label class="sub-header">1. Court case:</label>
+                      <div class="px-0">
+                        <div>
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Extent (in acres)</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="pnho_court_v_extent">
+                          </mat-form-field>
+                        </div>
+                        <div>
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Legal Proceeding Status</mat-label>
+                            <input matInput [readonly]="this.view" type="text"
+                              formControlName="pnho_court_v_legal_proceeding">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                          <div *ngIf="view || edit">
+                            <div *ngIf="awardDeatils?.length > 0 && pnho_court_file_PATH">
+                              <div class="col-12">
+                                <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                  [href]="pnho_court_file_PATH" target="_blank">
+                                  <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <div *ngIf="!view">
+                            <div class="col-4">
+                              <div>
+                                <input type="file" class="col-12 form-control" formControlName="pnho_court_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'pnho_court_file')">
+                                <input type="file" class="col-12 form-control" formControlName="pnho_court_file"
+                                  (change)="awsFileSelectedAwardMultipleFile($event, i, 'pnho_court_file')">
+
+                              </div>
+                            </div>
+                          </div> -->
+                      </div>
+                    </div>
+
+                    <div class=" col-3 mb-2">
+                      <label class="sub-header">2. Encroachment:</label>
+                      <div class="px-0">
+                        <div class="">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Extent (in acres)</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="pnho_enchro_v_extent">
+                          </mat-form-field>
+                        </div>
+                        <div class="">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Legal Proceeding Status</mat-label>
+                            <input matInput [readonly]="this.view" type="text"
+                              formControlName="pnho_enchro_v_legal_proceeding">
+                          </mat-form-field>
+                        </div>
+                        <div class="">
+                          <div *ngIf="view || edit">
+                            <div *ngIf="awardDeatils?.length > 0 && pnho_enchro_file_PATH">
+                              <div class="col-12">
+                                <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                  [href]="pnho_enchro_file_PATH" target="_blank">
+                                  <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- <div *ngIf="!view">
+                          <div class="col-4">
+                            <div>
+                              <input type="file" class="col-12 form-control" formControlName="pnho_enchro_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'pnho_enchro_file')">
+                              <input type="file" class="col-12 form-control" formControlName="pnho_enchro_file"
+                                (change)="awsFileSelectedAwardMultipleFile($event, i, 'pnho_enchro_file')">
+                            </div>
+                          </div>
+                        </div> -->
+
+                      </div>
+                    </div>
+
+                    <div class="mb-2 col-3">
+                      <label class="sub-header">3. Quashed:</label>
+                      <div class="px-0">
+                        <div class="">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Extent (in acres)</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="pnho_quash_v_extent">
+                          </mat-form-field>
+                        </div>
+                        <div class="">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Legal Proceeding Status</mat-label>
+                            <input matInput [readonly]="this.view" type="text"
+                              formControlName="pnho_quash_v_legal_proceeding">
+                          </mat-form-field>
+                        </div>
+                        <div class="">
+                          <div *ngIf="view || edit">
+                            <div *ngIf="awardDeatils?.length > 0 && pnho_quash_file_PATH">
+                              <div class="col-12">
+                                <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                  [href]="pnho_quash_file_PATH" target="_blank">
+                                  <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- <div *ngIf="!view">
+                          <div class="col-4">
+                            <div>
+                              <input type="file" class="col-12 form-control" formControlName="pnho_quash_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'pnho_quash_file')">
+                              <input type="file" class="col-12 form-control" formControlName="pnho_quash_file"
+                                (change)="awsFileSelectedAwardMultipleFile($event, i, 'pnho_quash_file')">
+                            </div>
+                          </div>
+                        </div> -->
+
+                      </div>
+                    </div>
+
+                    <div class=" col-3 mb-2">
+                      <label class="sub-header">4. Without Encumbrance:</label>
+                      <div class="px-0">
+                        <div class="">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Extent (in acres)</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="pnho_encumbr_v_extent">
+                          </mat-form-field>
+                        </div>
+                        <div class="">
+                          <mat-form-field class="example-full-width1">
+                            <mat-label>Legal Proceeding Status</mat-label>
+                            <input matInput [readonly]="this.view" type="text"
+                              formControlName="pnho_encumbr_v_legal_proceeding">
+                          </mat-form-field>
+                        </div>
+                        <div class="">
+                          <div *ngIf="view || edit">
+                            <div *ngIf="awardDeatils?.length > 0 && pnho_encumbr_file_PATH">
+                              <div class="col-12">
+                                <mat-label style="font-weight: bold;font-size: large;">File</mat-label>
+                                <a mat-flat-button style="color: #3FB8DE;font-size: medium;"
+                                  [href]="pnho_encumbr_file_PATH" target="_blank">
+                                  <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- <div *ngIf="!view">
+                          <div class="col-4">
+                            <div>
+                              <input type="file" class="col-12 form-control" formControlName="pnho_encumbr_file"
+                                  (change)="onFileSelectedawarddynamic($event, i, 'pnho_encumbr_file')">
+                              <input type="file" class="col-12 form-control" formControlName="pnho_encumbr_file"
+                                (change)="awsFileSelectedAwardMultipleFile($event, i, 'pnho_encumbr_file')">
+                            </div>
+                          </div>
+                        </div> -->
+
+
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-5 mb-2">
+                        <label class="mt-3 sub-header3">III. Available for Scheme Implementation:</label>
+                      </div>
+                      <div class="col-6">
+                        <mat-form-field class="example-full-width1">
+                          <mat-label>Total Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text"
+                            formControlName="v_PHO_SCHEME_TOTAL_EXTENT">
+                        </mat-form-field>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </form>
+        </mat-accordion><br>
+
+        <div class="row col-7" style="margin-top: 5px;" *ngIf="!view">
+          <button (click)="addExpansionPanelAward()" type="button" class="btn ms-2"
+            style="width: auto;background-color: #3FB8DE;color: white;">Add </button>
+          <button *ngIf="expansionPanelsAward.length > 1" (click)="removeLastRepeatedField('Award')" type="button"
+            class="btn ms-2" style="width: auto;background-color: red;color: white;">Remove</button>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button mat-button matStepperPrevious class="border">Previous</button>
+          <button mat-button matStepperNext style="background-color: #3FB8DE;color: white;" class="ms-2">Next</button>
+
+
+        </div>
+      </mat-step>
+
+      <!-- <mat-step [stepControl]="panelOneForm">
+        <ng-template matStepLabel>Left over</ng-template>
+        <div class="m-3">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <label class="col-6 col-form-label" style="font-weight: bold;font-size: large">Left over between LPS and
+                  4(1)</label>
+              </mat-expansion-panel-header>
+              <form [formGroup]="panelOneForm">
+                <div formArrayName="leftOverLPS4OneEntity">
+
+                  <div *ngFor="let item of panelOneItems.controls; let i = index" [formGroupName]="i">
+                    <div class="displayFlex">
+                      <span>
+
+                      </span>
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                        </mat-form-field>
+                      </span>
+                      <span *ngIf="!view">
+                        <mat-icon style="color: #3FB8DE;" (click)="addFields(panelOneItems)"
+                          matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                        <mat-icon style="color: red;" *ngIf="i !== 0"
+                          (click)="removeFieldss(panelOneItems, i, 'leftOverLPS4OneEntity')"
+                          matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2" *ngIf="panelOneItems.controls.length === 0 && edit">
+                    <div class="displayFlex">
+                      <span>
+
+                      </span>
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                        </mat-form-field>
+                      </span>
+                      <span *ngIf="!view">
+                        <mat-icon style="color: #3FB8DE;" (click)="addFields(panelOneItems)"
+                          matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                        <mat-icon style="color: red;" *ngIf="i !== 0"
+                          (click)="removeFieldss(panelOneItems, i, 'leftOverLPS4OneEntity')"
+                          matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </mat-expansion-panel>
+            <br>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <label class="col-6 col-form-label" style="font-weight: bold;font-size: large">Left over between 4(1)
+                  and 6DD</label>
+              </mat-expansion-panel-header>
+              <form [formGroup]="panelTwoForm">
+                <div formArrayName="left4One6DDEntity">
+
+                  <div *ngFor="let item of panelTwoItems.controls; let i = index" [formGroupName]="i">
+                    <div class="displayFlex">
+                      <span>
+
+                      </span>
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                        </mat-form-field>
+                      </span>
+                      <span *ngIf="!view">
+                        <mat-icon style="color: #3FB8DE;" (click)="addFields(panelTwoItems)"
+                          matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                        <mat-icon style="color: red;" *ngIf="i !== 0"
+                          (click)="removeFieldss(panelTwoItems, i, 'left4One6DDEntity')"
+                          matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2" *ngIf="panelTwoItems.controls.length === 0 && edit">
+                    <div class="displayFlex">
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Survey No</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                        </mat-form-field>
+                      </span>
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                        </mat-form-field>
+                      </span>
+                      <span *ngIf="!view">
+                        <mat-icon style="color: #3FB8DE;" (click)="addFields(panelTwoItems)"
+                          matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                        <mat-icon style="color: red;" *ngIf="i !== 0"
+                          (click)="removeFieldss(panelTwoItems, i, 'left4One6DDEntity')"
+                          matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </mat-expansion-panel>
+            <br>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <label class="col-6 col-form-label" style="font-weight: bold;font-size: large">Left over between 6DD and
+                  Award</label>
+              </mat-expansion-panel-header>
+              <form [formGroup]="panelThreeForm">
+                <div formArrayName="left6DDAwardEntity">
+
+                  <div *ngFor="let item of panelThreeItems.controls; let i = index" [formGroupName]="i">
+                    <div class="displayFlex">
+                      <span>
+                       -- <mat-form-field>
+                          <mat-label>Survey No</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                        </mat-form-field>--
+                      </span>
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                        </mat-form-field>
+                      </span>
+                      <span *ngIf="!view">
+                        <mat-icon style="color: #3FB8DE;" (click)="addFields(panelThreeItems)"
+                          matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                        <mat-icon style="color: red;" *ngIf="i !== 0"
+                          (click)="removeFieldss(panelThreeItems, i, 'left6DDAwardEntity')"
+                          matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2" *ngIf="panelThreeItems.controls.length === 0 && edit">
+                    <div class="displayFlex">
+                      <span>
+                        -- <mat-form-field>
+                          <mat-label>Survey No</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                        </mat-form-field> --
+                      </span>
+                      <span>
+                        <mat-form-field>
+                          <mat-label>Extent</mat-label>
+                          <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                        </mat-form-field>
+                      </span>
+                      <span *ngIf="!view">
+                        <mat-icon style="color: #3FB8DE;" (click)="addFields(panelThreeItems)"
+                          matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                        <mat-icon style="color: red;" *ngIf="i !== 0"
+                          (click)="removeFieldss(panelThreeItems, i, 'left6DDAwardEntity')"
+                          matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button mat-button matStepperPrevious class="border">Previous</button>
+          <button *ngIf="view" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+            (click)="back()">Back</button>
+          <button *ngIf="edit" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+            (click)="saveApi()">Update</button>
+          <button *ngIf="!view && !edit" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+            (click)="saveApi()">Submit</button>
+        </div>
+      </mat-step> -->
+
+      <div class="leftngy">
+        <mat-step [stepControl]="panelOneForm">
+          <ng-template matStepLabel>Left over</ng-template>
+          <div class="m-3">
+            <mat-accordion>
+              <div class="leftn">
+                <div class="col-4 panel1form">
+                  <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                      <label class="col col-form-label" style="font-weight: bold;font-size: large">Left over between LPS
+                        and
+                        4(1)</label>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="panelOneForm">
+                      <div formArrayName="leftOverLPS4OneEntity">
+
+                        <div *ngFor="let item of panelOneItems.controls; let i = index" [formGroupName]="i">
+                          <div class="displayFlex">
+                            <span>
+
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addFields(panelOneItems)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;" *ngIf="i !== 0"
+                                (click)="removeFieldss(panelOneItems, i, 'leftOverLPS4OneEntity')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col mb-2" *ngIf="panelOneItems.controls.length === 0 && edit">
+                          <div class="displayFlex">
+                            <span>
+
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addFields(panelOneItems)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;" *ngIf="i !== 0"
+                                (click)="removeFieldss(panelOneItems, i, 'leftOverLPS4OneEntity')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </mat-expansion-panel>
+                </div>
+                <div class="col-4 panel2form">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <label class="col col-form-label" style="font-weight: bold;font-size: large">Left over between
+                        4(1)
+                        and 6DD</label>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="panelTwoForm">
+                      <div formArrayName="left4One6DDEntity">
+
+                        <div *ngFor="let item of panelTwoItems.controls; let i = index" [formGroupName]="i">
+                          <div class="displayFlex">
+                            <span>
+
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addFields(panelTwoItems)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;" *ngIf="i !== 0"
+                                (click)="removeFieldss(panelTwoItems, i, 'left4One6DDEntity')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col mb-2" *ngIf="panelTwoItems.controls.length === 0 && edit">
+                          <div class="displayFlex">
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Survey No</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                              </mat-form-field>
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addFields(panelTwoItems)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;" *ngIf="i !== 0"
+                                (click)="removeFieldss(panelTwoItems, i, 'left4One6DDEntity')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </mat-expansion-panel>
+                </div>
+                <div class="col-4 panel2form">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <label class="col col-form-label" style="font-weight: bold;font-size: large">Left over between 6DD
+                        and Award</label>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="panelThreeForm">
+                      <div formArrayName="left6DDAwardEntity">
+
+                        <div *ngFor="let item of panelThreeItems.controls; let i = index" [formGroupName]="i">
+                          <div class="displayFlex">
+                            <span>
+                              <!-- <mat-form-field>
+                            <mat-label>Survey No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                          </mat-form-field> -->
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addFields(panelThreeItems)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;" *ngIf="i !== 0"
+                                (click)="removeFieldss(panelThreeItems, i, 'left6DDAwardEntity')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-6 mb-2" *ngIf="panelThreeItems.controls.length === 0 && edit">
+                          <div class="displayFlex">
+                            <span>
+                              <!-- <mat-form-field>
+                            <mat-label>Survey No</mat-label>
+                            <input matInput [readonly]="this.view" type="text" formControlName="v_SURVEY_NO">
+                          </mat-form-field> -->
+                            </span>
+                            <span>
+                              <mat-form-field>
+                                <mat-label>Extent</mat-label>
+                                <input matInput [readonly]="this.view" type="text" formControlName="v_EXTENT">
+                              </mat-form-field>
+                            </span>
+                            <span *ngIf="!view">
+                              <mat-icon style="color: #3FB8DE;" (click)="addFields(panelThreeItems)"
+                                matTooltip="Add Survey & Extend">add_circle</mat-icon>&nbsp;
+                              <mat-icon style="color: red;" *ngIf="i !== 0"
+                                (click)="removeFieldss(panelThreeItems, i, 'left6DDAwardEntity')"
+                                matTooltip="Remove Survey & Extend">cancel</mat-icon>&nbsp;&nbsp;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </mat-expansion-panel>
+                </div>
+              </div>
+            </mat-accordion>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button mat-button matStepperPrevious class="border">Previous</button>
+            <button *ngIf="view" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+              (click)="back()">Back</button>
+            <button *ngIf="edit" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+              (click)="saveApi()">Update</button>
+            <button *ngIf="!view && !edit" mat-button style="background-color: #3FB8DE;color: white;" class="ms-2"
+              (click)="saveApi()">Submit</button>
+          </div>
+        </mat-step>
+      </div>
+
+    </mat-stepper>
+  </mat-card>
+</div>

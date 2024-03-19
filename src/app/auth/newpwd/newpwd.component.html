@@ -1,0 +1,46 @@
+<section class="ftco-section">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="img" style="background-image: url(../../assets/img/bg-4.jpg);">
+                </div>
+            <div class="login-wrap p-4 p-md-5">
+                  <div class="d-flex">
+                    <img src="../../assets/img/tnhb_logo.png" alt="" style="max-height: 70px; margin-left: 2px;">
+                  </div>
+
+                    <br>
+
+                    <!-- <h5 style="font-weight: 400;font-size: 16px;line-height: 19px;">Employee Login</h5> -->
+                    <header style="font-weight: 700;font-size: 30px;line-height: 35px;">New Password</header>
+                    <br>
+                <form class="signin-form" [formGroup]="form">
+                      <div class="form-group mb-3">
+                          <label class="label" for="name">Enter Username</label>
+                          <input type="text" class="form-control" placeholder="Username" id="username"
+                          formControlName="userName" name="username">
+                      </div>
+                      <div class="form-group mb-3">
+                           <label class="label" for="password">Enter New Password</label>
+                           <input type="password" class="form-control" placeholder="Password"
+                           id="password_encrypted" formControlName="NewPassword"
+                           name="password_encrypted">
+                       </div>
+                       <div class="form-group">
+
+                            <a ><button type="submit" class="form-control btn btn-primary rounded submit px-3"
+                              (click)="updatenewpassword()" >Confirm Password</button></a>
+                       </div>
+                       <br>
+                       <h4 style="color:red">{{ message }}</h4>
+                </form>
+              <p class="text-center"><a data-toggle="tab" >Back</a></p>
+            </div>
+          </div>
+            </div>
+        </div>
+    </div>
+</section>
+

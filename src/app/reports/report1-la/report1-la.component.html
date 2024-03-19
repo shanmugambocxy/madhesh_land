@@ -1,0 +1,75 @@
+
+<!-- Main Section Starts -->
+<section class="about" id="report">
+    <br>
+    <br>
+<div class="container position-relative">
+  <div class="table-responsive">
+    <div style="text-align: right;">
+        <a href="#" class="btn btn-light" (click)="downloadExcel()">Download Report</a>
+      </div>
+<br>
+<br>
+    <table style=" font-size: 12px;" id="tableId">
+      <thead class="tblHead">
+          <tr>
+          <th rowspan="2">SI.No</th>
+          <th rowspan="2">Name of the Division/Unit</th>
+          <th rowspan="2">Total Extent of land acquired(in acres)</th>
+          <th colspan="9" style="text-align: center;">Possesssion Handed Over</th>
+          <th colspan="4" style="text-align: center;">Possession not Handed Over</th>
+         </tr>
+          <tr>
+            <th>Extent (in acres)</th>
+            <th>Flat (in acres)</th>
+            <th>Plot (in acres)</th>
+            <th>House (in acres)</th>
+            <th>Empty (in acres)</th>
+            <th>Extent covered by court case (in acres)</th>
+            <th>Extent lying vacant & for want of approach road ect.(in acres)</th>
+            <th>Extent covered by encroachement (in acres)</th>
+            <th>Extent covered under scattered(in acres)</th>
+            <th>Extent covered lapsed/quashed (in acres)</th>
+            <th>Land available for scheme implementation (in acres)</th>
+            <th>Extent (in acres)</th>
+            <th>Extent cover ed by court case(in acres)</th>
+            <th>Extent Covered under enroachement (in acres)</th>
+            <th>Extent covered quashed (in acres)</th>
+
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let data of reportdata; let i = index" style="text-align:center">
+            <td> {{ i+1 }}</td>
+            <td>{{data.division}} </td>
+            <td>{{data.total_extent_land_acquired}}</td>
+            <td>{{data.extent}} </td>
+            <td>{{data.extent_utilized_flat}} </td>
+            <td>{{data.extent_utilized_plot}} </td>
+            <td>{{data.extent_utilized_house}} </td>
+            <td>{{data.extent_not_utilized}}</td>
+            <td> {{data.extent_covered_by_court_case}}</td>
+            <td>{{data.extent_lying_vacant}} </td>
+            <td>{{data.extent_covered_by_encroachment}} </td>
+            <td>{{data.extent_covered_under_scattered}}</td>
+            <td>{{data.extent_covered_lapsed_quashed}}</td>
+            <td>{{data.land_available_for_scheme_implementation}}</td>
+            <td>{{data.not_handed_over_extent}}</td>
+            <td>{{data.not_handed_over_extent_covered_by_court_case}}</td>
+            <td>{{data.not_handed_over_extent_covered_under_encroachment}}</td>
+            <td>{{data.not_handed_over_extent_covered_quashed}}</td>
+
+
+        </tr>
+
+        </tbody>
+      </table>
+      </div>
+    </div>
+    </section>
+    <br>
+    <br>
+
+
+
+<!-- Main Section Ends -->

@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="card">
+        <div class="row">
+            <div class="img" style="background-image: url(../../../assets/img/bg-4.jpg);">
+            </div>
+
+            <div class="login-wrap p-4 p-md-5" style="width: 50%;">
+                <div class="d-flex">
+                    <img class="img2" src="../../assets/img/tnhb_logo.png" alt="">
+                </div>
+                <!-- <span class="row"></span> -->
+
+                <div class="m-3">
+                    <span class="row" style="font-size: x-large;font-weight: 700;margin: 10px;">Login to your
+                        Account</span>
+                    <form class="signin-form" [formGroup]="form" autocomplete="off">
+                        <div class="form-group mb-3">
+
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Username</mat-label>
+                                <input matInput type="text" formControlName="username" placeholder=""
+                                    [disabled]="isDisabled">
+                                <mat-error *ngIf="form.controls['username'].errors?.required">
+                                    Username is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group mb-3">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Password</mat-label>
+                                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password_encrypted"
+                                    [disabled]="isDisabled">
+                                <button mat-icon-button matSuffix (click)="hide = !hide"
+                                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                                <mat-error *ngIf="form.controls['password_encrypted'].errors?.required">
+                                    Password is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group" *ngIf="invalidLogin">
+                            <p style="color: red;">{{message}}!</p>
+                        </div>
+                        <div class="form-group disFlex">
+                            <button type="submit" mat-flat-button color="primary" (click)="checkLogin()"
+                                [disabled]="isDisabled">Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <p class="text-center"><a [routerLink]="['/auth/otp']" class="primary">Forgot Password?</a></p>
+            </div>
+        </div>
+
+    </div>
+</div>

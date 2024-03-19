@@ -1,0 +1,281 @@
+<section class="container-fluid table-2" style="padding:20px">
+  <!-- style="padding: 2rem 9rem;" -->
+  <div class="row">
+    <div class="col">
+      <div class="card-stat" style="background:#fcf1d9 ;">
+        <span class="title">{{'Total LPS'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color:#f5b707 ;">{{total_LPS | number:'1.2-2'}}</span> -->
+          <span class="rate" style="color:#2193f8 ;">{{getTotal('lps') | number:'1.2-2'}}</span>&nbsp;
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background: #c2e1fe;">
+        <span class="title">{{'Total LPS Acres'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color:#2193f8 ;">{{total_LPS_Acres | number:'1.2-2'}}</span>&nbsp; -->
+          <span class="rate" style="color:#2193f8 ;">{{getTotal_N('lpsAcres')| number:'1.2-2' }}</span>&nbsp;
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#e8cfe2 ;">
+        <span class="title">{{'Total 4(1)'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_4_1 | number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal('fourOne') | number:'1.2-2'}}</span>
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#ffc0cba8 ;">
+        <span class="title">{{'Total 4(1) Acres'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_4_1_Acres | number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal_N('fourAcres') | number:'1.2-2'}}</span>
+
+
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#ffc0cba8 ;">
+        <span class="title">{{'Total 6DD'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_6DD | number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal('sixDD') | number:'1.2-2'}}</span>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+
+    <div class="col">
+      <div class="card-stat" style="background: #c2e1fe;">
+        <span class="title">{{'Total 6DD Acres'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color:#2193f8 ;">{{total_6DD_Acres | number:'1.2-2'}}</span>&nbsp; -->
+          <span class="rate" style="color:#2193f8 ;">{{getTotal_N('sixAcres') | number:'1.2-2'}}</span>&nbsp;
+
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#ffc0cba8 ;">
+        <span class="title">{{'Total Award'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_Award | number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal('award') | number:'1.2-2'}}</span>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#ffc0cba8 ;">
+        <span class="title">{{'Total Award Acres'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_Award_Acres| number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal_N('awardAcres')| number:'1.2-2'}}</span>
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#ffc0cba8 ;">
+        <span class="title">{{'Total PTO Acres'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_PTO_Acres| number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal_N('possissiontakenOver')| number:'1.2-2'}}</span>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-stat" style="background:#ffc0cba8 ;">
+        <span class="title">{{'Total PNTO Acres'}}</span>
+        <div class="flex-bot">
+          <!-- <span class="rate" style="color: #b33789;">{{total_PNTO_Acres| number:'1.2-2'}}</span> -->
+          <span class="rate" style="color: #b33789;">{{getTotal_N('possiosionNotTakenOver')| number:'1.2-2'}}</span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="d-flex justify-content-between pt-2" style="align-items: baseline;">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Search ..</mat-label>
+      <input matInput (keyup)="applyTable2Search($event)" placeholder="search" #input>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" id="example1">
+      <mat-label>Division</mat-label>
+      <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter()" multiple
+        [panelClass]="'temporary'">
+        <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+          {{ divisionSelect }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
+    <mat-form-field appearance="outline" id="example2">
+      <mat-label>Village</mat-label>
+      <mat-select [formControl]="villageSelect" (selectionChange)="applyTable2Filter()" multiple
+        [panelClass]="'temporary'">
+        <mat-option *ngFor="let villageSelect of villageSelectList" [value]="villageSelect">
+          {{ villageSelect }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" [class]="disable ? 'doh':''" (click)="generatePDF()">Generate PDF</button>
+
+    <div class="d-flex justify-content-between align-items-center px-2"
+      style="background-color: #f3f3f9;border-radius: 10px;height: 3.5rem;">
+      <mat-checkbox (change)="toggleColumnVisibility('lps', $event.checked)">LPS</mat-checkbox>
+      <mat-checkbox (change)="toggleColumnVisibility('fourOne', $event.checked)">4(1)</mat-checkbox>
+      <mat-checkbox (change)="toggleColumnVisibility('sixDD', $event.checked)">6DD</mat-checkbox>
+      <mat-checkbox (change)="toggleColumnVisibility('award', $event.checked)">Award</mat-checkbox>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="table2dataSource" id="tableId">
+
+    <!-- Division Column -->
+    <ng-container matColumnDef="division">
+      <th mat-header-cell *matHeaderCellDef> Division </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.division}} </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+
+    </ng-container>
+
+    <!-- Village Column -->
+    <ng-container matColumnDef="village">
+      <th mat-header-cell *matHeaderCellDef> Village </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.village}} </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+    </ng-container>
+
+    <!-- LPS Column -->
+    <ng-container matColumnDef="lps">
+      <th mat-header-cell *matHeaderCellDef> LPS </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.lps ? data2.lps : 0}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal('lps')| number:'1.2-2'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="lps_acres">
+      <th mat-header-cell *matHeaderCellDef> LPS Acres</th>
+      <td mat-cell *matCellDef="let data2"> {{data2.lpsAcres | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal_N('lpsAcres')| number:'1.2-2'}}{{' '}}{{'(in acres)'}} </td>
+    </ng-container>
+    <!-- 4(1) Column -->
+    <ng-container matColumnDef="fourOne">
+      <th mat-header-cell *matHeaderCellDef> 4(1) </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.fourOne}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal('fourOne')| number:'1.2-2'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="fourOne_acres">
+      <th mat-header-cell *matHeaderCellDef> 4(1) Acres </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.fourAcres | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal_N('fourAcres')| number:'1.2-2'}} {{' '}}{{'(in acres)'}} </td>
+    </ng-container>
+    <!-- 6DD Column -->
+    <ng-container matColumnDef="sixDD">
+      <th mat-header-cell *matHeaderCellDef> 6DD </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.sixDD}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal('sixDD')| number:'1.2-2'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="sixDD_acres">
+      <th mat-header-cell *matHeaderCellDef> 6DD Acres </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.sixAcres | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal_N('sixAcres')| number:'1.2-2'}} {{' '}}{{'(in acres)'}}</td>
+    </ng-container>
+    <!-- Award Column -->
+    <ng-container matColumnDef="award">
+      <th mat-header-cell *matHeaderCellDef> Award </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.award}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal('award')| number:'1.2-2'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="award_acres">
+      <th mat-header-cell *matHeaderCellDef> Award Acres </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.awardAcres | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal_N('awardAcres')| number:'1.2-2'}} {{' '}}{{'(in acres)'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="possessTaken">
+      <th mat-header-cell *matHeaderCellDef matTooltip="Possession Taken Over"> PTO Acres </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.possissiontakenOver | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal_N('possissiontakenOver')| number:'1.2-2'}} {{' '}}
+        {{'(in acres)'}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="possessNotTaken">
+      <th mat-header-cell *matHeaderCellDef matTooltip="Possession Not Taken Over"> PNTO Acres </th>
+      <td mat-cell *matCellDef="let data2"> {{data2.possiosionNotTakenOver | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getTotal_N('possiosionNotTakenOver')| number:'1.2-2'}} {{' '}}
+        {{'(in acres)'}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="table2Columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: table2Columns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="table2Columns"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <!-- <table mat-table [dataSource]="table2NewDataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="division">
+      <th mat-header-cell *matHeaderCellDef> Division </th>
+      <td mat-cell *matCellDef="let data"> {{data.v_NAME_OF_DIVISION}} </td>
+    </ng-container>
+    <ng-container matColumnDef="lps_village">
+      <th mat-header-cell *matHeaderCellDef> LPS Village </th>
+      <td mat-cell *matCellDef="let data"> {{data.lps_village}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="four_one_village">
+      <th mat-header-cell *matHeaderCellDef> 4(1) Village </th>
+      <td mat-cell *matCellDef="let data"> {{data.four_one_village}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sixdd_village">
+      <th mat-header-cell *matHeaderCellDef> 6DD Village </th>
+      <td mat-cell *matCellDef="let data"> {{data.sixdd_village}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="award_village">
+      <th mat-header-cell *matHeaderCellDef> Award Village </th>
+      <td mat-cell *matCellDef="let data"> {{data.award_village}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="v_NAME_OF_SCHEME">
+      <th mat-header-cell *matHeaderCellDef> Scheme Name </th>
+      <td mat-cell *matCellDef="let data"> {{data.v_NAME_OF_SCHEME}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="n_UNIQUE_ID">
+      <th mat-header-cell *matHeaderCellDef> Unique ID </th>
+      <td mat-cell *matCellDef="let data"> {{data.n_UNIQUE_ID}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="table2NewColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: table2NewColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="2">No data available</td>
+    </tr>
+  </table> -->
+
+
+</section>

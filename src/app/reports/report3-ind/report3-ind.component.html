@@ -1,0 +1,880 @@
+<div style="padding: 10px;">
+    <mat-tab-group>
+        <mat-tab label="Acquisition of land (in acre)">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card-stat" style="background:#fcf1d9 ;">
+                        <span class="title">{{'Total 4One (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#f5b707 ;">{{totalFour | number:'1.2-2'}}</span> -->
+                            <span class="rate" style="color:#f5b707 ;">{{getTotalTab1('fourAcres') |
+                                number:'1.2-2'}}</span>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-stat" style="background: #c2e1fe;">
+                        <span class="title">{{'Total 6DD (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{totalSix | number:'1.2-2'}}</span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab1('sixAcres') |
+                                number:'1.2-2'}}</span>&nbsp;
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-stat" style="background:#e8cfe2 ;">
+                        <span class="title">{{'Total Award (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{totalAward | number:'1.2-2'}}</span> -->
+                            <span class="rate" style="color: #b33789;">{{getTotalTab1_N('awardAcres') |
+                                number:'1.2-2'}}</span>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-stat" style="background:#ffc0cba8 ;">
+                        <span class="title">{{'Total PTO (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{totalPtoAcres | number:'1.2-2'}}</span> -->
+                            <span class="rate" style="color: #b33789;">{{getTotalTab1_N('possissiontakenOver')|
+                                number:'1.2-2'}}</span>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 10px;">
+                <div class="row d-flex justify-content-between" style="align-items: baseline;">
+                    <div class="col-8" style="display: flex;gap: 10px;">
+                        <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Search ..</mat-label>
+                            <input matInput (keyup)="applyTable2Search($event,'1')" placeholder="search" #input>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Division</mat-label>
+                            <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter('1')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+                                    {{ divisionSelect }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+                        <mat-form-field appearance="outline" id="example2">
+                            <mat-label>Village</mat-label>
+                            <mat-select [formControl]="villageSelect" (selectionChange)="applyTable2Filter('1')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-select-trigger>
+                                    {{ villageCtrl.value ? villageCtrl.value : 'All' }}
+                                </mat-select-trigger>
+                                <div style="background: gainsboro;margin: 10px;border-radius: 8px;">
+                                    <input style="padding: 20px;" matInput placeholder="Village"
+                                        [formControl]="villageCtrl" required />
+                                </div>
+
+                                <mat-option [class]="valuerep1.length ===0?'doh':''"
+                                    *ngFor="let village of (filtered1Village | async)" [value]="village">
+                                    {{ village }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+
+                    </div>
+                    <div class="col-4" style="display: flex;justify-content: end;">
+                        <button mat-flat-button color="primary" [class]="disable ? 'doh':''"
+                            (click)="generatePDF('1')">Generate PDF</button>
+                    </div>
+
+                    <!-- <div class="d-flex justify-content-between align-items-center px-2"
+                      style="background-color: #f3f3f9;border-radius: 10px;height: 3.5rem;">
+                      <mat-checkbox (change)="toggleColumnVisibility('lps', $event.checked)">LPS</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('fourOne', $event.checked)">4(1)</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('sixDD', $event.checked)">6DD</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('award', $event.checked)">Award</mat-checkbox>
+                    </div> -->
+                </div>
+                <table mat-table [dataSource]="report1NewDataSource" id="tableId1">
+                    <!-- Village Column -->
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef>Name of Village </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.village}} </td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
+
+                    </ng-container>
+
+
+                    <!-- 4(1) Column -->
+                    <ng-container matColumnDef="fourOne">
+                        <th mat-header-cell *matHeaderCellDef> 4(1) (in acre)</th>
+                        <!-- <td mat-cell *matCellDef="let data2"> {{data2.fourOne}} </td> -->
+                        <td mat-cell *matCellDef="let data2"> {{data2.fourAcres | number:'1.2-2'}} </td>
+
+
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab1('fourAcres') | number:'1.2-2'}}
+                            {{' '}}
+                            {{'(in acres)'}} </td>
+                    </ng-container>
+
+                    <!-- 6DD Column -->
+                    <ng-container matColumnDef="sixDD">
+                        <th mat-header-cell *matHeaderCellDef> 6DD (in acre)</th>
+                        <!-- <td mat-cell *matCellDef="let data2"> {{data2.sixDD}} </td> -->
+                        <td mat-cell *matCellDef="let data2"> {{data2.sixAcres| number:'1.2-2'}} </td>
+
+
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab1('sixAcres')| number:'1.2-2'}}
+                            {{' '}}
+                            {{'(in acres)'}}</td>
+                    </ng-container>
+
+                    <!-- Award Column -->
+                    <ng-container matColumnDef="award">
+                        <th mat-header-cell *matHeaderCellDef> Award (in acre)</th>
+                        <!-- <td mat-cell *matCellDef="let data2"> {{data2.award}} </td> -->
+                        <td mat-cell *matCellDef="let data2"> {{data2.awardAcres| number:'1.2-2'}} </td>
+
+
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab1_N('awardAcres')| number:'1.2-2'}}
+                            {{' '}}
+                            {{'(in acres)'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="possessTaken">
+                        <th mat-header-cell *matHeaderCellDef matTooltip="Possession Taken Over"> PTO (in acre) </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.possissiontakenOver | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab1_N('possissiontakenOver')| number:'1.2-2'}}
+                            {{' '}}
+                            {{'(in acres)'}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="table1Columns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: table1Columns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="table1Columns"></tr>
+
+                </table>
+
+                <p class="nodata" *ngIf="!report1NewDataSource || report1NewDataSource?.filteredData.length===0">No data
+                    available</p>
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Extent Difference between 4(1) and 6 (DD) in acre">
+            <div class="row">
+                <div class="col">
+                    <div class="card-stat"
+                        style="background:#e8cfe2 ;margin-left: 0px !important;margin-right: 0px !important;">
+                        <span class="title">{{'LPS (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{totalLpsAcre | number:'1.2-2'}} </span> -->
+                            <span class="rate" style="color: #b33789;">{{getTotalTab2_N('lpsAcres') | number:'1.2-2'}}
+                            </span>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background:#fcf1d9 ;">
+                        <span class="title">{{'4One (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#f5b707 ;">{{total4oneAcres | number:'1.2-2'}} </span> -->
+                            <span class="rate" style="color:#f5b707 ;">{{getTotalTab2_N('fourAcres') | number:'1.2-2'}}
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #c2e1fe;">
+                        <span class="title">{{'6DD (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{totalSixAcres | number:'1.2-2'}} </span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab2_N('sixAcres') | number:'1.2-2'}}
+                            </span>&nbsp;
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #ffa5006b;">
+                        <span class="title">{{'4(1) Notification No of GO s'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{totalFour | number:'1.2-2'}} </span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab2('fourOne') | number:'1.2-2'}}
+                            </span>&nbsp;
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #ff000045;">
+                        <span class="title">{{'6DD No of GO s'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{totalSix | number:'1.2-2'}} </span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab2('sixdd_file_count') |
+                                number:'1.2-2'}}
+                            </span>&nbsp;
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #adff2f7a;">
+                        <span class="title">{{'4(1) - 6DD '}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{total6DD4_1 | number:'1.2-2'}} </span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab2_N('total6DD4_1') |
+                                number:'1.2-2'}} </span>&nbsp;
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 10px;">
+                <div class="row d-flex justify-content-between" style="align-items: baseline;">
+                    <div class="col-8" style="display: flex;gap: 10px;">
+                        <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Search ..</mat-label>
+                            <input matInput (keyup)="applyTable2Search($event,'2')" placeholder="search" #input>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Division</mat-label>
+                            <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter('2')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+                                    {{ divisionSelect }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+                        <mat-form-field appearance="outline" id="example2">
+                            <mat-label>Village</mat-label>
+                            <mat-select [formControl]="villageSelect" (selectionChange)="applyTable2Filter('2')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-select-trigger>
+                                    {{ villageCtrl.value ? villageCtrl.value : 'All' }}
+                                </mat-select-trigger>
+                                <div style="background: gainsboro;margin: 10px;border-radius: 8px;">
+                                    <input style="padding: 20px;" matInput placeholder="Village"
+                                        [formControl]="villageCtrl" required />
+                                </div>
+
+                                <mat-option [class]="valuerep1.length ===0?'doh':''"
+                                    *ngFor="let village of (filtered2Village | async)" [value]="village">
+                                    {{ village }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+
+                    </div>
+                    <div class="col-4" style="display: flex;justify-content: end;">
+                        <button mat-flat-button color="primary" [class]="disable ? 'doh':''"
+                            (click)="generatePDF('2')">Generate PDF</button>
+                    </div>
+
+                    <!-- <div class="d-flex justify-content-between align-items-center px-2"
+                      style="background-color: #f3f3f9;border-radius: 10px;height: 3.5rem;">
+                      <mat-checkbox (change)="toggleColumnVisibility('lps', $event.checked)">LPS</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('fourOne', $event.checked)">4(1)</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('sixDD', $event.checked)">6DD</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('award', $event.checked)">Award</mat-checkbox>
+                    </div> -->
+                </div>
+                <table mat-table [dataSource]="report2NewDataSource" id="tableId2">
+                    <!-- Village Column -->
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef>Name of Village </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.village}} </td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lps_acres">
+                        <th mat-header-cell *matHeaderCellDef> LPS Extent (in acre)</th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.lpsAcres | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab2_N('lpsAcres')| number:'1.2-2'}}
+                            {{' '}}{{'(in acres)'}} </td>
+                    </ng-container>
+                    <!-- 4(1) Column -->
+                    <ng-container matColumnDef="fourOne_acres">
+                        <th mat-header-cell *matHeaderCellDef> 4(1) (in acres) </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.fourAcres | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab2_N('fourAcres')| number:'1.2-2'}}
+                            {{''}}{{'(in acres)'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fourOneGO">
+                        <th mat-header-cell *matHeaderCellDef> "4(1) Notification No of GO's "</th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.fourOne| number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab2('fourOne')| number:'1.2-2'}} </td>
+                    </ng-container>
+                    <!-- 6DD Column -->
+                    <ng-container matColumnDef="sixDD_acres">
+                        <th mat-header-cell *matHeaderCellDef> 6DD Acres (in acre)</th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.sixAcres | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab2_N('sixAcres')| number:'1.2-2'}}
+                            {{''}}{{'(in acres)'}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="sixDDGO">
+                        <th mat-header-cell *matHeaderCellDef> 6DD No of GO's </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.sixdd_file_count| number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab2('sixdd_file_count')| number:'1.2-2'}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="diff">
+                        <th mat-header-cell *matHeaderCellDef> 4(1) (in acres) - 6DD (in acre)</th>
+
+                        <td mat-cell *matCellDef="let data2"> {{data2.total6DD4_1 | number:'1.2-2'}} </td>
+                        <!-- <td mat-cell *matCellDef="let data2" hidden> {{data2.fourOne - data2.sixAcres | number:'1.2-2'}}
+                        </td> -->
+
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab2_N('total6DD4_1')| number:'1.2-2'}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="table2Columns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: table2Columns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="table2Columns"></tr>
+
+                </table>
+                <p class="nodata" *ngIf="!report2NewDataSource || report2NewDataSource?.filteredData.length===0">No data
+                    available</p>
+
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Extent Difference between  6 (DD) and Award in acre">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card-stat" style="background: #c2e1fe;">
+                        <span class="title">{{'6DD (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{totalSixAcres | number:'1.2-2'}}
+                                {{'(in acres)'}}</span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab3_N('sixAcres') | number:'1.2-2'}}
+                            </span>&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-stat" style="background:#fcf1d9 ;">
+                        <span class="title">{{'Award (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#f5b707 ;">{{totalAwardAcres | number:'1.2-2'}}
+                                {{'(in acres)'}}</span> -->
+                            <span class="rate" style="color:#f5b707 ;">{{getTotalTab3_N('awardAcres') | number:'1.2-2'}}
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card-stat" style="background:#e8cfe2 ;">
+                        <span class="title">{{'6DD (in acres) - Award (in acres)'}}</span>
+
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{totalAward6DDAcres | number:'1.2-2'}}
+                                {{'(in acres)'}}</span> -->
+                            <span class="rate" style="color: #b33789;">{{ getTotalTab3_N('total_Sixacres_AwardAcres') |
+                                number:'1.2-2'}}</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 10px;">
+                <div class="row d-flex justify-content-between" style="align-items: baseline;">
+                    <div class="col-8" style="display: flex;gap: 10px;">
+                        <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Search ..</mat-label>
+                            <input matInput (keyup)="applyTable2Search($event,'3')" placeholder="search" #input>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Division</mat-label>
+                            <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter('3')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+                                    {{ divisionSelect }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+                        <mat-form-field appearance="outline" id="example2">
+                            <mat-label>Village</mat-label>
+                            <mat-select [formControl]="villageSelect" (selectionChange)="applyTable2Filter('3')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-select-trigger>
+                                    {{ villageCtrl.value ? villageCtrl.value : 'All' }}
+                                </mat-select-trigger>
+                                <div style="background: gainsboro;margin: 10px;border-radius: 8px;">
+                                    <input style="padding: 20px;" matInput placeholder="Village"
+                                        [formControl]="villageCtrl" required />
+                                </div>
+
+                                <mat-option [class]="valuerep1.length ===0?'doh':''"
+                                    *ngFor="let village of (filtered3Village | async)" [value]="village">
+                                    {{ village }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+
+                    </div>
+                    <div class="col-4" style="display: flex;justify-content: end;">
+                        <button mat-flat-button color="primary" [class]="disable ? 'doh':''"
+                            (click)="generatePDF('3')">Generate PDF</button>
+                    </div>
+
+                    <!-- <div class="d-flex justify-content-between align-items-center px-2"
+                      style="background-color: #f3f3f9;border-radius: 10px;height: 3.5rem;">
+                      <mat-checkbox (change)="toggleColumnVisibility('lps', $event.checked)">LPS</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('fourOne', $event.checked)">4(1)</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('sixDD', $event.checked)">6DD</mat-checkbox>
+                      <mat-checkbox (change)="toggleColumnVisibility('award', $event.checked)">Award</mat-checkbox>
+                    </div> -->
+                </div>
+                <table mat-table [dataSource]="report3NewDataSource" id="tableId3">
+                    <!-- Village Column -->
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef>Name of Village </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.village}} </td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
+                    </ng-container>
+                    <!-- 6DD Column -->
+                    <ng-container matColumnDef="sixDD_acres">
+                        <th mat-header-cell *matHeaderCellDef> 6DD (in acres) </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.sixAcres | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab3_N('sixAcres')| number:'1.2-2'}} {{'
+                            '}}{{'(in acres)'}}
+                        </td>
+                    </ng-container>
+                    <!-- Award Column -->
+                    <ng-container matColumnDef="award_acres">
+                        <th mat-header-cell *matHeaderCellDef> Award Extent (in acres) </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.awardAcres | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab3_N('awardAcres')| number:'1.2-2'}}
+                            {{''}}{{'(in acres)'}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="diff">
+                        <th mat-header-cell *matHeaderCellDef> 6DD (in acre) - Award (in acre)</th>
+                        <!--   <td mat-cell *matCellDef="let data2"> {{data2.sixAcres - data2.awardAcres | number:'1.2-2'}}
+                        </td>-->
+                        <td mat-cell *matCellDef="let data2"> {{data2.total_Sixacres_AwardAcres | number:'1.2-2'}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab3_N('total_Sixacres_AwardAcres')|
+                            number:'1.2-2'}} {{''}}{{'(in acres)'}}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="table3Columns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: table3Columns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="table3Columns"></tr>
+
+                </table>
+                <p class="nodata" *ngIf="!report3NewDataSource || report3NewDataSource?.filteredData.length===0">No data
+                    available</p>
+
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Utilization of Land Acquired (in acre)">
+            <div class="row">
+                <div class="col">
+                    <div class="card-stat"
+                        style="background:#e8cfe2 ;margin-left: 0px !important;margin-right: 0px !important;">
+                        <span class="title">{{'Total PTO (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{totalPtoAcres | number:'1.2-2'}}</span> -->
+                            <span class="rate" style="color: #b33789;">{{getTotalTab4_N('possissiontakenOver') |
+                                number:'1.2-2'}}</span>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background:#fcf1d9 ;">
+                        <span class="title">{{'Total Utilized'}}</span>
+                        <div class="flex-bot">
+                            <span class="rate" style="color:#f5b707 ;">{{0 | number:'1.2-2'}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #c2e1fe;">
+                        <span class="title">{{'Total Non Utilized'}}</span>
+                        <div class="flex-bot">
+                            <span class="rate" style="color:#2193f8 ;">{{0 | number:'1.2-2'}}</span>&nbsp;
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div style="padding: 10px;">
+                <div class="row mt-10">
+                    <div class="col-8" style="display: flex;gap: 10px;">
+                        <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Search ..</mat-label>
+                            <input matInput (keyup)="applyTable2Search($event,'4')" placeholder="search" #input>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Division</mat-label>
+                            <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter('4')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+                                    {{ divisionSelect }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+
+
+
+                    </div>
+                    <div class="col-4" style="display: flex;justify-content: end;">
+                        <button mat-flat-button color="primary" [class]="disable ? 'doh':''"
+                            (click)="generatePDF('4')">Generate PDF</button>
+                    </div>
+                </div>
+                <table mat-table [dataSource]="table2dataSource" id="tableId4">
+                    <!-- Village Column -->
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef>Name of Village </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.village}} </td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
+                    </ng-container>
+                    <!-- Award Column -->
+                    <ng-container matColumnDef="possessTaken">
+                        <th mat-header-cell *matHeaderCellDef matTooltip="Possession Taken Over"> PTO Acres </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.possissiontakenOver | number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab4_N('possissiontakenOver')| number:'1.2-2'}}
+                            {{' '}}
+                            {{'(in acres)'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="utilized">
+                        <th mat-header-cell *matHeaderCellDef>Utilized</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab4_N('utilized')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="non_utilized">
+                        <th mat-header-cell *matHeaderCellDef>Non Utilized</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab4_N('non_utilized')}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="table4Columns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: table4Columns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="table4Columns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                    </tr>
+                </table>
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Non - Utilization of Land Acquired (in acre)">
+            <div class="row">
+                <div class="col">
+                    <div class="card-stat"
+                        style="background:#e8cfe2 ;margin-left: 0px !important;margin-right: 0px !important;">
+                        <span class="title">{{'Total Non Utilized'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{totalPtoAcres | number:'1.2-2'}}</span> -->
+                            <span class="rate" style="color: #b33789;">{{0 |
+                                number:'1.2-2'}}</span>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background:#fcf1d9 ;">
+                        <span class="title">{{'Total Land Available for Scheme'}}</span>
+                        <div class="flex-bot">
+                            <span class="rate" style="color:#f5b707 ;">{{0 | number:'1.2-2'}}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div style="padding: 10px;">
+                <div class="row mt-10">
+                    <div class="col-8" style="display: flex;gap: 10px;">
+                        <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Search ..</mat-label>
+                            <input matInput (keyup)="applyTable2Search($event,'5')" placeholder="search" #input>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Division</mat-label>
+                            <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter('4')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+                                    {{ divisionSelect }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+
+
+
+                    </div>
+                    <div class="col-4" style="display: flex;justify-content: end;">
+                        <button mat-flat-button color="primary" [class]="disable ? 'doh':''"
+                            (click)="generatePDF('5')">Generate PDF</button>
+                    </div>
+                </div>
+                <table mat-table [dataSource]="table2dataSource" id="tableId5">
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef> Village </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.village}} </td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="non_utilized">
+                        <th mat-header-cell *matHeaderCellDef>Non Utilized</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('non_utilized')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="visitors">
+                        <th mat-header-cell *matHeaderCellDef colspan="5"> {{'Reason for Non-Utilization (in acre)'}}
+                        </th>
+                    </ng-container>
+                    <ng-container matColumnDef="govtDept">
+                        <th mat-header-cell *matHeaderCellDef>Govt Depts</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('govtDept')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="reconvey">
+                        <th mat-header-cell *matHeaderCellDef>Reconvey</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('reconvey')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="quash">
+                        <th mat-header-cell *matHeaderCellDef>Quashed</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('quash')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="encroach">
+                        <th mat-header-cell *matHeaderCellDef>Encroachment</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('encroach')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="litigation">
+                        <th mat-header-cell *matHeaderCellDef>Under Litigation</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('litigation')}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="availableForScheme">
+                        <th mat-header-cell *matHeaderCellDef>Land Available for Scheme</th>
+                        <td mat-cell *matCellDef="let data2"> {{0}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab5_N('availableForScheme')}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="['village', 'non_utilized','visitors','availableForScheme']">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: table5Columns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="table5Columns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                    </tr>
+                </table>
+            </div>
+        </mat-tab>
+        <mat-tab label="Award Amount Deposit Details">
+            <div class="row">
+                <div class="col">
+                    <div class="card-stat"
+                        style="background:#e8cfe2 ;margin-left: 0px !important;margin-right: 0px !important;">
+                        <span class="title">{{'Total Extent (in acres)'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color: #b33789;">{{total_Extend_In_Acres | number:'1.2-2'}} 
+                            {{'(in acres)'}}</span> -->
+                            <span class="rate" style="color: #b33789;">{{getTotalTab6('V_TOTAL_EXTENT') |
+                                number:'1.2-2'}}
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background:#fcf1d9 ;">
+                        <span class="title">{{'Total Award Amount '}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#f5b707 ;">{{total_Award_Amount | number:'1.2-2'}}</span> -->
+                            <span class="rate" style="color:#f5b707 ;">{{getTotalTab6_N('N_TOTAL_AWARD_AMOUNT')|
+                                number:'1.2-2'}}</span>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #c2e1fe;">
+                        <span class="title">{{'Total Direct Payment'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{total_Direct_Payment | number:'1.2-2'}}
+                             {{'(in acres)'}}</span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab6_N('totalAmountDirectPayment') |
+                                number:'1.2-2'}}
+                            </span>&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #ffa5006b;">
+                        <span class="title">{{'Total Revenue Deposit'}}</span>
+                        <div class="flex-bot">
+                            <!-- <span class="rate" style="color:#2193f8 ;">{{total_Revenue_Deposit | number:'1.2-2'}}
+                            </span>&nbsp; -->
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab6_N('totalAmountRevenuePayment') |
+                                number:'1.2-2'}}
+                            </span>&nbsp;
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-stat" style="background: #ff000045;">
+                        <span class="title">{{'Total CC Deposit'}}</span>
+                        <div class="flex-bot">
+                            <span class="rate" style="color:#2193f8 ;">{{getTotalTab6_N('totalAmountCourtDeposit') |
+                                number:'1.2-2'}}
+                            </span>&nbsp;
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="padding: 10px;">
+                <div class="row mt-10">
+                    <div class="col-8" style="display: flex;gap: 10px;">
+                        <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Search ..</mat-label>
+                            <input matInput (keyup)="applyTable2Search($event,'6')" placeholder="search" #input>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field appearance="outline" id="example1">
+                            <mat-label>Division</mat-label>
+                            <mat-select [formControl]="divisionSelect" (selectionChange)="applyTable2Filter('2')"
+                                multiple [panelClass]="'temporary'">
+                                <mat-option *ngFor="let divisionSelect of divisionSelectList" [value]="divisionSelect">
+                                    {{ divisionSelect }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+
+
+
+                    </div>
+                    <div class="col-4" style="display: flex;justify-content: end;">
+                        <button mat-flat-button color="primary" [class]="disable ? 'doh':''"
+                            (click)="generatePDF('6')">Generate PDF</button>
+                    </div>
+                </div>
+
+                <table mat-table [dataSource]="awardAmountDetailsdataSource" id="tableId6">
+
+                    <!-- Division Column -->
+                    <ng-container matColumnDef="division">
+                        <th mat-header-cell *matHeaderCellDef> Division </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.division}} </td>
+                        <td mat-footer-cell *matFooterCellDef> '' </td>
+                    </ng-container>
+                    <!-- Award Column -->
+                    <ng-container matColumnDef="awardNo">
+                        <th mat-header-cell *matHeaderCellDef> Award No</th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.V_AWARD_NO}} </td>
+                        <td mat-footer-cell *matFooterCellDef> Total </td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.D_AWARD_DATE}} </td>
+                        <td mat-footer-cell *matFooterCellDef> - </td>
+                    </ng-container>
+                    <ng-container matColumnDef="award_acres">
+                        <th mat-header-cell *matHeaderCellDef> Extent in Acres </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.V_TOTAL_EXTENT }} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab6('V_TOTAL_EXTENT')}} </td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="award_amount">
+                        <th mat-header-cell *matHeaderCellDef> Award Amount </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.N_TOTAL_AWARD_AMOUNT}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('N_TOTAL_AWARD_AMOUNT')}} </td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="direct">
+                        <th mat-header-cell *matHeaderCellDef> Direct Payment </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountDirectPayment| number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('totalAmountDirectPayment')|
+                            number:'1.2-2'}} </td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="revenue">
+                        <th mat-header-cell *matHeaderCellDef> Revenue Deposit </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountRevenuePayment| number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('totalAmountRevenuePayment')|
+                            number:'1.2-2'}} </td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="cc">
+                        <th mat-header-cell *matHeaderCellDef> CC Deposit </th>
+                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountCourtDeposit| number:'1.2-2'}} </td>
+                        <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('totalAmountCourtDeposit')|
+                            number:'1.2-2'}} </td>
+
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="table6Columns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: table6Columns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="table6Columns"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                    </tr>
+                </table>
+            </div>
+
+        </mat-tab>
+    </mat-tab-group>
+</div>

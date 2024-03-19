@@ -1,0 +1,266 @@
+
+:root {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: "Open Sans", sans-serif;
+    background: #f6f9ff;
+    color: #444444;
+  }
+
+  a {
+    color: #4154f1;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #717ff5;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Nunito", sans-serif;
+  }
+
+  /*--------------------------------------------------------------
+  # Main
+  --------------------------------------------------------------*/
+  #main {
+    margin-top: 60px;
+    padding: 20px 30px;
+    transition: all 0.3s;
+  }
+
+  @media (max-width: 1199px) {
+    #main {
+      padding: 20px;
+    }
+  }
+
+  /*--------------------------------------------------------------
+  # Page Title
+  --------------------------------------------------------------*/
+  .pagetitle {
+    margin-bottom: 10px;
+  }
+
+  .pagetitle h1 {
+    font-size: 24px;
+    margin-bottom: 0;
+    font-weight: 600;
+    color: #012970;
+  }
+
+
+  /* Light Backgrounds */
+  .bg-primary-light {
+    background-color: #f5f8fd;
+    border-color: #f1f4f8;
+  }
+
+  .bg-secondary-light {
+    background-color: #e2e3e5;
+    border-color: #e2e3e5;
+  }
+
+  .bg-success-light {
+    background-color: #d1e7dd;
+    border-color: #d1e7dd;
+  }
+
+  .bg-danger-light {
+    background-color: #f8d7da;
+    border-color: #f8d7da;
+  }
+
+  .bg-warning-light {
+    background-color: #fff3cd;
+    border-color: #fff3cd;
+  }
+
+  .bg-info-light {
+    background-color: #cff4fc;
+    border-color: #cff4fc;
+  }
+
+  .bg-dark-light {
+    background-color: #d3d3d4;
+    border-color: #d3d3d4;
+  }
+
+  /* Card */
+  .card {
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  }
+
+  .card-header,
+  .card-footer {
+    border-color: #ebeef4;
+    background-color: #fff;
+    color: #798eb3;
+    padding: 15px;
+  }
+
+  .card-title {
+    padding: 20px 0 15px 0;
+    /* font-size: 17px;
+    font-weight: 500;
+    color: #012970; */
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 150%;
+    color: #000000;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .card-title span {
+    color: #899bbd;
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .card-body {
+    padding: 0 20px 20px 20px;
+  }
+
+  .card-img-overlay {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+
+
+  /* Close Button */
+  .btn-close {
+    background-size: 25%;
+  }
+
+  .btn-close:focus {
+    outline: 0;
+    box-shadow: none;
+  }
+
+
+
+  /* Breadcrumbs */
+  .breadcrumb {
+    font-size: 14px;
+    font-family: "Nunito", sans-serif;
+    color: #899bbd;
+    font-weight: 600;
+  }
+
+  .breadcrumb a {
+    color: #899bbd;
+    transition: 0.3s;
+  }
+
+  .breadcrumb a:hover {
+    color: #51678f;
+  }
+
+  .breadcrumb .breadcrumb-item::before {
+    color: #899bbd;
+  }
+
+  .breadcrumb .active {
+    color: #51678f;
+    font-weight: 600;
+  }
+
+
+
+
+  .button-container {
+    text-align: center;
+  }
+
+  .button1{
+    display: inline-block;
+    margin: 0 10px;
+    width: 216px;
+    height: 58px;
+    background: rgba(63, 184, 222, 0.3);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  .button2{
+    display: inline-block;
+    margin: 0 10px;
+    width: 216px;
+    height: 58px;
+    background: #3FB8DE;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 20px;
+
+  }
+
+.uploadbutton{
+  box-sizing: border-box;
+  width: 92px;
+  height: 38px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+.required-asterisk{
+  color: red;
+  font-weight: bold;
+  margin-left: 3px;
+  font-size: 1.2em;
+}
+/* input[type='file'] { font-size: 0; }
+::file-selector-button { font-size: initial; } */
+
+.uploadbutton1{
+  box-sizing: border-box;
+  width: 92px;
+  height: 38px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  content: "+";
+}
+
+/* font-size: 16px; */
+.center-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh; /* Adjust the height to your needs */
+}
+.center-card1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh; /* Adjust the height to your needs */
+}
+
+.uploadbutton2{
+  box-sizing: border-box;
+  width: 92px;
+  height: 38px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+
+}
+.text-right {
+  text-align: right;
+  margin-right:375px;
+  margin-top: -10px;
+ }
+ .text-right1 {
+  text-align: right;
+  margin-right:375px;
+  margin-top: -10px;
+ }

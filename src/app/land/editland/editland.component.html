@@ -1,0 +1,529 @@
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="hero">
+    <br>
+    <br>
+    <section id="hero" class="hero">
+      <div class="container position-relative">
+        <div class="row gy-5" data-aos="fade-in">
+          <h2 class="text-center">Edit Land Record<span></span></h2>
+
+          <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center text-center text-lg-start">
+
+            </div>
+          <div class="col-lg-6 order-1 order-lg-2">
+            <img src="" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="100">
+          </div>
+        </div>
+      </div>
+
+</section>
+</section>
+
+
+
+    <main id="main" class="main" style="margin-left: 100px;">
+
+        <!-- End Page Title -->
+
+        <div class="row" *ngIf="datasingle.id">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Enter Land Details & Documents</h5>
+
+                <!-- General Form Elements -->
+                <form>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Unique Id:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="unique_code" [(ngModel)]="datasingle.unique_code" name="unique_code" required/>
+                    </div>
+                  </div>
+<br>
+                  <div class="row mb-3">
+                    <label class="col-sm-5 col-form-label" style="font-weight: bold">Type of Division:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" value="{{datasingle.citynrural}}" disabled />
+                  </div>
+                  </div>
+
+<br>
+                  <div class="row mb-3">
+                    <label class="col-sm-5 col-form-label" style="font-weight: bold">Name of the Circle:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" value="{{datasingle.circle}}"disabled/>
+                    </div>
+                  </div>
+<br>
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Name of the Division:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" value="{{datasingle.division}}"disabled />
+                    </div>
+                  </div>
+<br>
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Name of the Land:</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="land_name" value="{{datasingle.land_name}}" disabled />
+                    </div>
+                  </div>
+
+
+<br>
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Acquired by/through:</label>
+                    <div class="col-sm-10">
+                      <select class="form-select" aria-label="Default select example" id="acquired_by" [(ngModel)]="datasingle.acquired_by" name="acquired_by" required>
+                        <option [selected]="true" value="Select" selected disabled hidden>Select</option>
+                        <option >Govt/Other Dept.Land</option>
+                        <option >Land acquisition through private negotiation</option>
+                        <option >Land acquisition through LA act</option>
+                      </select>
+                    </div>
+                  </div>
+<br>
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Possession Status:</label>
+                    <div class="col-sm-10">
+                      <select class="form-select" aria-label="Default select example" id="possession_status" [(ngModel)]="datasingle.possession_status" name="possession_status" required>
+                        <option [selected]="true" value="Select" selected disabled hidden>Select</option>
+                        <option >Taken over</option>
+                        <option >Not taken over</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br>
+                </form>
+
+                <!-- End General Form Elements -->
+              </div>
+            </div>
+         </div>
+         <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+
+              <!-- Advanced Form Elements -->
+              <form>
+
+                <div class="row mb-3">
+                  <label class="col-sm-9 col-form-label" style="font-weight: bold">Exclusion/Reconveyance/NOC:</label>
+                  <div class="col-sm-10">
+                   <select class="form-select" aria-label="Default select example" id="exclusion_reconveyance_noc" [(ngModel)]="datasingle.exclusion_reconveyance_noc" name="exclusion_reconveyance_noc" required>
+                      <option [selected]="true" value="Select" selected disabled hidden>Select</option>
+                      <option >Exclusion</option>
+                      <option >Reconveyance</option>
+                      <option >NOC</option>
+                    </select>
+
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label class="col-sm-9 col-form-label" style="font-weight: bold">Extent utilized for scheme:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="extent_utilized_for_Scheme" [(ngModel)]="datasingle.extent_utilized_for_Scheme" name="extent_utilized_for_Scheme" required/>
+                  </div>
+                </div>
+
+
+
+
+                <div class="row mb-3">
+                  <label class="col-sm-9 col-form-label" style="font-weight: bold">Geo Tagging/ Geo Fencing:
+                    <a href="{{datasingle.geo_tagging_geo_fencing}}" target="_blank"><i class="bi bi-geo-alt-fill" style="color: red;font-size: 32px;"></i></a></label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="geo_tagging_geo_fencing" [(ngModel)]="datasingle.geo_tagging_geo_fencing" name="geo_tagging_geo_fencing" required/>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label class="col-sm-5 col-form-label"style="font-weight: bold">Status:</label>
+                  <div class="col-sm-10">
+                    <select class="form-select" aria-label="Default select example" id="status" [(ngModel)]="datasingle.status" name="status" required>
+                      <option [selected]="true" value="Select" selected disabled hidden>Select</option>
+                      <option >Registering the land details in Asset Management</option>
+                      <option >Handover the land for Project Management</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold">Total Extent of land acquired(in acres):</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="total_extent_land_acquired" [(ngModel)]="datasingle.total_extent_land_acquired" name="total_extent_land_acquired" required/>
+                  </div>
+                </div>
+<br>
+              </form>
+
+              <!-- End General Form Elements -->
+            </div>
+          </div>
+        </div>
+
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Possession Handed Over</h5>
+
+                <!-- Advanced Form Elements -->
+                <form>
+
+
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent (in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="extent" [(ngModel)]="datasingle.extent" name="extent" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Flat(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="extent_utilized" [(ngModel)]="datasingle.extent_utilized_flat" name="extent_utilized" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label"style="font-weight: bold">Layout Design:</label>
+                    <div class="col-sm-10">
+                    <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedLayoutFlat($event)" >
+                   </div>
+                  <button class="updatebutton" (click)="UpdateLayoutFlat()">Update</button>
+                  <div *ngIf="updateStatusLayoutFlat" class="text-danger">{{ updateStatusLayoutFlat }}</div>
+                  <div *ngIf="updateErrorLayoutFlat" class="text-danger">{{ updateErrorLayoutFlat }}</div>
+                  <div *ngIf="fileTooLargeLayoutFlat" class="text-danger">File size is too large</div>
+                  <div *ngIf="fileInvalidTypeLayoutFlat" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                   <br>
+                   <br>
+                   <br>
+                   <div class="col-sm-10">
+                      <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                      &nbsp;&nbsp;
+                      <button class="viewbutton" ><a target="_blank" href="file:///{{filepathLayoutFlat}}">View</a></button>
+                  </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Approval:</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedApprovalFlat($event)" >
+                     </div>
+                    <button class="updatebutton" (click)="UpdateApprovalFlat()">Update</button>
+                    <div *ngIf="updateStatusApprovalFlat" class="text-danger">{{ updateStatusApprovalFlat }}</div>
+                    <div *ngIf="updateErrorApprovalFlat" class="text-danger">{{ updateErrorApprovalFlat }}</div>
+                    <div *ngIf="fileTooLargeApprovalFlat" class="text-danger">File size is too large</div>
+                    <div *ngIf="fileInvalidTypeApprovalFlat" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                     <br>
+                     <br>
+                     <br>
+                     <div class="col-sm-10">
+                        <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                        &nbsp;&nbsp;&nbsp;
+                        <button class="viewbutton" ><a target="_blank" href="file:///{{filepathApprovalFlat}}">View</a></button>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Plot(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="extent_utilized" [(ngModel)]="datasingle.extent_utilized_plot" name="extent_utilized" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label"style="font-weight: bold">Layout Design:</label>
+                    <div class="col-sm-10">
+                    <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedLayoutPlot($event)" >
+                   </div>
+                  <button class="updatebutton" (click)="UpdateLayoutPlot()">Update</button>
+                  <div *ngIf="updateStatusLayoutPlot" class="text-danger">{{ updateStatusLayoutPlot }}</div>
+                  <div *ngIf="updateErrorLayoutPlot" class="text-danger">{{ updateErrorLayoutPlot }}</div>
+                  <div *ngIf="fileTooLargeLayoutPlot" class="text-danger">File size is too large</div>
+                  <div *ngIf="fileInvalidTypeLayoutPlot" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                   <br>
+                   <br>
+                   <br>
+                   <div class="col-sm-10">
+                      <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                      &nbsp;&nbsp;
+                      <button class="viewbutton" ><a target="_blank" href="file:///{{filepathLayoutPlot}}">View</a></button>
+                  </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Approval:</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedApprovalPlot($event)" >
+                     </div>
+                    <button class="updatebutton" (click)="UpdateApprovalPlot()">Update</button>
+                    <div *ngIf="updateStatusApprovalPlot" class="text-danger">{{ updateStatusApprovalPlot }}</div>
+                    <div *ngIf="updateErrorApprovalPlot" class="text-danger">{{ updateErrorApprovalPlot }}</div>
+                    <div *ngIf="fileTooLargeApprovalPlot" class="text-danger">File size is too large</div>
+                    <div *ngIf="fileInvalidTypeApprovalPlot" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                     <br>
+                     <br>
+                     <br>
+                     <div class="col-sm-10">
+                        <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                        &nbsp;&nbsp;&nbsp;
+                        <button class="viewbutton" ><a target="_blank" href="file:///{{filepathApprovalPlot}}">View</a></button>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">House(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="extent_utilized" [(ngModel)]="datasingle.extent_utilized_house" name="extent_utilized" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label"style="font-weight: bold">Layout Design:</label>
+                    <div class="col-sm-10">
+                    <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedLayoutHouse($event)" >
+                   </div>
+                  <button class="updatebutton" (click)="UpdateLayoutHouse()">Update</button>
+                  <div *ngIf="updateStatusLayoutHouse" class="text-danger">{{ updateStatusLayoutHouse }}</div>
+                  <div *ngIf="updateErrorLayoutHouse" class="text-danger">{{ updateErrorLayoutHouse }}</div>
+                  <div *ngIf="fileTooLargeLayoutHouse" class="text-danger">File size is too large</div>
+                  <div *ngIf="fileInvalidTypeLayoutHouse" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                   <br>
+                   <br>
+                   <br>
+                   <div class="col-sm-10">
+                      <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                      &nbsp;&nbsp;
+                      <button class="viewbutton" ><a target="_blank" href="file:///{{filepathLayoutHouse}}">View</a></button>
+                  </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Approval:</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedApprovalHouse($event)" >
+                     </div>
+                    <button class="updatebutton" (click)="UpdateApprovalHouse()">Update</button>
+                    <div *ngIf="updateStatusApprovalHouse" class="text-danger">{{ updateStatusApprovalHouse }}</div>
+                    <div *ngIf="updateErrorApprovalHouse" class="text-danger">{{ updateErrorApprovalHouse }}</div>
+                    <div *ngIf="fileTooLargeApprovalHouse" class="text-danger">File size is too large</div>
+                    <div *ngIf="fileInvalidTypeApprovalHouse" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                     <br>
+                     <br>
+                     <br>
+                     <div class="col-sm-10">
+                        <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                        &nbsp;&nbsp;&nbsp;
+                        <button class="viewbutton" ><a target="_blank" href="file:///{{filepathApprovalHouse}}">View</a></button>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Empty(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="extent_not_utilized" [(ngModel)]="datasingle.extent_not_utilized" name="extent_not_utilized" required/>
+                    </div>
+                  </div>
+
+                  <!-- <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label"style="font-weight: bold">Layout Design:</label>
+                    <div class="col-sm-10">
+                    <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedLayoutEmpty($event)" >
+                   </div>
+                  <button class="updatebutton" (click)="UpdateLayoutEmpty()">Update</button>
+                  <div *ngIf="updateStatusLayout" class="text-danger">{{ updateStatusLayout }}</div>
+                  <div *ngIf="updateErrorLayout" class="text-danger">{{ updateErrorLayout }}</div>
+                  <div *ngIf="fileTooLargeLayout" class="text-danger">File size is too large</div>
+                  <div *ngIf="fileInvalidTypeLayout" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                   <br>
+                   <br>
+                   <br>
+                   <div class="col-sm-10">
+                      <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                      &nbsp;&nbsp;
+                      <button class="viewbutton" ><a target="_blank" href="file:///{{filepathLayout}}">View</a></button>
+                  </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-9 col-form-label" style="font-weight: bold">Approval:</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedApprovalEmpty($event)" >
+                     </div>
+                    <button class="updatebutton" (click)="UpdateApprovalEmpty()">Update</button>
+                    <div *ngIf="updateStatusApproval" class="text-danger">{{ updateStatusApproval }}</div>
+                    <div *ngIf="updateErrorApproval" class="text-danger">{{ updateErrorApproval }}</div>
+                    <div *ngIf="fileTooLargeApproval" class="text-danger">File size is too large</div>
+                    <div *ngIf="fileInvalidTypeApproval" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                     <br>
+                     <br>
+                     <br>
+                     <div class="col-sm-10">
+                        <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                        &nbsp;&nbsp;&nbsp;
+                        <button class="viewbutton" ><a target="_blank" href="file:///{{filepathApproval}}">View</a></button>
+                    </div>
+                  </div> -->
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered by court case(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="extent_covered_by_court_case" [(ngModel)]="datasingle.extent_covered_by_court_case" name="extent_covered_by_court_case" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label"style="font-weight: bold">
+                      Extent lying vacant & for want of approach road ect.(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="extent_lying_vacant" [(ngModel)]="datasingle.extent_lying_vacant" name="extent_lying_vacant" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                  <label class="col-sm-10 col-form-label" style="font-weight: bold" >Extent covered by encroachment(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="extent_covered_by_encroachment" [(ngModel)]="datasingle.extent_covered_by_encroachment" name="extent_covered_by_encroachment" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label"style="font-weight: bold">Extent covered under scattered(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="extent_covered_under_scattered" [(ngModel)]="datasingle.extent_covered_under_scattered" name="extent_covered_under_scattered" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered lapsed/quashed(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="extent_covered_lapsed_quashed" [(ngModel)]="datasingle.extent_covered_lapsed_quashed" name="extent_covered_lapsed_quashed" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">
+                      Land available for scheme implementation(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="land_available_for_scheme_implementation" [(ngModel)]="datasingle.land_available_for_scheme_implementation" name="land_available_for_scheme_implementation" required/>
+                    </div>
+                 </div>
+
+                </form>
+
+                <!-- End General Form Elements -->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Possession Not Handed Over</h5>
+
+                <!-- Advanced Form Elements -->
+                <form>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label"style="font-weight: bold">Extent (in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="not_handed_over_extent" [(ngModel)]="datasingle.not_handed_over_extent" name="not_handed_over_extent" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Extent covered by court case(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="not_handed_over_extent_covered_by_court_case" [(ngModel)]="datasingle.not_handed_over_extent_covered_by_court_case" name="not_handed_over_extent_covered_by_court_case" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label"style="font-weight: bold">
+                      Extent covered under encroachment(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="not_handed_over_extent_covered_under_encroachment" [(ngModel)]="datasingle.not_handed_over_extent_covered_under_encroachment" name="not_handed_over_extent_covered_under_encroachment" required/>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label"style="font-weight: bold">Extent covered quashed(in acres):</label>
+                    <div class="col-sm-10">
+                      <input type="text"class="form-control" id="not_handed_over_extent_covered_quashed" [(ngModel)]="datasingle.not_handed_over_extent_covered_quashed" name="not_handed_over_extent_covered_quashed" required/>
+                    </div>
+                  </div>
+
+                </form>
+
+                <!-- End General Form Elements -->
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Legal Proceedings</h5>
+
+                <!-- Advanced Form Elements -->
+                <form>
+                  <div class="row mb-3">
+                    <label class="col-sm-10 col-form-label" style="font-weight: bold">Legal Proceedings:</label>
+                    <div class="col-sm-10">
+                      <select class="form-select" aria-label="Default select example" id="legalproceedings" [(ngModel)]="datasingle.legalproceedings" name="legalproceedings" required>
+                        <option [selected]="true" value="Select" selected disabled hidden>Select</option>
+                        <option >O.S</option>
+                        <option >W.P</option>
+                        <option >W.A</option>
+                        <option >SLP(L.A)</option>
+                        <option >LAOP</option>
+                        <option >APPEAL SUIT AGAINST LAOP</option>
+                        <option >APPEAL SUIT AGAINST OS</option>
+                        <option >SLP(E.C)</option>
+                        <option >CIVIL SUIT</option>
+                        <option >CRP</option>
+                        <option >REVIEW PETITION</option>
+                        <option >CONTEMPT PETITION</option>
+                        <option >E.P</option>
+                      </select>
+                    </div>
+                 </div>
+
+                 <div class="row mb-3">
+                  <label class="col-sm-9 col-form-label"style="font-weight: bold">Court Case/ Other Files:</label>
+                  <div class="col-sm-10">
+                  <input class="form-control" accept=".pdf" type="file" (change)="onFileSelectedCourt($event)" >
+                 </div>
+                <button class="updatebutton" (click)="UpdateCourt()">Update</button>
+                <div *ngIf="updateStatusCourt" class="text-danger">{{ updateStatusCourt }}</div>
+                <div *ngIf="updateErrorCourt" class="text-danger">{{ updateErrorCourt }}</div>
+                <div *ngIf="fileTooLargeCourt" class="text-danger">File size is too large</div>
+                <div *ngIf="fileInvalidTypeCourt" class="text-danger">Invalid file type. Only PDF files are allowed.</div>
+                 <br>
+                 <br>
+                 <br>
+                 <div class="col-sm-10">
+                    <i class="bi bi-file-pdf" style="color: red;font-size: 32px;" ></i>
+                    &nbsp;&nbsp;
+                    <button class="viewbutton" ><a target="_blank" href="file:///{{filepathCourt}}">View</a></button>
+                </div>
+                </div>
+
+                </form>
+
+                <!-- End General Form Elements -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="button-container">
+            <button class="button1" [routerLink]="['/home']">Discard</button>
+            <button class="button2" (click)="updateData()">Update</button>
+          </div>
+          <br>
+          <h4>{{ message }}</h4>
+    </main>
+    <!-- End #main -->
