@@ -141,6 +141,9 @@ export interface AwardTabDeatil {
   awardPossessionTakenOverEntityValuesDetails: AwardPossessionTakenOverEntityValuesDetails[]
   awardPossessionNotTakenOverEntityValuesDetails: AwardPossessionNotTakenOverEntityValuesDetail[]
   awardPossessionExtentAvailableEntityValuesDetails: AwardPossessionExtentAvailableEntityValuesDetail[]
+  awardUtilisedLhoSelectedExtentList: []
+  awardutilisedlnhoselectedextentlist: []
+  awardnotUtilisedLhoSelectedExtentList: []
   n_ID: number
   v_PHO_SCHEME_TOTAL_EXTENT: string
   v_PHO_TOTAL_EXTENT: string
@@ -152,6 +155,16 @@ export interface AwardTabDeatil {
   v_AWARD_NO: string
   v_FILE_NAME: string
   d_AWARD_DATE: string
+  v_LHO_EXTENT_ACRES: string
+  v_LHO_FILE_NAME: string
+  v_LHO_FILE_PATH: string
+  v_LNHO_EXTENT_ACRES: string
+  lhoExtent1: string
+  utilisedExtent: string
+  futureDevExtent: string
+  notUtilisedLhoExtentList: string
+  lnhoExtent1: string;
+  lnhoUtilisedExtent: string;
 }
 
 export interface AwardOtherFileEntityValuesDetail {
@@ -174,11 +187,14 @@ export interface DynamicValuesDetail4 {
 }
 
 export interface AwardDirectPaymentEntityValuesDetail {
+
   n_ID: number
   v_NOTIFIED_PERSON: string
   n_FILE_ID: number
   n_UNIQUE_ID: number
   v_AMOUNT: number
+  v_FILE_PATH: string
+  v_FILE_NAME: string
 }
 
 export interface AwardRevenuePaymentEntityValuesDetail {
@@ -187,6 +203,8 @@ export interface AwardRevenuePaymentEntityValuesDetail {
   n_FILE_ID: number
   n_UNIQUE_ID: number
   v_AMOUNT: number
+  v_FILE_PATH: string
+  v_FILE_NAME: string
 }
 
 export interface AwardCourtDepositPaymentEntityValuesDetail {
@@ -195,6 +213,8 @@ export interface AwardCourtDepositPaymentEntityValuesDetail {
   n_FILE_ID: number
   n_UNIQUE_ID: number
   v_AMOUNT: number
+  v_FILE_PATH: string
+  v_FILE_NAME: string
 }
 
 export interface AwardPossessionTakenOverEntityValuesDetails {

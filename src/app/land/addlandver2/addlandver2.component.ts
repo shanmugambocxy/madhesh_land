@@ -14,7 +14,8 @@ import { AwardTabDeatil, FourOneTabDeatil, LandDigitMediaModel, Root, SixDdTabDe
 import * as uuid from 'uuid';
 import { ConfirmDialogComponent } from 'src/app/shared-module/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Console } from 'console';
+import { Console, error, log } from 'console';
+import { DialogComponent } from 'src/app/shared-module/dialog/dialog.component';
 declare var AWS: any;
 
 @Component({
@@ -365,6 +366,45 @@ export class Addlandver2Component {
   allCircleDivisionDdr: any;
   circleNames: any;
   circleDropDownName: any;
+  circleCount: number = 0;
+  divisionCount: number = 0;
+  districtCount: number = 0;
+  villageCount: number = 0;
+  awardUtilisedLHOList: any = [
+
+    {
+      "mode": "",
+      "n_FILE_ID": "",
+      "n_ID": "",
+      "v_LHOSELECTEDEXTENTINLIST": "Residential",
+      "v_EXTEND": null,
+      "v_NAME": ""
+    },
+    {
+      "mode": "",
+      "n_FILE_ID": "",
+      "n_ID": "",
+      "v_LHOSELECTEDEXTENTINLIST": "Commercial",
+      "v_EXTEND": null,
+      "v_NAME": ""
+    },
+    {
+      "mode": "",
+      "n_FILE_ID": "",
+      "n_ID": "",
+      "v_LHOSELECTEDEXTENTINLIST": "Non Saleable",
+      "v_EXTEND": null,
+      "v_NAME": ""
+    }
+
+
+  ];
+  lhoextent: any = '';
+  lnhoextent: any = '';
+  circleDistVillList: any;
+  userDivision: any;
+
+
 
 
   constructor(private builder: FormBuilder, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private adVerSer: AddVerService,
@@ -386,6 +426,10 @@ export class Addlandver2Component {
     } else {
       const apiMediasDatas = this.landDigitMediaFiles;
     }
+    // let getDivision = sessionStorage.getItem("group_name");
+    // this.getAllDataByDivision(getDivision);
+
+    this.userDivision = sessionStorage.getItem("group_name");
   }
 
   openFile(filePath: string): string {
@@ -405,7 +449,21 @@ export class Addlandver2Component {
 
 
   }
+  getAllDataByDivision(division) {
+    debugger
+    let endPoint = "Details/" + division;
+    this.commonService.apiGetCall(endPoint).subscribe((res: any) => {
+      if (res) {
+        this.circleDistVillList = res;
+        this.allCircleDropdown = res.Circles;
+        this.districtSelectList = res.Districts;
+        this.villageSelectList = res.Villages;
 
+
+
+      }
+    })
+  }
   getMediasDatasFromApi(data: any) {
     if (data) {
       data.forEach((item) => {
@@ -567,6 +625,10 @@ export class Addlandver2Component {
     // this.addExpansionPanelAward();
     if (!this.landId) {
       this.addExpansionPanelAward();
+
+      // this.adddirectpay(0);
+      // this.addrevenuepay(0);
+      // this.addcivilpay(0);
     }
 
     // LeftOver
@@ -612,23 +674,53 @@ export class Addlandver2Component {
     //   this.expansionPanelsSixDD.disable();
     //   this.expansionPanelsAward.disable();
     // }
+    if (!this.edit && !this.view) {
+      this.getAllCircleName()
 
-    this.getAllCircleName()
+    }
     // this.getCirDivDisVil()
   }
 
   getAllCircleName() {
-    this.commonService.apiGetCall('Circle').subscribe(responce => {
-      this.allCircleDropdown = responce
-      console.log("all circle dropdown = = = =", this.allCircleDropdown);
+    debugger
+    this.commonService.apiGetCall('Circle').subscribe((response: any) => {
+      if (response && response.length > 0) {
 
-      // if (this.allCircleDropdown.length > 0) {
-      //   this.personalInfoFormGroup.patchValue({
-      //     v_NAME_OF_CIRCLE: this.allCircleDropdown[0]
-      //   })
-      // }
-      this.circleDropDownName = this.personalInfoFormGroup.controls['v_NAME_OF_CIRCLE'].value;
-      console.log(this.circleDropDownName, "Hello Circle Drop Down");
+
+        // this.personalInfoFormGroup.controls['v_NAME_OF_DIVISION'].setValue('');
+        // this.personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].setValue('');
+        // this.personalInfoFormGroup.controls['v_VILLAGE'].setValue('');
+
+
+        this.allCircleDropdown = response
+        console.log("all circle dropdown = = = =", this.allCircleDropdown);
+
+        // if (this.allCircleDropdown.length > 0) {
+        //   this.personalInfoFormGroup.patchValue({
+        //     v_NAME_OF_CIRCLE: this.allCircleDropdown[0]
+        //   })
+        // }
+
+        // if ((this.edit || this.view) && this.circleCount == 0) {
+        //   // this.personalInfoFormGroup.patchValue(this.landDigitDataEntity);
+        //   let circlename = this.allLandData.landDigitDataEntity.v_NAME_OF_CIRCLE;
+        //   this.personalInfoFormGroup.patchValue({ v_NAME_OF_CIRCLE: circlename });
+
+        //   this.circleCount = this.circleCount + 1;
+        //   console.log('this.personalInfoFormGroup', this.personalInfoFormGroup);
+
+        //   this.getCirDivDisVil();
+
+        // } else {
+        //   this.getCirDivDisVil();
+
+        // }
+        this.getCirDivDisVil();
+        this.circleDropDownName = this.personalInfoFormGroup.controls['v_NAME_OF_CIRCLE'].value;
+        console.log(this.circleDropDownName, "Hello Circle Drop Down");
+      } else {
+        this.allCircleDropdown = [];
+      }
     });
   }
 
@@ -643,20 +735,50 @@ export class Addlandver2Component {
     console.log(apiUrl, "name of api string call");
 
     // console.log(apiCall1, "name of api call actual 1");
+    if (selectedCircle != '' && this.userDivision == "All") {
+      this.commonService.apiGetCall(apiCall).subscribe((response: any) => {
+        if (response && response.length > 0) {
+          // this.personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].setValue('');
+          // this.personalInfoFormGroup.controls['v_VILLAGE'].setValue('');
+          this.allCircleDivisionDdr = response;
 
-    this.commonService.apiGetCall(apiCall).subscribe(response => {
-      this.allCircleDivisionDdr = response;
-      console.log("get All Circle And Division Name Name ===== ", this.allCircleDivisionDdr);
+          console.log("get All Circle And Division Name Name ===== ", this.allCircleDivisionDdr);
 
-      // if (this.allCircleDivisionDdr.length > 0) {
-      //   // Patch the first value to the form control
-      //   this.personalInfoFormGroup.patchValue({
-      //     v_NAME_OF_DIVISION: this.allCircleDivisionDdr[0]
-      //   });
-      // }
-      // this.getDistrict();
+          this.getDistrict();
+        } else {
+          this.allCircleDivisionDdr = [];
+        }
 
-    });
+
+      });
+    } else {
+      // this.commonService.apiGetCall(apiCall).subscribe((response: any) => {
+      //   if (response && response.length > 0) {
+      //     // this.personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].setValue('');
+      //     // this.personalInfoFormGroup.controls['v_VILLAGE'].setValue('');
+      //     this.allCircleDivisionDdr = response;
+
+      //     console.log("get All Circle And Division Name Name ===== ", this.allCircleDivisionDdr);
+
+      //     this.personalInfoFormGroup.patchValue({
+      //       'v_NAME_OF_DIVISION': this.userDivision
+      //     })
+
+      //     this.getAllDataByDivision(this.userDivision);
+      //     // this.getDistrict();
+      //   } else {
+      //     this.allCircleDivisionDdr = [];
+      //   }
+
+
+      // });
+      this.personalInfoFormGroup.patchValue({
+        'v_NAME_OF_DIVISION': this.userDivision
+      })
+
+      this.getAllDataByDivision(this.userDivision);
+    }
+
 
   }
   getDistrict() {
@@ -665,17 +787,33 @@ export class Addlandver2Component {
     let division = this.personalInfoFormGroup.controls['v_NAME_OF_DIVISION'].value ? this.personalInfoFormGroup.controls['v_NAME_OF_DIVISION'].value : '';
     let apiUrl = "District/";
     let apicall = apiUrl + circleName + '/' + division;
-    this.commonService.apiGetCall(apicall).subscribe((res: any) => {
-      if (res && res.length > 0) {
-        this.districtSelectList = res;
-        // this.personalInfoFormGroup.patchValue({
-        //   v_NAME_OF_DISTRICT: this.districtSelectList[0]
-        // });
+    if (this.userDivision == "All") {
+
+      if (circleName != '' && division != '' && this.allCircleDivisionDdr.length > 0) {
+        this.commonService.apiGetCall(apicall).subscribe((res: any) => {
+          if (res && res.length > 0) {
+            // this.personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].setValue('');
+            // this.personalInfoFormGroup.controls['v_VILLAGE'].setValue('');
+            this.districtSelectList = res;
+            this.getVillage();
+
+            // this.personalInfoFormGroup.patchValue({
+            //   v_NAME_OF_DISTRICT: this.districtSelectList[0]
+            // });
+          } else {
+            this.districtSelectList = [];
+            this.getVillage();
+
+          }
+        })
       } else {
         this.districtSelectList = [];
       }
-      // this.getVillage();
-    })
+    } else {
+      this.districtSelectList = this.circleDistVillList.Districts;
+
+    }
+
   }
   getVillage() {
     debugger
@@ -684,17 +822,32 @@ export class Addlandver2Component {
     let district = this.personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].value ? this.personalInfoFormGroup.controls['v_NAME_OF_DISTRICT'].value : '';
     let apiUrl = "Village/";
     let apicall = apiUrl + circleName + '/' + division + '/' + district;
-    this.commonService.apiGetCall(apicall).subscribe((res: any) => {
-      if (res && res.length > 0) {
-        this.villageSelectList = res;
-        // this.personalInfoFormGroup.patchValue({
-        //   v_NAME_OF_VILLAGE: this.villageSelectList[0]
-        // });
+    if (this.userDivision == "All") {
+      if (circleName != '' && division != '' && district != '' && this.districtSelectList.length > 0) {
+        this.commonService.apiGetCall(apicall).subscribe((res: any) => {
+          if (res && res.length > 0) {
+            this.villageSelectList = res;
+            // this.personalInfoFormGroup.patchValue({
+            //   v_NAME_OF_VILLAGE: this.villageSelectList[0]
+            // });
+            // if ((this.edit || this.view) && this.count == 0) {
+            //   this.personalInfoFormGroup.patchValue(this.landDigitDataEntity);
+            //   this.count = this.count + 1;
+            // }
+
+          } else {
+            this.villageSelectList = [];
+
+          }
+        })
       } else {
         this.villageSelectList = [];
 
       }
-    })
+    } else {
+      this.villageSelectList = this.circleDistVillList.Villages;
+    }
+
   }
 
 
@@ -754,8 +907,10 @@ export class Addlandver2Component {
         // land DETAILS
         this.landDigitDataEntity = mainApiData.data.landDigitDataEntity;
         this.n_UNIQUE_ID = this.landDigitDataEntity.n_UNIQUE_ID;
-        this.personalInfoFormGroup.patchValue(this.landDigitDataEntity);
+        // this.personalInfoFormGroup.patchValue(this.landDigitDataEntity);
         // land Details Media First Tab
+        this.getAllCircleName()
+
         this.landDigitMediaFiles = mainApiData.data?.landDigitMediaFiles ? mainApiData.data?.landDigitMediaFiles : [];
         if (this.landDigitMediaFiles.length) {
           this.getMediasDatasFromApi(this.landDigitMediaFiles);
@@ -1055,10 +1210,38 @@ export class Addlandver2Component {
           this.addExpansionPanelAward();
           this.cdr.detectChanges();
           const awardFormGroup = (this.expansionPanelsAward.at(i) as FormGroup);
-
+          debugger
           awardFormGroup.controls['v_AWARD_NO'].setValue(this.awardDeatils[i].v_AWARD_NO);
           awardFormGroup.controls['v_TOTAL_EXTENT'].setValue(this.awardDeatils[i].v_TOTAL_EXTENT);
           const d_d_award_date_format = this.awardDeatils[i].d_AWARD_DATE;
+          // const dateStr = "2024-03-24";
+
+          // const dateStr = this.datePipe.transform(this.awardDeatils[i].d_AWARD_DATE, 'yyyy-MM-dd');
+          // const dateObj = new Date(d_d_award_date_format);
+
+          // // Convert the Date object to ISO 8601 format
+          // let isoDate = dateObj.toISOString();
+          // console.log('isoDate', isoDate);
+          // console.log(' this.awardDeatils[i].d_AWARD_DATE', this.awardDeatils[i].d_AWARD_DATE);
+
+
+
+          // if (this.awardDeatils[i].d_AWARD_DATE) {
+          //   const parts = this.awardDeatils[i].d_AWARD_DATE.split("-"); // Split the string into parts
+
+          //   // Parse the parts into integers
+          //   const day = parseInt(parts[0], 10);
+          //   const month = parseInt(parts[1], 10) - 1; // Months are zero-based in JavaScript Date objects
+          //   const year = parseInt(parts[2], 10);
+
+          //   console.log('d_d_award_date_format', new Date(year, month, day));
+          //   const newFormateDate = new Date(year, month, day)
+          //   console.log('newFormateDate', newFormateDate);
+
+          //   // awardFormGroup.controls['d_AWARD_DATE'].setValue(newFormateDate);
+
+          // }
+          debugger
           awardFormGroup.controls['d_AWARD_DATE'].setValue(d_d_award_date_format);
           // sixDDFormGroup.controls['file'].setValue(this.sixDDDeatils[i].v_FILE_1_FILENAME);
           awardFormGroup.controls['n_TOTAL_AWARD_AMOUNT'].setValue(this.awardDeatils[i].n_TOTAL_AWARD_AMOUNT);
@@ -1068,7 +1251,122 @@ export class Addlandver2Component {
           awardFormGroup.controls['n_UNIQUE_ID'].setValue(this.awardDeatils[i].n_UNIQUE_ID);
           awardFormGroup.controls['v_FILE_NAME'].setValue(this.awardDeatils[i].v_FILE_NAME);
           awardFormGroup.controls['v_FILE_PATH'].setValue(this.awardDeatils[i].v_FILE_PATH);
+          awardFormGroup.controls['v_LHO_EXTENT_ACRES'].setValue(this.awardDeatils[i].v_LHO_EXTENT_ACRES);
+          awardFormGroup.controls['v_LHO_FILE_NAME'].setValue(this.awardDeatils[i].v_LHO_FILE_NAME);
+          awardFormGroup.controls['v_LHO_FILE_PATH'].setValue(this.awardDeatils[i].v_LHO_FILE_PATH);
+          awardFormGroup.controls['v_LNHO_EXTENT_ACRES'].setValue(this.awardDeatils[i].v_LNHO_EXTENT_ACRES);
+          awardFormGroup.controls['lhoExtent1'].setValue(this.awardDeatils[i].lhoExtent1);
+          awardFormGroup.controls['utilisedExtent'].setValue(this.awardDeatils[i].utilisedExtent);
+          awardFormGroup.controls['futureDevExtent'].setValue(this.awardDeatils[i].futureDevExtent);
+          awardFormGroup.controls['notUtilisedLhoExtentList'].setValue(this.awardDeatils[i].notUtilisedLhoExtentList);
+          awardFormGroup.controls['lnhoExtent1'].setValue(this.awardDeatils[i].lnhoExtent1);
 
+          awardFormGroup.controls['lnhoUtilisedExtent'].setValue(this.awardDeatils[i].lnhoUtilisedExtent);
+
+          //lho_utilised
+          if (this.awardDeatils && this.awardDeatils[i].awardUtilisedLhoSelectedExtentList.length > 0) {
+            let lho_extent_list = this.awardDeatils[i].awardUtilisedLhoSelectedExtentList.map((item: any) => item.v_LHOSELECTEDEXTENTINLIST)
+            console.log('lho_extent_list', lho_extent_list);
+
+            awardFormGroup.controls['lho_extent_list'].setValue(lho_extent_list);
+            console.log('lnho_extent_list,value', awardFormGroup.controls['lho_extent_list'].value);
+
+          }
+          const apiValue_lhoExtentFields = this.awardDeatils[i].awardUtilisedLhoSelectedExtentList;
+          const awardFieldLHOExtenttFormArray = (awardFormGroup.controls['lho_selected_extent_list'] as FormArray);
+          for (let i = 0; i < apiValue_lhoExtentFields.length; i++) {
+            const apiValue_awardLHOExtent_group: any = apiValue_lhoExtentFields[i];
+            if (!awardFieldLHOExtenttFormArray.at(i)) {
+              awardFieldLHOExtenttFormArray.push(new FormGroup({
+                mode: new FormControl(''),
+                n_FILE_ID: new FormControl(''),
+                n_ID: new FormControl(''),
+                v_LHOSELECTEDEXTENTINLIST: new FormControl(''),
+                v_EXTEND: new FormControl(''),
+                v_NAME: new FormControl(''),
+                n_UNIQUE_ID: new FormControl(''),
+
+              }))
+            }
+            const award_LHO_ExtentField = awardFieldLHOExtenttFormArray.at(i) as FormGroup;
+            award_LHO_ExtentField.controls['mode'].setValue("edit");
+            award_LHO_ExtentField.controls['n_FILE_ID'].setValue(apiValue_awardLHOExtent_group.n_FILE_ID);
+            award_LHO_ExtentField.controls['n_ID'].setValue(apiValue_awardLHOExtent_group.n_ID);
+            award_LHO_ExtentField.controls['v_LHOSELECTEDEXTENTINLIST'].setValue(apiValue_awardLHOExtent_group.v_LHOSELECTEDEXTENTINLIST);
+            award_LHO_ExtentField.controls['v_EXTEND'].setValue(apiValue_awardLHOExtent_group.v_EXTEND);
+            award_LHO_ExtentField.controls['v_NAME'].setValue(apiValue_awardLHOExtent_group.v_NAME);
+            award_LHO_ExtentField.controls['n_UNIQUE_ID'].setValue(apiValue_awardLHOExtent_group.n_UNIQUE_ID);
+          }
+          //lho_not_utilised
+          if (this.awardDeatils && this.awardDeatils[i].awardnotUtilisedLhoSelectedExtentList.length > 0) {
+            let lnho_noutilised_extent_list = this.awardDeatils[i].awardnotUtilisedLhoSelectedExtentList.map((item: any) => item.v_LHOSELECTEDEXTENTINLIST)
+            console.log('lnho_noutilised_extent_list', lnho_noutilised_extent_list);
+
+            awardFormGroup.controls['not_utilised_lho_extent_list'].setValue(lnho_noutilised_extent_list);
+            console.log('not_utilised_lho_extent_list,value', awardFormGroup.controls['not_utilised_lho_extent_list'].value);
+
+          }
+
+          const apiValue_lho_non_utilisedExtentFields = this.awardDeatils[i].awardnotUtilisedLhoSelectedExtentList;
+          const awardFieldLHO_not_utilisedExtenttFormArray = (awardFormGroup.controls['not_utilised_lho_selected_extent_list'] as FormArray);
+          for (let i = 0; i < apiValue_lho_non_utilisedExtentFields.length; i++) {
+            const apiValue_awardLHO_not_utilisedExtent_group: any = apiValue_lho_non_utilisedExtentFields[i];
+            if (!awardFieldLHO_not_utilisedExtenttFormArray.at(i)) {
+              awardFieldLHO_not_utilisedExtenttFormArray.push(new FormGroup({
+                mode: new FormControl(''),
+                n_FILE_ID: new FormControl(''),
+                n_ID: new FormControl(''),
+                v_LHOSELECTEDEXTENTINLIST: new FormControl(''),
+                v_EXTEND: new FormControl(''),
+                v_NAME: new FormControl(''),
+                n_UNIQUE_ID: new FormControl(''),
+
+              }))
+            }
+            const award_LHO_ExtentField = awardFieldLHO_not_utilisedExtenttFormArray.at(i) as FormGroup;
+            award_LHO_ExtentField.controls['mode'].setValue("edit");
+            award_LHO_ExtentField.controls['n_FILE_ID'].setValue(apiValue_awardLHO_not_utilisedExtent_group.n_FILE_ID);
+            award_LHO_ExtentField.controls['n_ID'].setValue(apiValue_awardLHO_not_utilisedExtent_group.n_ID);
+            award_LHO_ExtentField.controls['v_LHOSELECTEDEXTENTINLIST'].setValue(apiValue_awardLHO_not_utilisedExtent_group.v_LHOSELECTEDEXTENTINLIST);
+            award_LHO_ExtentField.controls['v_EXTEND'].setValue(apiValue_awardLHO_not_utilisedExtent_group.v_EXTEND);
+            award_LHO_ExtentField.controls['v_NAME'].setValue(apiValue_awardLHO_not_utilisedExtent_group.v_NAME);
+            award_LHO_ExtentField.controls['n_UNIQUE_ID'].setValue(apiValue_awardLHO_not_utilisedExtent_group.n_UNIQUE_ID);
+          }
+          debugger
+          //lnho_utilised
+          if (this.awardDeatils && this.awardDeatils[i].awardutilisedlnhoselectedextentlist.length > 0) {
+            let lnho_extent_list = this.awardDeatils[i].awardutilisedlnhoselectedextentlist.map((item: any) => item.v_LHONSELECTEDEXTENTINLIST)
+            console.log('lnho_extent_list', lnho_extent_list);
+
+            awardFormGroup.controls['lnho_extent_list'].setValue(lnho_extent_list);
+            console.log('lnho_extent_list,value', awardFormGroup.controls['lnho_extent_list'].value);
+
+          }
+          const apiValue_lnhoExtentFields = this.awardDeatils[i].awardutilisedlnhoselectedextentlist;
+          const awardFieldLNHOExtenttFormArray = (awardFormGroup.controls['lnho_selected_extent_list'] as FormArray);
+          for (let i = 0; i < apiValue_lnhoExtentFields.length; i++) {
+            const apiValue_awardLNHOExtent_group: any = apiValue_lnhoExtentFields[i];
+            if (!awardFieldLNHOExtenttFormArray.at(i)) {
+              awardFieldLNHOExtenttFormArray.push(new FormGroup({
+                mode: new FormControl(''),
+                n_FILE_ID: new FormControl(''),
+                n_ID: new FormControl(''),
+                v_LHONSELECTEDEXTENTINLIST: new FormControl(''),
+                v_EXTEND: new FormControl(''),
+                v_NAME: new FormControl(''),
+                n_UNIQUE_ID: new FormControl(''),
+
+              }))
+            }
+            const award_LHO_ExtentField = awardFieldLNHOExtenttFormArray.at(i) as FormGroup;
+            award_LHO_ExtentField.controls['mode'].setValue("edit");
+            award_LHO_ExtentField.controls['n_FILE_ID'].setValue(apiValue_awardLNHOExtent_group.n_FILE_ID);
+            award_LHO_ExtentField.controls['n_ID'].setValue(apiValue_awardLNHOExtent_group.n_ID);
+            award_LHO_ExtentField.controls['v_LHONSELECTEDEXTENTINLIST'].setValue(apiValue_awardLNHOExtent_group.v_LHONSELECTEDEXTENTINLIST);
+            award_LHO_ExtentField.controls['v_EXTEND'].setValue(apiValue_awardLNHOExtent_group.v_EXTEND);
+            award_LHO_ExtentField.controls['v_NAME'].setValue(apiValue_awardLNHOExtent_group.v_NAME);
+            award_LHO_ExtentField.controls['n_UNIQUE_ID'].setValue(apiValue_awardLNHOExtent_group.n_UNIQUE_ID);
+          }
 
           const apiValue_dynamicValuesDetails = this.awardDeatils[i].dynamicValuesDetails;
           const repeatedFieldsFormArray = (awardFormGroup.controls['dynamicValuesDetails'] as FormArray);
@@ -1089,7 +1387,7 @@ export class Addlandver2Component {
             repeatedField.controls['v_VALUE_NAME'].setValue(apiValue_dynamicValues_group_field2);
             repeatedField.controls['mode'].setValue(apiValue_dynamicValues);
           }
-
+          debugger
           const apiValue_directpayFields = this.awardDeatils[i].awardDirectPaymentEntityValuesDetails;
           const awardFieldsDirectFormArray = (awardFormGroup.controls['awardDirectPaymentEntityValuesDetails'] as FormArray);
           for (let i = 0; i < apiValue_directpayFields.length; i++) {
@@ -1098,13 +1396,24 @@ export class Addlandver2Component {
               awardFieldsDirectFormArray.push(new FormGroup({
                 'v_AMOUNT': new FormControl(''),
                 'v_NOTIFIED_PERSON': new FormControl(''),
-                'mode': new FormControl('')
+                'v_FILE_NAME': new FormControl(''),
+                'v_FILE_PATH': new FormControl(''),
+                'mode': new FormControl(''),
+                'n_ID': new FormControl(''),
+                'n_FILE_ID': new FormControl(''),
+                'n_UNIQUE_ID': new FormControl(''),
               }))
             }
+
             const awarddirectpayField = awardFieldsDirectFormArray.at(i) as FormGroup;
             awarddirectpayField.controls['v_AMOUNT'].setValue(apiValue_awardDirect_group.v_AMOUNT);
             awarddirectpayField.controls['v_NOTIFIED_PERSON'].setValue(apiValue_awardDirect_group.v_NOTIFIED_PERSON);
             awarddirectpayField.controls['mode'].setValue("edit");
+            awarddirectpayField.controls['n_ID'].setValue(apiValue_awardDirect_group.n_ID);
+            awarddirectpayField.controls['n_FILE_ID'].setValue(apiValue_awardDirect_group.n_FILE_ID);
+            awarddirectpayField.controls['n_UNIQUE_ID'].setValue(apiValue_awardDirect_group.n_UNIQUE_ID);
+            awarddirectpayField.controls['v_FILE_NAME'].setValue(apiValue_awardDirect_group.v_FILE_NAME);
+            awarddirectpayField.controls['v_FILE_PATH'].setValue(apiValue_awardDirect_group.v_FILE_PATH);
           }
 
           const apiValue_revenuepayFields = this.awardDeatils[i].awardRevenuePaymentEntityValuesDetails;
@@ -1115,6 +1424,8 @@ export class Addlandver2Component {
               awardFieldsRevenueFormArray.push(new FormGroup({
                 'v_AMOUNT': new FormControl(''),
                 'v_NOTIFIED_PERSON': new FormControl(''),
+                'v_FILE_NAME': new FormControl(''),
+                'v_FILE_PATH': new FormControl(''),
                 'mode': new FormControl(''),
                 'n_ID': new FormControl(''),
                 'n_FILE_ID': new FormControl(''),
@@ -1128,6 +1439,8 @@ export class Addlandver2Component {
             awardrevenuepayField.controls['n_ID'].setValue(apiValue_awardRevenue_group.n_ID);
             awardrevenuepayField.controls['n_FILE_ID'].setValue(apiValue_awardRevenue_group.n_FILE_ID);
             awardrevenuepayField.controls['n_UNIQUE_ID'].setValue(apiValue_awardRevenue_group.n_UNIQUE_ID);
+            awardrevenuepayField.controls['v_FILE_NAME'].setValue(apiValue_awardRevenue_group.v_FILE_NAME);
+            awardrevenuepayField.controls['v_FILE_PATH'].setValue(apiValue_awardRevenue_group.v_FILE_PATH);
           }
 
           const apiValue_courtpayFields = this.awardDeatils[i].awardCourtDepositPaymentEntityValuesDetails;
@@ -1138,6 +1451,8 @@ export class Addlandver2Component {
               awardFieldsCourtFormArray.push(new FormGroup({
                 'v_AMOUNT': new FormControl(''),
                 'v_NOTIFIED_PERSON': new FormControl(''),
+                'v_FILE_NAME': new FormControl(''),
+                'v_FILE_PATH': new FormControl(''),
                 'mode': new FormControl(''),
                 'n_ID': new FormControl(''),
                 'n_FILE_ID': new FormControl(''),
@@ -1151,6 +1466,8 @@ export class Addlandver2Component {
             awardcourtpayField.controls['n_ID'].setValue(apiValue_awardCourt_group.n_ID);
             awardcourtpayField.controls['n_FILE_ID'].setValue(apiValue_awardCourt_group.n_FILE_ID);
             awardcourtpayField.controls['n_UNIQUE_ID'].setValue(apiValue_awardCourt_group.n_UNIQUE_ID);
+            awardcourtpayField.controls['v_FILE_NAME'].setValue(apiValue_awardCourt_group.v_FILE_NAME);
+            awardcourtpayField.controls['v_FILE_PATH'].setValue(apiValue_awardCourt_group.v_FILE_PATH);
           }
 
           awardFormGroup.controls['v_PHO_TOTAL_EXTENT'].setValue(this.awardDeatils[i].v_PHO_TOTAL_EXTENT);
@@ -1320,6 +1637,8 @@ export class Addlandver2Component {
             }
           }
         });
+        //land entity
+        this.personalInfoFormGroup.patchValue(this.landDigitDataEntity);
 
       }
     });
@@ -1422,17 +1741,26 @@ export class Addlandver2Component {
   }
 
   addExpansionPanelAward() {
+    debugger
     const expansionPanelAward = this.formBuilder.group({
       v_FILE_NAME: [''],
       v_FILE_PATH: [''],
+      v_LHO_FILE_NAME: [''],
+      v_LHO_FILE_PATH: [''],
       file: null,
       v_AWARD_NO: [''],
       d_AWARD_DATE: [''],
       v_TOTAL_EXTENT: [''],
       n_TOTAL_AWARD_AMOUNT: [''],
+      v_LHO_EXTENT_ACRES: [''],
+      v_LNHO_EXTENT_ACRES: [''],
+
       n_ID: [''],
-      n_UNIQUE_ID: [''],
+      // n_UNIQUE_ID: [''],    
+      n_UNIQUE_ID: [this.n_UNIQUE_ID],
+      // mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
       mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+
       dynamicValuesDetails: this.formBuilder.array([]),
       awardDirectPaymentEntityValuesDetails: this.formBuilder.array([]),
       awardRevenuePaymentEntityValuesDetails: this.formBuilder.array([]),
@@ -1476,9 +1804,30 @@ export class Addlandver2Component {
       pnho_encumbr_v_extent: [''],
       pnho_encumbr_v_legal_proceeding: [''],
       pnho_encumbr_file: null,
+      lhoExtent1: [''],
+      utilisedExtent: [''],
+      lho_extent_list: [''],
+      awardUtilisedLhoSelectedExtentList: [[]],
+      lho_selected_extent_list: this.formBuilder.array([]),
+      futureDevExtent: [''],
+      notUtilisedLhoExtentList: [''],
+      awardnotUtilisedLhoSelectedExtentList: [[]],
+      awardutilisedlnhoselectedextentlist: [[]],
+      not_utilised_lho_extent_list: [],
+      not_utilised_lho_selected_extent_list: this.formBuilder.array([]),
+      lnhoExtent1: [''],
 
+      lnhoUtilisedExtent: [''],
+      lnho_extent_list: [''],
+      lnho_selected_extent_list: this.formBuilder.array([]),
     });
     this.expansionPanelsAward.push(expansionPanelAward);
+
+    let index = this.expansionPanelsAward.controls.length;
+    this.adddirectpay(index - 1);
+    this.addrevenuepay(index - 1);
+    this.addcivilpay(index - 1);
+
 
   }
 
@@ -1505,6 +1854,28 @@ export class Addlandver2Component {
     }
     else if (this.expansionPanelsAward.length > 0 && type === 'Award') {
       this.expansionPanelsAward.removeAt(this.expansionPanelsAward.length - 1);
+    }
+  }
+  removeAwardByIndex(index) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(index) as FormGroup;
+    if (expansionPanel && expansionPanel.value.n_ID) {
+      let endUrl = 'Award/delete/' + expansionPanel.value.n_ID;
+      this.commonService.apiRemovePostCall(endUrl).subscribe((res: any) => {
+        console.log('res??????', res);
+
+        if (res.status == 1) {
+          this.expansionPanelsAward.removeAt(index);
+
+        }
+      }), (error) => {
+        console.log('error----', error);
+
+      }
+
+    } else {
+      this.expansionPanelsAward.removeAt(index);
+
     }
   }
 
@@ -1878,21 +2249,69 @@ export class Addlandver2Component {
     const directpayFieldsArray = expansionPanel.get('awardDirectPaymentEntityValuesDetails') as FormArray;
     if (this.router.url.includes('edit')) {
       const award = this.awardDeatils[expansionPanelIndex];
+      console.log('award=========', award, expansionPanelIndex);
 
       const directpayField = this.formBuilder.group({
         v_AMOUNT: [''],
         v_NOTIFIED_PERSON: [''],
+        v_FILE_NAME: [''],
+        v_FILE_PATH: [''],
+        // dp_file_NAME: [''],
+        // dp_file_PATH: [''],
         mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+
         n_UNIQUE_ID: [this.n_UNIQUE_ID],
+
         n_ID: [''],
-        n_FILE_ID: [award.n_ID]
+        n_FILE_ID: [award ? award.n_ID : null]
+        // n_FILE_ID: [null]
+
       });
       directpayFieldsArray.push(directpayField);
+
+      // const award = this.awardDeatils[0];
+
+      // if (expansionPanelIndex == 0) {
+      //   const directpayField = this.formBuilder.group({
+      //     v_AMOUNT: [''],
+      //     v_NOTIFIED_PERSON: [''],
+      //     v_FILE_NAME: [''],
+      //     v_FILE_PATH: [''],
+      //     // dp_file_NAME: [''],
+      //     // dp_file_PATH: [''],
+      //     mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+      //     n_UNIQUE_ID: [this.n_UNIQUE_ID],
+      //     n_ID: [''],
+      //     n_FILE_ID: [award ? award.n_ID : null]
+      //   });
+      //   directpayFieldsArray.push(directpayField);
+      // } else {
+      //   const getFileID = this.awardDeatils[expansionPanelIndex - 1];
+
+      //   const directpayField = this.formBuilder.group({
+      //     v_AMOUNT: [''],
+      //     v_NOTIFIED_PERSON: [''],
+      //     v_FILE_NAME: [''],
+      //     v_FILE_PATH: [''],
+      //     // dp_file_NAME: [''],
+      //     // dp_file_PATH: [''],
+      //     mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+      //     n_UNIQUE_ID: [this.n_UNIQUE_ID],
+      //     n_ID: [''],
+      //     n_FILE_ID: [getFileID ? getFileID.n_ID + 1 : null]
+      //   });
+      //   directpayFieldsArray.push(directpayField);
+      // }
+
 
     } else {
       const directpayField = this.formBuilder.group({
         v_AMOUNT: [''],
         v_NOTIFIED_PERSON: [''],
+        v_FILE_NAME: [''],
+        v_FILE_PATH: [''],
+        // dp_file_NAME: [''],
+        // dp_file_PATH: [''],
         mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
         n_UNIQUE_ID: [this.n_UNIQUE_ID],
         n_ID: [''],
@@ -1922,13 +2341,19 @@ export class Addlandver2Component {
     const revenuepayFieldsArray = expansionPanel.get('awardRevenuePaymentEntityValuesDetails') as FormArray;
     if (this.router.url.includes('edit')) {
       const award = this.awardDeatils[expansionPanelIndex];
+      // const award = this.awardDeatils[0];
+
       const revenuepayField = this.formBuilder.group({
         v_AMOUNT: [''],
+        // rd_file_NAME: [''],
+        // rd_file_PATH: [''],
+        v_FILE_NAME: [''],
+        v_FILE_PATH: [''],
         v_NOTIFIED_PERSON: [''],
         mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
         n_UNIQUE_ID: [this.n_UNIQUE_ID],
         n_ID: [''],
-        n_FILE_ID: [award.n_ID]
+        n_FILE_ID: [award ? award.n_ID : null]
       });
       revenuepayFieldsArray.push(revenuepayField);
 
@@ -1936,6 +2361,10 @@ export class Addlandver2Component {
       const revenuepayField = this.formBuilder.group({
         v_AMOUNT: [''],
         v_NOTIFIED_PERSON: [''],
+        // rd_file_NAME: [''],
+        // rd_file_PATH: [''],
+        v_FILE_NAME: [''],
+        v_FILE_PATH: [''],
         mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
         n_UNIQUE_ID: [this.n_UNIQUE_ID],
         n_ID: [''],
@@ -1964,13 +2393,19 @@ export class Addlandver2Component {
     const civilpayFieldsArray = expansionPanel.get('awardCourtDepositPaymentEntityValuesDetails') as FormArray;
     if (this.router.url.includes('edit')) {
       const award = this.awardDeatils[expansionPanelIndex];
+      // const award = this.awardDeatils[0];
+
       const civilpayField = this.formBuilder.group({
         v_AMOUNT: [''],
         v_NOTIFIED_PERSON: [''],
+        // cv_file_NAME: [''],
+        // cv_file_PATH: [''],
+        v_FILE_NAME: [''],
+        v_FILE_PATH: [''],
         mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
         n_UNIQUE_ID: [this.n_UNIQUE_ID],
         n_ID: [''],
-        n_FILE_ID: [award.n_ID]
+        n_FILE_ID: [award ? award.n_ID : null]
       });
       civilpayFieldsArray.push(civilpayField);
 
@@ -1979,6 +2414,10 @@ export class Addlandver2Component {
       const civilpayField = this.formBuilder.group({
         v_AMOUNT: [''],
         v_NOTIFIED_PERSON: [''],
+        // cv_file_NAME: [''],
+        // cv_file_PATH: [''],
+        v_FILE_NAME: [''],
+        v_FILE_PATH: [''],
         mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
         n_UNIQUE_ID: [this.n_UNIQUE_ID],
         n_ID: [''],
@@ -2002,6 +2441,274 @@ export class Addlandver2Component {
 
     // civilpayFieldsArray.push(civilpayField);
   }
+  utilisedForLHOChange(event: any, expansionPanelIndex: number, controlname: string) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    const utilisedForLHOArray = expansionPanel.get('lho_selected_extent_list') as FormArray;
+    console.log('utilisedForLHOArray', utilisedForLHOArray);
+
+    let selectedList = expansionPanel.get(controlname)?.value;
+    if (utilisedForLHOArray.length > 0) {
+      utilisedForLHOArray.controls = []
+
+    }
+    // if (utilisedForLHOArray.value.length > 0) {
+    //   // utilisedForLHOArray.controls = []
+    //   utilisedForLHOArray.value.forEach((element, index) => {
+    //     let getList = selectedList.filter(x => x == element.v_LHOSELECTEDEXTENTINLIST)
+    //     if (getList.length == 0) {
+    //       // utilisedForLHOArray.value.removeAt(index)
+    //       utilisedForLHOArray.value.splice(index, 1);
+    //     }
+    //   });
+    //   // for (let list of selectedList) {
+    //   //   utilisedForLHOArray.value.filter(x=>x.v_LHOSELECTEDEXTENTINLIST!=)
+
+    //   // }
+    //   // for (let list of selectedList) {
+    //   //   utilisedForLHOArray
+    //   //   const controlsArray = utilisedForLHOArray.get('myArray') as FormArray;
+    //   //   const indexToRemove = controlsArray.value.v_LHOSELECTEDEXTENTINLIST.indexOf(list);
+    //   //   if (indexToRemove !== -1) {
+    //   //     controlsArray.removeAt(indexToRemove);
+    //   //   }
+    //   // }
+
+
+    // }
+    console.log('selectedList', selectedList);
+    // selectedList.forEach(element => {
+    //   if (element != '') {
+    //     // if (this.router.url.includes('edit')) {
+    //     //   const award = this.awardDeatils[expansionPanelIndex];
+    //     //   element.mode = this.n_UNIQUE_ID ? 'edit' : 'create';
+    //     //   element.n_UNIQUE_ID = this.n_UNIQUE_ID;
+    //     //   element.n_FILE_ID = award.n_ID;
+    //     // } else {
+    //     //   element.mode = this.n_UNIQUE_ID ? 'edit' : 'create';
+    //     //   element.n_UNIQUE_ID = this.n_UNIQUE_ID;
+    //     // }
+    //     // this.utilisedForLHOExtent(expansionPanelIndex, selectedList)
+    //   }
+    // });
+    // const controlsArray = this.myForm.get('myArray') as FormArray;
+
+    if (selectedList && selectedList.length > 0) {
+
+      this.utilisedForLHOExtent(expansionPanelIndex, selectedList)
+    }
+
+
+
+  }
+
+  utilisedForLHOExtent(expansionPanelIndex: number, selectedItem: any) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    const utilisedForLHOArray = expansionPanel.get('lho_selected_extent_list') as FormArray;
+    if (utilisedForLHOArray.length > 0) {
+      utilisedForLHOArray.controls = []
+
+    }
+    // if (selectedItem > 0) {
+    //   selectedItem.forEach(element => {
+    //     const indexToRemove = utilisedForLHOArray.value.v_LHOSELECTEDEXTENTINLIST.indexOf(element);
+    //     if (indexToRemove !== -1) {
+    //       utilisedForLHOArray.removeAt(indexToRemove);
+    //     }
+    //   })
+    // }
+
+    selectedItem.forEach(element => {
+      // let getList = utilisedForLHOArray.value.filter(x => x.v_LHOSELECTEDEXTENTINLIST == element)
+      // if (getList.length == 0) {
+      if (element) {
+
+        if (this.router.url.includes('edit')) {
+          const award = this.awardDeatils[expansionPanelIndex];
+          const utilisedForLHOField = this.formBuilder.group({
+            mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            n_FILE_ID: [award ? award.n_ID : null],
+            n_ID: [''],
+            v_LHOSELECTEDEXTENTINLIST: [element],
+            v_EXTEND: [''],
+            v_NAME: [],
+            n_UNIQUE_ID: [this.n_UNIQUE_ID],
+
+
+          });
+          utilisedForLHOArray.push(utilisedForLHOField);
+
+
+        } else {
+          const utilisedForLHOField = this.formBuilder.group({
+            mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            n_FILE_ID: [null],
+            n_ID: [''],
+            v_LHOSELECTEDEXTENTINLIST: [element],
+            v_EXTEND: [''],
+            v_NAME: [],
+            n_UNIQUE_ID: [this.n_UNIQUE_ID],
+          });
+          utilisedForLHOArray.push(utilisedForLHOField);
+        }
+      }
+
+    });
+    console.log('utilisedForLHOArray', utilisedForLHOArray);
+
+
+  }
+  notUtilisedForLHOChange(event: any, expansionPanelIndex: number, controlname: string) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    const notutilisedForLHOArray = expansionPanel.get('not_utilised_lho_selected_extent_list') as FormArray;
+    if (notutilisedForLHOArray.length > 0) {
+      notutilisedForLHOArray.controls = []
+
+    }
+    let selectedList = expansionPanel.get(controlname)?.value;
+    console.log('selectedList', selectedList);
+    // selectedList.forEach(element => {
+    //   if (element != '') {
+    //     this.notUtilisedForLHOExtent(expansionPanelIndex, selectedList)
+    //   }
+    // });
+    if (selectedList && selectedList.length > 0) {
+      this.notUtilisedForLHOExtent(expansionPanelIndex, selectedList)
+
+    }
+  }
+  notUtilisedForLHOExtent(expansionPanelIndex: number, selectedItem: any) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    const utilisedForLHOArray = expansionPanel.get('not_utilised_lho_selected_extent_list') as FormArray;
+    if (utilisedForLHOArray.length > 0) {
+      utilisedForLHOArray.controls = []
+
+    }
+    selectedItem.forEach(element => {
+      if (element != "") {
+        if (this.router.url.includes('edit')) {
+          const award = this.awardDeatils[expansionPanelIndex];
+          const notUtilisedForLHOField = this.formBuilder.group({
+            mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            n_FILE_ID: [award ? award.n_ID : null],
+            n_ID: [''],
+            v_LHOSELECTEDEXTENTINLIST: [element],
+            v_EXTEND: [''],
+            v_NAME: [],
+            n_UNIQUE_ID: [this.n_UNIQUE_ID],
+
+            // lho_selected_extent_not_utilised: [''],
+            // name: [element],
+            // mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            // n_UNIQUE_ID: [this.n_UNIQUE_ID],
+            // n_ID: [''],
+            // n_FILE_ID: [award.n_ID]
+          });
+          utilisedForLHOArray.push(notUtilisedForLHOField);
+
+
+        } else {
+          const notUtilisedForLHOField = this.formBuilder.group({
+            mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            n_FILE_ID: [null],
+            n_ID: [''],
+            v_LHOSELECTEDEXTENTINLIST: [element],
+            v_EXTEND: [''],
+            v_NAME: [],
+            n_UNIQUE_ID: [this.n_UNIQUE_ID],
+            // lho_selected_extent_not_utilised: [''],
+            // name: [element],
+            // mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            // n_UNIQUE_ID: [this.n_UNIQUE_ID],
+            // n_ID: [''],
+            // n_FILE_ID: [null]
+          });
+          utilisedForLHOArray.push(notUtilisedForLHOField);
+        }
+      }
+
+    });
+
+  }
+  UtilisedForLNHOChange(event: any, expansionPanelIndex: number, controlname: string) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    const notutilisedForLNHOArray = expansionPanel.get('lnho_selected_extent_list') as FormArray;
+    if (notutilisedForLNHOArray.length > 0) {
+      notutilisedForLNHOArray.controls = []
+
+    }
+    let selectedList = expansionPanel.get(controlname)?.value;
+    console.log('selectedList', selectedList);
+    // selectedList.forEach(element => {
+    //   if (element != '') {
+    //     this.utilisedLNHOExtent(expansionPanelIndex, selectedList)
+    //   }
+    // });
+    if (selectedList && selectedList.length > 0) {
+      this.utilisedLNHOExtent(expansionPanelIndex, selectedList)
+
+    }
+
+  }
+  utilisedLNHOExtent(expansionPanelIndex: number, selectedItem: any) {
+    debugger
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    const utilisedForLHOArray = expansionPanel.get('lnho_selected_extent_list') as FormArray;
+    if (utilisedForLHOArray.length > 0) {
+      utilisedForLHOArray.controls = []
+
+    }
+    selectedItem.forEach(element => {
+      if (element != "") {
+        if (this.router.url.includes('edit')) {
+          const award = this.awardDeatils[expansionPanelIndex];
+          const notUtilisedForLHOField = this.formBuilder.group({
+            mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            n_FILE_ID: [award ? award.n_ID : null],
+            n_ID: [''],
+            v_LHONSELECTEDEXTENTINLIST: [element],
+            v_EXTEND: [''],
+            v_NAME: [],
+            n_UNIQUE_ID: [this.n_UNIQUE_ID],
+            // lnho_selected_extent: [''],
+            // name: [element],
+            // mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            // n_UNIQUE_ID: [this.n_UNIQUE_ID],
+            // n_ID: [''],
+            // n_FILE_ID: [award.n_ID]
+          });
+          utilisedForLHOArray.push(notUtilisedForLHOField);
+
+
+        } else {
+          const notUtilisedForLHOField = this.formBuilder.group({
+            mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            n_FILE_ID: [null],
+            n_ID: [''],
+            v_LHONSELECTEDEXTENTINLIST: [element],
+            v_EXTEND: [''],
+            v_NAME: [],
+            n_UNIQUE_ID: [this.n_UNIQUE_ID],
+
+            // lnho_selected_extent: [''],
+            // name: [element],
+            // mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
+            // n_UNIQUE_ID: [this.n_UNIQUE_ID],
+            // n_ID: [''],
+            // n_FILE_ID: [null]
+          });
+          utilisedForLHOArray.push(notUtilisedForLHOField);
+        }
+      }
+
+    });
+
+  }
+
 
   addpho(expansionPanelIndex: number) {
     const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
@@ -2301,6 +3008,7 @@ export class Addlandver2Component {
 
   deletedDirectpayFields: any[] = [];
   removedirectpay(expansionPanelIndex: number, directpayFieldIndex: number, formArray?: FormArray, index?: number, formArrayName?: string) {
+    debugger
     const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
     const directpayFieldsArray = expansionPanel.get('awardDirectPaymentEntityValuesDetails') as FormArray;
 
@@ -2309,13 +3017,34 @@ export class Addlandver2Component {
       deletedFormArrayString: formArrayName,
       deletedValue: deletedValues,
     };
-    this.deletedDirectpayFields.push(deletedData);
+    // this.deletedDirectpayFields.push(deletedData);
+    if (deletedValues && deletedValues.n_ID) {
+      let endUrl = 'direct-payment/delete/' + deletedValues.n_ID
+      this.commonService.apiRemovePostCall(endUrl).subscribe((res: any) => {
+        console.log('res??????', res);
 
-    directpayFieldsArray.removeAt(directpayFieldIndex);
+        if (res.status == 1) {
+          directpayFieldsArray.removeAt(directpayFieldIndex);
+
+        }
+      }), (error) => {
+        console.log('error----', error);
+
+      }
+
+    } else {
+      directpayFieldsArray.removeAt(directpayFieldIndex);
+
+    }
+
+
+
+
   }
 
   deletedRevenuepayFields: any[] = [];
   removerevenuepay(expansionPanelIndex: number, revenuepayFieldIndex: number, formArray?: FormArray, index?: number, formArrayName?: string) {
+    debugger
     const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
     const revenuepayFieldsArray = expansionPanel.get('awardRevenuePaymentEntityValuesDetails') as FormArray;
     let deletedValues = (revenuepayFieldsArray.at(revenuepayFieldIndex) as FormControl).value;
@@ -2323,8 +3052,25 @@ export class Addlandver2Component {
       deletedFormArrayString: formArrayName,
       deletedValue: deletedValues,
     };
-    this.deletedRevenuepayFields.push(deletedData);
-    revenuepayFieldsArray.removeAt(revenuepayFieldIndex);
+    // this.deletedRevenuepayFields.push(deletedData);
+    if (deletedValues && deletedValues.n_ID) {
+      let endUrl = 'revenue-payment/delete/' + deletedValues.n_ID
+      this.commonService.apiRemovePostCall(endUrl).subscribe((res: any) => {
+        console.log('res??????', res);
+
+        if (res.status == 1) {
+          revenuepayFieldsArray.removeAt(revenuepayFieldIndex);
+
+        }
+      }), (error) => {
+        console.log('error----', error);
+
+      }
+
+    } else {
+      revenuepayFieldsArray.removeAt(revenuepayFieldIndex);
+
+    }
   }
 
 
@@ -2339,8 +3085,26 @@ export class Addlandver2Component {
       deletedFormArrayString: formArrayName,
       deletedValue: deletedValues,
     };
-    this.deletedCivilpayFields.push(deletedData);
-    civilpayFieldsArray.removeAt(civilpayFieldIndex);
+    // this.deletedCivilpayFields.push(deletedData);
+    if (deletedValues && deletedValues.n_ID) {
+
+      let endUrl = 'court-deposit-payment/delete/' + deletedValues.n_ID
+      this.commonService.apiRemovePostCall(endUrl).subscribe((res: any) => {
+        console.log('res??????', res);
+
+        if (res.status == 1) {
+          civilpayFieldsArray.removeAt(civilpayFieldIndex);
+
+        }
+      }), (error) => {
+        console.log('error----', error);
+
+      }
+
+    } else {
+      civilpayFieldsArray.removeAt(civilpayFieldIndex);
+
+    }
   }
 
   deletedPhoFields: any[] = [];
@@ -2881,8 +3645,8 @@ export class Addlandver2Component {
     // }
 
   }
-  async awsFileSelectedAwardFile(event: Event, expansionPanelIndex: number, controlName: string, tab: string, fileType: string) {
-
+  async awsFileSelectedAwardFile(event: Event, expansionPanelIndex: number, controlName: string, type: string, fileIndex: number) {
+    debugger
     // this.isLoader = true;
 
     console.log('num', Math.floor(Math.random() * 90000) + 10000);
@@ -2896,7 +3660,26 @@ export class Addlandver2Component {
       const originalFileName = file.name;
       const fileExtension = originalFileName.split('.').pop();
       var fileName: any;
-      fileName = `award_file${myId}.${fileExtension}`;
+      if (type != 'DP' && type != 'RD' && type != 'CCD') {
+        fileName = `award_file${myId}.${fileExtension}`;
+
+      }
+      if (type == 'DP') {
+        fileName = `award_DP${myId}.${fileExtension}`;
+
+      }
+      if (type == 'RD') {
+        fileName = `award_RD${myId}.${fileExtension}`;
+
+      }
+      if (type == 'CCD') {
+        fileName = `award_CCD${myId}.${fileExtension}`;
+
+      }
+      // if (type == 'lho') {
+      //   fileName = `award_${myId}.${fileExtension}`;
+
+      // }
 
 
 
@@ -2937,8 +3720,50 @@ export class Addlandver2Component {
               // };
               const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
 
-              expansionPanel.get(controlName)?.setValue(fileName);
-              expansionPanel.get('v_FILE_PATH')?.setValue(fileuri);
+              // expansionPanel.get(controlName)?.setValue(fileName);
+              if (type != 'DP' && type != 'RD' && type != 'CCD') {
+                if (controlName == 'v_FILE_NAME') {
+                  expansionPanel.get(controlName)?.setValue(fileName);
+
+                  expansionPanel.get('v_FILE_PATH')?.setValue(fileuri);
+                }
+
+                if (controlName == 'v_FILE_NAME_lho') {
+                  expansionPanel.get(controlName)?.setValue(fileName);
+
+                  expansionPanel.get('v_FILE_PATH_lho')?.setValue(fileuri);
+
+                }
+                if (controlName == 'v_LHO_FILE_NAME') {
+                  expansionPanel.get(controlName)?.setValue(fileName);
+
+                  expansionPanel.get('v_LHO_FILE_PATH')?.setValue(fileuri);
+
+                }
+              }
+
+
+              if (type == 'DP') {
+                const awardFieldsDirectFormArray = (expansionPanel.controls['awardDirectPaymentEntityValuesDetails'] as FormArray);
+                const awarddirectpayField = awardFieldsDirectFormArray.at(fileIndex) as FormGroup;
+                awarddirectpayField.controls['v_FILE_NAME'].setValue(fileName);
+                awarddirectpayField.controls['v_FILE_PATH'].setValue(fileuri);
+
+              }
+              if (type == 'RD') {
+                const awardFieldsRevenueFormArray = (expansionPanel.controls['awardRevenuePaymentEntityValuesDetails'] as FormArray);
+                const awardrevenuepayField = awardFieldsRevenueFormArray.at(fileIndex) as FormGroup;
+                awardrevenuepayField.controls['v_FILE_NAME'].setValue(fileName);
+                awardrevenuepayField.controls['v_FILE_PATH'].setValue(fileuri);
+
+              }
+              if (type == 'CCD') {
+                const awardFieldsCourtFormArray = (expansionPanel.controls['awardCourtDepositPaymentEntityValuesDetails'] as FormArray);
+                const awardcourtpayField = awardFieldsCourtFormArray.at(fileIndex) as FormGroup;
+                awardcourtpayField.controls['v_FILE_NAME'].setValue(fileName);
+                awardcourtpayField.controls['v_FILE_PATH'].setValue(fileuri);
+
+              }
             }
           });
           // this.isLoader = false;
@@ -3506,16 +4331,35 @@ export class Addlandver2Component {
     }
 
     // Award
+    debugger
     let awardTabDetails = this.awardInfoFormGroup.value;
     console.log("awardTabDetails", awardTabDetails);
     let firstTabAward = awardTabDetails.expansionPanelsAward;
     console.log("awardTabDetails to Api", firstTabAward);
 
-    if (!this.view && !this.edit) {
-      firstTabAward.forEach((panelData) => {
-        panelData.d_AWARD_DATE = this.datePipe.transform(panelData.d_AWARD_DATE, 'dd-MM-yyyy');
-      });
-    }
+    // if (!this.view && !this.edit) {
+    //   firstTabAward.forEach((panelData) => {
+    //     panelData.awardUtilisedLhoSelectedExtentList = [];
+    //     panelData.awardUtilisedLhoSelectedExtentList = panelData.lho_selected_extent_list;
+    //     panelData.d_AWARD_DATE = this.datePipe.transform(panelData.d_AWARD_DATE, 'dd-MM-yyyy');
+    //   });
+    // }
+    firstTabAward.forEach((panelData) => {
+      panelData.awardUtilisedLhoSelectedExtentList = [];
+      panelData.awardUtilisedLhoSelectedExtentList = panelData.lho_selected_extent_list;
+      panelData.awardnotUtilisedLhoSelectedExtentList = [];
+      panelData.awardnotUtilisedLhoSelectedExtentList = panelData.not_utilised_lho_selected_extent_list;
+      panelData.awardutilisedlnhoselectedextentlist = [];
+      panelData.lhoExtent1 = panelData.v_LHO_EXTENT_ACRES;
+      panelData.lnhoExtent1 = panelData.v_LNHO_EXTENT_ACRES;
+
+      panelData.awardutilisedlnhoselectedextentlist = panelData.lnho_selected_extent_list;
+      // if (!this.view && !this.edit) {
+      // panelData.d_AWARD_DATE = this.datePipe.transform(panelData.d_AWARD_DATE, 'dd-MM-yyyy');
+      // panelData.d_AWARD_DATE = this.datePipe.transform(panelData.d_AWARD_DATE, 'yyyy-MM-dd');
+
+      // }
+    });
 
 
     let deletedAwardDynamicValues = this.deletedAwardDynamicValues;
@@ -4364,8 +5208,8 @@ export class Addlandver2Component {
       values: this.group_name
     };
 
-    // this.http.post<any[]>('http://localhost:5000/GetData', requestBody).subscribe(
-    this.http.post<any[]>('http://localhost:5000/GetData', requestBody).subscribe(
+    // this.http.post<any[]>('https://landapi.aocxy.com/GetData', requestBody).subscribe(
+    this.http.post<any[]>('https://landapi.aocxy.com/GetData', requestBody).subscribe(
 
       (response) => {
         console.log("get division response ", response);
@@ -4466,17 +5310,59 @@ export class Addlandver2Component {
 
 
   }
-  removeFileAward(index, controlName) {
+  removeFileAward(expansionPanelIndex, index, controlName, type) {
     debugger
-    const expansionPanel = this.expansionPanelsAward.at(index) as FormGroup;
+    const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+    if (type == 'awardFile') {
+      expansionPanel.get(controlName)?.setValue('');
+      expansionPanel.get('v_FILE_PATH')?.setValue('');
+    }
+    if (type == 'DP') {
+      const awardFieldsDirectFormArray = (expansionPanel.controls['awardDirectPaymentEntityValuesDetails'] as FormArray);
+      const awarddirectpayField = awardFieldsDirectFormArray.at(index) as FormGroup;
+      awarddirectpayField.controls['v_FILE_NAME'].setValue('');
+      awarddirectpayField.controls['v_FILE_PATH'].setValue('');
+    }
 
-    expansionPanel.get(controlName)?.setValue('');
-    expansionPanel.get('v_FILE_PATH')?.setValue('');
+    if (type == 'RD') {
+      const awardFieldsRevenueFormArray = (expansionPanel.controls['awardRevenuePaymentEntityValuesDetails'] as FormArray);
+      const awardrevenuepayField = awardFieldsRevenueFormArray.at(index) as FormGroup;
+      awardrevenuepayField.controls['v_FILE_NAME'].setValue('');
+      awardrevenuepayField.controls['v_FILE_PATH'].setValue('');
+
+    }
+    if (type == 'CCD') {
+      const awardFieldsCourtFormArray = (expansionPanel.controls['awardCourtDepositPaymentEntityValuesDetails'] as FormArray);
+      const awardcourtpayField = awardFieldsCourtFormArray.at(index) as FormGroup;
+      awardcourtpayField.controls['v_FILE_NAME'].setValue('');
+      awardcourtpayField.controls['v_FILE_PATH'].setValue('');
+
+    }
+    if (type == 'LHOfile') {
+      expansionPanel.get(controlName)?.setValue('');
+      expansionPanel.get('V_LHO_FILE_PATH')?.setValue('');
+
+    }
+
+
+    // if (controlName == 'v_FILE_NAME') {
+    //   expansionPanel.get('v_FILE_PATH')?.setValue('');
+
+    // }
+    // if (controlName == 'v_FILE_NAME_lho') {
+    //   expansionPanel.get('v_FILE_PATH_lho')?.setValue('');
+
+    // }
 
     // expansionPanel.get(controlName)?.setValue(null);
     //     expansionPanel.get('file2')?.setValue(null);
     //     expansionPanel.get('v_FILE_2_FILEPATH')?.setValue(null);
 
+
+  }
+  checkLho(event: any) {
+    debugger
+    console.log('event', event);
 
   }
 
@@ -4506,6 +5392,40 @@ export class Addlandver2Component {
   //     }
   //   })
   // }
+
+
+  deleteData(expansionPanelIndex: number, directpayFieldIndex: number, formArray?: FormArray, index?: number, formArrayName?: string, type?: string) {
+    debugger
+    // Open the confirmation dialog
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '500px',
+      data: {
+        message: 'Are you sure to delete this data?',
+        confirmBackgroundColor: 'red',
+        cancelBackgroundColor: 'white',
+        confirmTextColor: 'white',
+        cancelTextColor: 'black',
+        confirmText: 'Yes',
+        cancelText: 'No',
+        from: 'delete'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        // Call the delete service
+        if (type == 'DP') {
+          this.removedirectpay(expansionPanelIndex, directpayFieldIndex, formArray, index, formArrayName)
+        } else if (type == 'RD') {
+          this.removerevenuepay(expansionPanelIndex, directpayFieldIndex, formArray, index, formArrayName)
+        } else if (type == 'CCD') {
+          this.removecivilpay(expansionPanelIndex, directpayFieldIndex, formArray, index, formArrayName)
+        } else if (type == 'award') {
+          this.removeAwardByIndex(expansionPanelIndex);
+        }
+      }
+    });
+  }
 
 
 }

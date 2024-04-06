@@ -11,10 +11,10 @@ import { ConfirmDialogComponent } from 'src/app/shared-module/confirm-dialog/con
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.component';
-import * as jsPDF from 'jspdf';
 import { Console } from 'console';
 import { FormControl } from '@angular/forms';
-
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
 export interface SaveLandApiModel {
   landDigitDataEntity: LandDigitDataEntity
@@ -301,7 +301,9 @@ export class HomeComponent implements OnInit {
   @ViewChild('table') table: ElementRef;
   dataSource = new MatTableDataSource<any>([]);
   // columnsToDisplay = ['n_UNIQUE_ID', 'v_NAME_OF_SCHEME', 'v_NAME_OF_CIRCLE', 'v_NAME_OF_DIVISION', 'v_TOTAL_EXTENT', 'v_PHO_TOTAL_EXTENT', 'v_PNHO_TOTAL_EXTENT', 'v_PHO_SCHEME_TOTAL_EXTENT', 'actions'];
-  columnsToDisplay = ['n_UNIQUE_ID', 'v_NAME_OF_SCHEME', 'v_NAME_OF_DIVISION', 'v_NAME_OF_DISTRICT', 'v_NAME_OF_VILLAGE', '4(1) (in acres)', '6DD (in acres)', 'v_TOTAL_EXTENT', 'v_PHO_TOTAL_EXTENT', 'v_PNHO_TOTAL_EXTENT', 'v_PHO_SCHEME_TOTAL_EXTENT', 'actions'];
+  // columnsToDisplay = ['n_UNIQUE_ID', 'v_NAME_OF_SCHEME', 'v_NAME_OF_DIVISION', 'v_NAME_OF_DISTRICT', 'v_NAME_OF_VILLAGE', '4(1) (in acres)', '6DD (in acres)', 'v_TOTAL_EXTENT', 'v_PHO_TOTAL_EXTENT', 'v_PNHO_TOTAL_EXTENT', 'v_PHO_SCHEME_TOTAL_EXTENT', 'actions'];
+  columnsToDisplay = ['n_UNIQUE_ID', 'v_NAME_OF_SCHEME', 'v_NAME_OF_DIVISION', 'v_NAME_OF_DISTRICT', 'v_NAME_OF_VILLAGE', '4(1) (in acres)', '6DD (in acres)', 'Award (in acres)', 'Award Amount', 'DP Amount', 'RD Amount', 'CC Amount', 'LHO (in acres)', 'Utilized (in acres)', 'Non Utilized (in acres)', 'Future Dev (in acres)', 'LNHO (in acres)', 'actions'];
+
 
 
   alldata: any[] = [];
@@ -377,10 +379,10 @@ export class HomeComponent implements OnInit {
       this.originalTableData = data;
       this.dataSource = new MatTableDataSource(data);
       const uniqueDivisions: any = [] = [...new Set(data.map(item => item.v_NAME_OF_DIVISION))];
-      const uniqueDistrict: any = [] = [...new Set(data.map(item => item.v_NAME_OF_DISTRICT))];
+      // const uniqueDistrict: any = [] = [...new Set(data.map(item => item.v_NAME_OF_DISTRICT))];
 
       this.divisionSelectList = ['All', ...uniqueDivisions];
-      this.districtSelectList = ['All', ...uniqueDistrict];
+      // this.districtSelectList = ['All', ...uniqueDistrict];
       // console.log(this.dataSource.data+"mass");
 
     });
@@ -515,31 +517,9 @@ export class HomeComponent implements OnInit {
   }
 
 
-  exportExcel() {
 
-    this.excelData = this.alldata.map(item => ({
-
-
-      unique_code: item.unique_code,
-      land_name: item.land_name,
-      citynrural: item.citynrural,
-      division: item.division,
-      total_extent_land_acquired: item.total_extent_land_acquired,
-      extent: item.extent,
-      not_handed_over_extent: item.not_handed_over_extent,
-      legalproceedings: item.legalproceedings
-
-
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(this.excelData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    FileSaver.saveAs(data, 'TableData.xlsx');
-  }
   getTotal(column: string) {
+
     return this.dataSource?.filteredData.reduce((acc, data2) => {
       const value = data2[column] !== null && !isNaN(Number(data2[column])) ? Number(data2[column]) : 0;
       // console.log('value>>>', acc + value);
@@ -563,16 +543,17 @@ export class HomeComponent implements OnInit {
 
 
     if (!divisionFilterValue || divisionFilterValue.length == 0) {
-      this.dataSource = new MatTableDataSource(
-        this.originalTableData.filter(data => {
-          if (
-            (districtFilterValue.includes('All') || districtFilterValue.includes(data.v_NAME_OF_DISTRICT))
-          ) {
-            return true;
-          }
-          return false;
-        })
-      );
+      this.dataSource = new MatTableDataSource(this.originalTableData)
+      // this.dataSource = new MatTableDataSource(
+      //   this.originalTableData.filter(data => {
+      //     if (
+      //       (districtFilterValue.includes('All') || districtFilterValue.includes(data.v_NAME_OF_DISTRICT))
+      //     ) {
+      //       return true;
+      //     }
+      //     return false;
+      //   })
+      // );
       // return;
     } else {
       this.dataSource = new MatTableDataSource(
@@ -585,12 +566,13 @@ export class HomeComponent implements OnInit {
           return false;
         })
       );
+      const uniqueDistrict: any = [] = [...new Set(this.dataSource.data.map(item => item.v_NAME_OF_DISTRICT))];
+      this.districtSelectList = ['All', ...uniqueDistrict];
+
     }
 
-
-
-
     console.log('dataSource', this.dataSource);
+
 
   }
 
@@ -613,23 +595,227 @@ export class HomeComponent implements OnInit {
       );
       // return;
     } else {
-      this.dataSource = new MatTableDataSource(
-        this.originalTableData.filter(data => {
-          if (
-            (districtFilterValue.includes('All') || districtFilterValue.includes(data.v_NAME_OF_DISTRICT))
-          ) {
-            return true;
-          }
-          return false;
-        })
-      );
+      if (this.dataSource && this.dataSource.data.length > 0) {
+        this.dataSource = new MatTableDataSource(
+          this.dataSource.data.filter(data => {
+            if (
+              (districtFilterValue.includes('All') || districtFilterValue.includes(data.v_NAME_OF_DISTRICT))
+            ) {
+              return true;
+            }
+            return false;
+          })
+
+          // this.originalTableData.filter(data => {
+          //   if (
+          //     (districtFilterValue.includes('All') || districtFilterValue.includes(data.v_NAME_OF_DISTRICT))
+          //   ) {
+          //     return true;
+          //   }
+          //   return false;
+          // })
+        );
+      }
     }
+
 
 
 
 
     console.log('dataSource', this.dataSource);
 
+
+  }
+
+  convert() {
+    var columnStyle: any;
+    let currentdate = new Date();
+    let formaateDate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1).toString().padStart(2, '0')
+      + "-" + currentdate.getDate().toString().padStart(2, '0') + ' ' + currentdate.getHours().toString().padStart(2, '0') + ":" + currentdate.getMinutes().toString().padStart(2, '0');
+    console.log('formate', formaateDate);
+
+    try {
+      let currentdate = new Date();
+      let formaateDate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1).toString().padStart(2, '0')
+        + "-" + currentdate.getDate().toString().padStart(2, '0') + ' ' + currentdate.getHours().toString().padStart(2, '0') + ":" + currentdate.getMinutes().toString().padStart(2, '0');
+      console.log('formate', formaateDate);
+
+      let getExportdata = [];
+      var fileName: any;
+      let headerName: any = [];
+      let selectedDatetype: any;
+
+
+      columnStyle = {
+        // 0: { halign: "center" },
+
+        // 1: { halign: "right" },
+        // 2: { halign: "right" },
+
+        // 3: { halign: "right" },
+        // 4: { halign: "right" },
+
+      }
+      fileName = 'Land Digitization';
+      headerName = ['S.No', 'Scheme Name', 'Division', 'District', 'Village', '4(1) (in acres)', '6DD (in acres)', 'Award (in acres)', 'Award Amount', 'DP Amount', 'RD Amount', 'CC Amount', 'LHO (in acres)', 'Utilized (in acres)', 'Not Utilized (in acres)', 'Future Dev (in acres)', 'LNHO (in acres)',];
+      // headerName = ['S.No', 'Scheme Name', 'Division', 'District', 'Village',];
+
+      this.dataSource.data.forEach((element, index) => {
+        let data = [
+          index + 1,
+
+          element.v_NAME_OF_SCHEME,
+          element.v_NAME_OF_DIVISION,
+          element.v_NAME_OF_DISTRICT,
+          element.v_NAME_OF_VILLAGE,
+          element.fourone_total_extent,
+          element.sixdd_total_extent,
+          element.v_TOTAL_EXTENT,
+          element.n_TOTAL_AWARD_AMOUNT,
+          element.award_direct_payment,
+          element.award_revenue_payment,
+          element.award_court_deposit,
+          element.lhoExtent1,
+          element.utilisedExtent,
+          element.notUtilisedExtent,
+          element.futureDevExtent,
+          element.lnhoExtent1
+
+
+        ]
+        getExportdata.push(data)
+      });
+
+
+
+      console.log('getExportdata', getExportdata);
+
+
+      const doc = new jsPDF();
+      const imageUrl = '/assets/img/Tnhbnew1.png'; // Replace with the path to your image
+      // doc.addImage(imageUrl, 'png', 70, 10, 40, 40);
+      const imageWidth = 25; // Adjust the image width as needed
+      const pdfWidth = doc.internal.pageSize.getWidth();
+
+      // const imageX = (pdfWidth - imageWidth) / 2;
+      const imageX = 10;
+
+      const imageY = 5; // Adjust the top margin as needed
+
+      // doc.addImage(imageUrl, 'png', 0, 0, 200, 30);
+
+      // doc.text(fileName + ' ' + '-' + ' ' + selectedDatetype + ':', 14, 15, { align: "center" });
+      // let cellWidth = this.selectedCategory == 1 || this.selectedCategory == 4 ? {
+
+      //   0: { cellWidth: 12 }, // Set width for column 0
+      //   1: { cellWidth: 28 }, // Set width for column 1
+      //   // Add more column styles as needed
+      // } : {
+
+      // };
+
+      autoTable(doc, {
+        head: [headerName],
+        body: getExportdata,
+        theme: 'grid', // 'striped', 'grid', 'plain', or 'css' (default is 'striped')
+        headStyles: {
+          fillColor: [14, 31, 83],
+          // Header background color
+          textColor: 255, // Header text color
+          // textColor: '#0E1F5',
+          fontSize: 5 // Header font size
+        },
+        bodyStyles: {
+          textColor: 0, // Body text color
+          fontSize: 5 // Body font size
+        },
+        // columnStyles: columnStyle,
+        alternateRowStyles: {
+          fillColor: [255, 255, 255] // Alternate row background color
+        },
+        // columnStyles: cellWidth,
+        margin: { top: 45 },
+        pageBreak: 'auto',
+        didDrawPage: (data) => {
+          // console.log('data', data.pageCount);
+          doc.addImage(imageUrl, 'png', 0, 0, 200, 30);
+          doc.setTextColor(14, 31, 83);
+          // let titleX = this.selectedDate != 5 ? 70 : 90
+          let titleY = 33;
+          // doc.text(fileName, 0, 0, { align: "center" });
+          doc.text(fileName, doc.internal.pageSize.getWidth() / 2, titleY, { align: "center" });
+
+          doc.setFontSize(10);
+          // let subTitle;
+
+          // doc.text(subTitle, titleX, 25, { align: "center" });
+          // if (type == "layoutProject") {
+          //   doc.text(this.layoutProjectSelect, doc.internal.pageSize.getWidth() / 2, 40, { align: 'center' });
+
+          // }
+          // doc.setFontSize(10);
+          doc.text('Page:' + ' ' + data.pageNumber + ', ' + 'Generated on: ' + formaateDate, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+        },
+      },)
+      debugger
+
+      if (getExportdata.length > 0) {
+        setTimeout(() => {
+          doc.save(fileName + '.pdf');
+        }, 100);
+
+      } else {
+
+      }
+
+    } catch (error) {
+      console.log('error', error);
+
+
+    }
+
+
+  }
+  exportExcel() {
+
+    this.excelData = this.dataSource.data.map((item, index) => ({
+
+      'S.No': index + 1,
+      'Scheme Name': item.v_NAME_OF_SCHEME,
+      'Division': item.v_NAME_OF_DIVISION,
+      'District': item.v_NAME_OF_DISTRICT,
+      'Village': item.v_NAME_OF_VILLAGE,
+      '4(1) (in acres)': item.fourone_total_extent,
+      '6DD (in acres)': item.sixdd_total_extent,
+      'Award (in acres)': item.v_TOTAL_EXTENT,
+      'Award Amount': item.n_TOTAL_AWARD_AMOUNT,
+      'DP Amount': item.award_direct_payment,
+      'RD Amount': item.award_revenue_payment,
+      'CC Amount': item.award_court_deposit,
+      'LHO (in acres)': item.lhoExtent1,
+      'Utilized (in acres)': item.utilisedExtent,
+      'Not Utilized (in acres)': item.notUtilisedExtent,
+      'Future Dev (in acres)': item.futureDevExtent,
+      'LNHO (in acres)': item.lnhoExtent1
+
+      // unique_code: item.unique_code,
+      // land_name: item.land_name,
+      // citynrural: item.citynrural,
+      // division: item.division,
+      // total_extent_land_acquired: item.total_extent_land_acquired,
+      // extent: item.extent,
+      // not_handed_over_extent: item.not_handed_over_extent,
+      // legalproceedings: item.legalproceedings
+
+
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(this.excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    FileSaver.saveAs(data, 'TableData.xlsx');
   }
 
 }

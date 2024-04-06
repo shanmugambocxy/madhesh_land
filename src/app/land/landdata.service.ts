@@ -3,16 +3,16 @@ import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
 
-const baseUrl1 = 'http://localhost:5000/landdigitdata/add';
-const baseUrl2 = 'http://localhost:5000/landdigitdata/get';
-const baseUrl3 = 'http://localhost:5000/landdigitdata/edit';
-const baseUrl4 = 'http://localhost:5000/landdigitdata/delete';
-const baseUrl5 = 'http://localhost:5000/api/ForgetPassword';
-const baseUrl6 = 'http://localhost:5000/api/changepassword';
-const baseUrl7 = 'http://localhost:5000/landdigitdata/report1';
-const baseUrl8 = 'http://localhost:5000/getfile';
-const baseUrl9 = 'http://localhost:5000/update';
-const baseUrl10 = 'http://localhost:5000/merge';
+const baseUrl1 = 'https://landapi.aocxy.com/landdigitdata/add';
+const baseUrl2 = 'https://landapi.aocxy.com/landdigitdata/get';
+const baseUrl3 = 'https://landapi.aocxy.com/landdigitdata/edit';
+const baseUrl4 = 'https://landapi.aocxy.com/landdigitdata/delete';
+const baseUrl5 = 'https://landapi.aocxy.com/api/ForgetPassword';
+const baseUrl6 = 'https://landapi.aocxy.com/api/changepassword';
+const baseUrl7 = 'https://landapi.aocxy.com/landdigitdata/report1';
+const baseUrl8 = 'https://landapi.aocxy.com/getfile';
+const baseUrl9 = 'https://landapi.aocxy.com/update';
+const baseUrl10 = 'https://landapi.aocxy.com/merge';
 
 
 
@@ -29,14 +29,14 @@ export class LanddataService {
   getDataforDivcircity(): Observable<any> {
     const types = sessionStorage.getItem('type')!;
     const values = sessionStorage.getItem('value')!;
-    return this.http.post(`http://localhost:5000/GetData`, { types: types, values: values })
+    return this.http.post(`https://landapi.aocxy.com/GetData`, { types: types, values: values })
       .pipe();
   }
 
   getCountDataforDivcircity(): Observable<any> {
     const types = sessionStorage.getItem('type')!;
     const values = sessionStorage.getItem('value')!;
-    return this.http.get(`http://localhost:5000/GetDataCount`, { params: { types: types, values: values } })
+    return this.http.get(`https://landapi.aocxy.com/GetDataCount`, { params: { types: types, values: values } })
       .pipe();
   }
 
@@ -62,7 +62,7 @@ export class LanddataService {
   }
 
   verifyotp(username: any, otp: any) {
-    return this.http.post<any>('http://localhost:5000/api/VerifyOtp', { username, otp }).pipe(
+    return this.http.post<any>('https://landapi.aocxy.com/api/VerifyOtp', { username, otp }).pipe(
       map(otpData => {
         sessionStorage.setItem('otpvalue', otp);
         return otpData;

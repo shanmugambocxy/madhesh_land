@@ -227,7 +227,7 @@ export class Report3IndComponent {
       "values": value
     };
 
-    this.http.post<any[]>('http://localhost:5000/GetCountDataVillage', requestBody).subscribe(
+    this.http.post<any[]>('https://landapi.aocxy.com/GetCountDataVillage', requestBody).subscribe(
       (response) => {
         if (response) {
 

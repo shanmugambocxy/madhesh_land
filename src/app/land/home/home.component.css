@@ -63,17 +63,35 @@
 }
 
 th {
-  background-color: #3FB8DE;
+  /* background-color: #3FB8DE; */
+
+  /* background-color: #FE9677 !important; */
+  /* background-color: #41436A !important; */
+  background-color: #9A7787 !important;
+
+  text-align: center;
+
+
+
   padding: 7px;
   border: 1px solid rgb(136, 134, 134);
 
 }
 
+tfoot {
+  background-image: linear-gradient(to bottom right, #987787, #E4AFB0, #FEB7BF) !important;
+}
+
+.footerbg {
+  background-image: linear-gradient(to bottom right, #987787, #E4AFB0, #FEB7BF) !important;
+
+}
+
 table tr:nth-child(odd) td {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  /* padding-top: 8px;
+  padding-bottom: 8px; */
   border: 1px solid rgb(136, 134, 134);
-  border-radius: 50px;
+  /* border-radius: 50px; */
 }
 
 table tr:nth-child(even) td {
@@ -152,7 +170,7 @@ td a i {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 ::ng-deep .mdc-button .mdc-button__label {
@@ -167,4 +185,19 @@ td a i {
 
 .displayicon {
   display: flex;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.total-bg {
+  padding: 0px;
+  text-align: center;
+  /* background: #0080001a; */
+  /* background: #f2f2f2; */
+  background-image: linear-gradient(180deg, #987787, #E4AFB0, #FEB7BF) !important;
+  /* border: solid 2px #FEB7BF !important; */
+  border: none !important;
+  font-weight: bold;
 }

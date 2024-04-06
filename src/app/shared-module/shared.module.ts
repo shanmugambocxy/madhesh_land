@@ -7,16 +7,17 @@ import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { CreatedAtSortPipe } from './created-at.pipe';
 import { ExcelMapComponent } from './excel-map/excel-map.component';
+import { DialogComponent } from "./dialog/dialog.component";
 
 @NgModule({
     declarations: [
-        ChartComponent,SnackbarComponent, ConfirmDialogComponent, CreatedAtSortPipe, ExcelMapComponent
+        ChartComponent, SnackbarComponent, ConfirmDialogComponent, CreatedAtSortPipe, ExcelMapComponent, DialogComponent
     ],
     exports: [
-        ChartComponent,SnackbarComponent,ConfirmDialogComponent,CreatedAtSortPipe,ExcelMapComponent
+        ChartComponent, SnackbarComponent, ConfirmDialogComponent, CreatedAtSortPipe, ExcelMapComponent
     ],
     imports: [
-        MaterialModule,FormsModule,CommonModule
+        MaterialModule, FormsModule, CommonModule
     ]
 })
 export class SharedModule { }

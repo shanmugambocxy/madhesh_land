@@ -4,9 +4,9 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AppResponse } from '../models/appResponse.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-// const API_URL = "http://localhost:5000/";
-const localUrl = "http://localhost:5000/";
-const API_URL = "http://localhost:5000/";
+// const API_URL = "https://landapi.aocxy.com/";
+const localUrl = "https://landapi.aocxy.com/";
+const API_URL = "https://landapi.aocxy.com/";
 
 
 @Injectable({
@@ -38,6 +38,7 @@ export class CommonService {
     let finalURL = API_URL + endPoint;
     return this.http.get<AppResponse>(finalURL).pipe(catchError(this.handleError));
   }
+
 
   apiGetDetailsCall(id: any, endPoint: string): Observable<AppResponse> {
     let finalURL = API_URL + endPoint;
@@ -84,5 +85,12 @@ export class CommonService {
     let finalURL = API_URL + endPoint;
     return this.http.get<AppResponse>(finalURL).pipe(catchError(this.handleError));
   }
+  apiRemovePostCall(endPoint: string): Observable<any> {
+    let finalURL = API_URL + endPoint;
+    console.log('finalURL', finalURL);
+
+    return this.http.get<any>(finalURL).pipe(catchError(this.handleError));
+  }
+
 
 }

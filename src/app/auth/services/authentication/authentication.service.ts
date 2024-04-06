@@ -27,7 +27,7 @@ export class AuthenticationService {
   }
 
   authenticate(username: any, password: any) {
-    return this.httpClient.post<any>('http://localhost:5000/api/login', { username, password });
+    return this.httpClient.post<any>('https://landapi.aocxy.com/api/login', { username, password });
   }
 
   getToken() {
@@ -50,7 +50,7 @@ export class AuthenticationService {
 
   authenticatelogout(username: any) {
 
-    return this.httpClient.post<any>('http://localhost:5000/api/logout', { username }).pipe(
+    return this.httpClient.post<any>('https://landapi.aocxy.com/api/logout', { username }).pipe(
       map(userData => {
         return userData;
       })

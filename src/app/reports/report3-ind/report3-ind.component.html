@@ -846,21 +846,21 @@
                     </ng-container>
                     <ng-container matColumnDef="direct">
                         <th mat-header-cell *matHeaderCellDef> Direct Payment </th>
-                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountDirectPayment| number:'1.2-2'}} </td>
+                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountDirectPayment}} </td>
                         <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('totalAmountDirectPayment')|
                             number:'1.2-2'}} </td>
 
                     </ng-container>
                     <ng-container matColumnDef="revenue">
                         <th mat-header-cell *matHeaderCellDef> Revenue Deposit </th>
-                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountRevenuePayment| number:'1.2-2'}} </td>
+                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountRevenuePayment}} </td>
                         <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('totalAmountRevenuePayment')|
                             number:'1.2-2'}} </td>
 
                     </ng-container>
                     <ng-container matColumnDef="cc">
                         <th mat-header-cell *matHeaderCellDef> CC Deposit </th>
-                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountCourtDeposit| number:'1.2-2'}} </td>
+                        <td mat-cell *matCellDef="let data2"> {{data2.totalAmountCourtDeposit}} </td>
                         <td mat-footer-cell *matFooterCellDef> {{getTotalTab6_N('totalAmountCourtDeposit')|
                             number:'1.2-2'}} </td>
 

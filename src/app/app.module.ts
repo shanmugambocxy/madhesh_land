@@ -68,7 +68,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig =
     Report1LAComponent,
     Report2LPComponent,
     ReportsComponent,
-    Report3IndComponent
+    Report3IndComponent,
+
   ],
   imports: [
     BrowserModule,

@@ -146,7 +146,7 @@ export class Report2LPComponent implements OnInit {
       "values": value
     };
 
-    this.http.post<any[]>('http://localhost:5000/GetCountDataVillage', requestBody).subscribe(
+    this.http.post<any[]>('https://landapi.aocxy.com/GetCountDataVillage', requestBody).subscribe(
       (response) => {
         const mappedResponse: Table2Data[] = response.map(item => ({
           division: item.v_NAME_OF_DIVISION,
@@ -204,7 +204,7 @@ export class Report2LPComponent implements OnInit {
       "values": value
     }
 
-    this.http.post<any[]>('http://localhost:5000/GetListDataVillage', requestBody).subscribe(
+    this.http.post<any[]>('https://landapi.aocxy.com/GetListDataVillage', requestBody).subscribe(
       (response) => {
         this.table2NewData = response;
         this.table2NewDataSource = new MatTableDataSource<Table2NewData>(this.table2NewData);

@@ -51,7 +51,7 @@ export class OtpComponent implements OnInit {
       username: username
     };
 
-    this.http.post(`http://localhost:5000/api/SendOtp`, data, { responseType: 'text' }).subscribe(
+    this.http.post(`https://landapi.aocxy.com/api/SendOtp`, data, { responseType: 'text' }).subscribe(
       response => {
         if (response) {
           this.userDisabled = true;
@@ -76,7 +76,7 @@ export class OtpComponent implements OnInit {
       otp: this.form.get('otp').value
     };
 
-    this.http.post('http://localhost:5000/api/VerifyOtp', data, { responseType: 'text' }).subscribe(
+    this.http.post('https://landapi.aocxy.com/api/VerifyOtp', data, { responseType: 'text' }).subscribe(
       response => {
         console.log(response);
         this.userDisabled = true;
@@ -96,7 +96,7 @@ export class OtpComponent implements OnInit {
       password: this.form.get('password').value
     };
 
-    this.http.post('http://localhost:5000/api/changepassword', data, { responseType: 'text' }).subscribe(
+    this.http.post('https://landapi.aocxy.com/api/changepassword', data, { responseType: 'text' }).subscribe(
       response => {
         console.log(response);
         this.passwordChanged = "Password Changed Successfully!"
