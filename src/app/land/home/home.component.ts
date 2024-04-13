@@ -691,7 +691,7 @@ export class HomeComponent implements OnInit {
       console.log('getExportdata', getExportdata);
 
 
-      const doc = new jsPDF();
+      const doc = new jsPDF('landscape');
       const imageUrl = '/assets/img/Tnhbnew1.png'; // Replace with the path to your image
       // doc.addImage(imageUrl, 'png', 70, 10, 40, 40);
       const imageWidth = 25; // Adjust the image width as needed
@@ -724,10 +724,12 @@ export class HomeComponent implements OnInit {
           textColor: 255, // Header text color
           // textColor: '#0E1F5',
           fontSize: 5 // Header font size
+
         },
         bodyStyles: {
           textColor: 0, // Body text color
           fontSize: 5 // Body font size
+
         },
         // columnStyles: columnStyle,
         alternateRowStyles: {
@@ -738,7 +740,9 @@ export class HomeComponent implements OnInit {
         pageBreak: 'auto',
         didDrawPage: (data) => {
           // console.log('data', data.pageCount);
-          doc.addImage(imageUrl, 'png', 0, 0, 200, 30);
+          // doc.addImage(imageUrl, 'png', 0, 0, 200, 30);
+          doc.addImage(imageUrl, 'png', 20, 0, 250, 30);
+
           doc.setTextColor(14, 31, 83);
           // let titleX = this.selectedDate != 5 ? 70 : 90
           let titleY = 33;

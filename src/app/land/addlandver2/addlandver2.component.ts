@@ -1732,7 +1732,7 @@ export class Addlandver2Component {
       // v_REF_NO: [''],
       v_TOTAL_EXTENT: [''],
       mode: [this.n_UNIQUE_ID ? 'edit' : 'create'],
-      n_UNIQUE_ID: [null],
+      n_UNIQUE_ID: [this.n_UNIQUE_ID],
       dynamicValuesDetails: this.formBuilder.array([]),
       sixDdDynamicFileEntityValuesDetails: this.formBuilder.array([]),
       n_ID: [null]
