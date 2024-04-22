@@ -19,7 +19,8 @@
                             <div class="form-group mb-3">
                                 <label class="label" for="name">Enter Username</label>
                                 <input type="text" class="form-control" placeholder="Username" id="username"
-                                    formControlName="userName" name="username" [disabled]="userDisabled">
+                                    formControlName="userName" name="username" [disabled]="userDisabled" maxlength="20"
+                                    (keypress)="nameValidate($event ,'username')">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary rounded submit px-3"
@@ -33,7 +34,8 @@
                             <div class="form-group mb-3" *ngIf="otpmessage">
                                 <label class="label" for="otp">Enter OTP</label>
                                 <input type="password" class="form-control" placeholder="Enter OTP" id="otp"
-                                    formControlName="otp" name="otp" [disabled]="otpDisabled">
+                                    formControlName="otp" name="otp" [disabled]="otpDisabled" maxlength="20"
+                                    (keypress)="nameValidate($event,'otp')">
                             </div>
                             <div class="form-group" *ngIf="otpmessage">
                                 <a>
@@ -49,7 +51,7 @@
                             <div class="form-group mb-3" *ngIf="otpverified">
                                 <label class="label" for="otp">Enter Password</label>
                                 <input type="password" class="form-control" placeholder="Enter Password"
-                                    formControlName="password" name="password">
+                                    formControlName="password" name="password" maxlength="20">
                             </div>
                             <div class="form-group" *ngIf="otpverified">
                                 <a><button mat-raised-button type="submit"

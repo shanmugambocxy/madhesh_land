@@ -7,7 +7,7 @@ import { SpinnerService } from './services/spinner.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'landdigit';
 
   showHead: boolean = false;
@@ -23,6 +23,14 @@ export class AppComponent {
         }
       }
     });
+  }
+  ngOnInit() {
+    debugger
+    let getToken = sessionStorage.getItem('token');
+    if (!getToken) {
+      this.router.navigate(['/login'])
+
+    }
   }
 
 

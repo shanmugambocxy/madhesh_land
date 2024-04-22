@@ -2710,6 +2710,7 @@ export class Addlandver2Component {
   }
 
 
+
   addpho(expansionPanelIndex: number) {
     const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
     const phoFieldsArray = expansionPanel.get('awardPossessionTakenOverEntityValuesDetails') as FormArray;
@@ -3531,113 +3532,124 @@ export class Addlandver2Component {
     const inputElement = event.target as HTMLInputElement;
 
     if (inputElement.files && inputElement.files.length > 0) {
-      const file = inputElement.files[0];
-      const originalFileName = file.name;
-      const fileExtension = originalFileName.split('.').pop();
-      var fileName: any;
-      if (tab == "fourOne") {
-        if (fileType == "file1") {
-          fileName = `fourone_file_1${myId}.${fileExtension}`;
-        } else {
-          fileName = `fourone_file_2${myId}.${fileExtension}`;
-        }
+      let checkExtension = inputElement.files[0].name.split('.');
+      if (checkExtension && checkExtension.length != 2) {
+        // this.message = "Please upload valid jpeg,jpg,png,pdf.";
       } else {
-        if (fileType == "file1") {
-          fileName = `sixdd_file_1${myId}.${fileExtension}`;
-        } else {
-          fileName = `sixdd_file_2${myId}.${fileExtension}`;
-        }
-      }
+        if (inputElement.files[0].type == "application/pdf") {
 
-      // const s3Direct = async (file: File, fileName: string) => {
-      try {
-        const s3 = new AWS.S3({
-          accessKeyId: this.aws_SecretKey.accessKeyId,
-          secretAccessKey: this.aws_SecretKey.secretKey,
-          region: this.aws_SecretKey.region
-        });
 
-        // const generatedFilename = this.generateFilename();
-        const params = {
-          Bucket: this.aws_SecretKey.bucketName,
-          Key: fileName,
-          Body: file
-        };
-
-        return new Promise((resolve, reject) => {
-          s3.upload(params, (err: any, data: any) => {
-            if (err) {
-              console.error('Error uploading file:', err);
-              reject(err);
-              this.isLoader = false;
+          const file = inputElement.files[0];
+          const originalFileName = file.name;
+          const fileExtension = originalFileName.split('.').pop();
+          var fileName: any;
+          if (tab == "fourOne") {
+            if (fileType == "file1") {
+              fileName = `fourone_file_1${myId}.${fileExtension}`;
             } else {
-              console.log('File uploaded successfully. File location:', data.Location);
-              // const fileuri = "http://tnhb-noc-docs.s3-website.ap-south-1.amazonaws.com/" + fileName;
-              const fileuri = "https://tnhb-land-docs.s3.amazonaws.com/" + fileName;
-
-
-              console.log('fileuri', fileuri);
-              // const filesdata = {
-              //   filename: fileName,
-              //   // appid: response.id,
-              //   filepath: fileuri,
-              //   // date: formattedDate
-              // };
-              if (tab == "fourOne") {
-                const expansionPanel = this.expansionPanelsArray4.at(expansionPanelIndex) as FormGroup;
-
-                if (fileType == "file1") {
-                  // fileName = `fourone_file_1.${fileExtension}`;
-
-                  expansionPanel.get(controlName)?.setValue(fileName);
-                  expansionPanel.get('v_FILE_1_FILEPATH')?.setValue(fileuri);
-                } else {
-                  // fileName = `fourone_file_1.${fileExtension}`;
-
-                  expansionPanel.get(controlName)?.setValue(fileName);
-                  expansionPanel.get('v_FILE_2_FILEPATH')?.setValue(fileuri);
-                }
-
-
-
-              } else {
-                const expansionPanelSixDD = this.expansionPanelsSixDD.at(expansionPanelIndex) as FormGroup;
-
-                if (fileType == "file1") {
-                  // fileName = `sixdd_file_1.${fileExtension}`;
-
-                  expansionPanelSixDD.get(controlName)?.setValue(fileName);
-                  expansionPanelSixDD.get('v_FILE_1_FILEPATH')?.setValue(fileuri);
-
-                } else {
-                  // fileName = `sixdd_file_2.${fileExtension}`;
-
-                  expansionPanelSixDD.get(controlName)?.setValue(fileName);
-                  expansionPanelSixDD.get('v_FILE_2_FILEPATH')?.setValue(fileuri);
-                }
-
-              }
-              this.isLoader = false;
-
-
-              // Add file data to database
-              // this.customerService.sendS3Data(filesdata).subscribe(
-              //   (response: any) => {
-              //     console.log(response);
-              //     resolve(response);
-              //   },
-              //   (error: any) => {
-              //     console.error("ERROR : ", error);
-              //     reject(error);
-              //   }
-              // );
-
+              fileName = `fourone_file_2${myId}.${fileExtension}`;
             }
-          });
-        });
-      } catch (error) {
-        // console.error(Error uploading ${fileName}:, error);
-        throw error;
+          } else {
+            if (fileType == "file1") {
+              fileName = `sixdd_file_1${myId}.${fileExtension}`;
+            } else {
+              fileName = `sixdd_file_2${myId}.${fileExtension}`;
+            }
+          }
+
+          // const s3Direct = async (file: File, fileName: string) => {
+          try {
+            const s3 = new AWS.S3({
+              accessKeyId: this.aws_SecretKey.accessKeyId,
+              secretAccessKey: this.aws_SecretKey.secretKey,
+              region: this.aws_SecretKey.region
+            });
+
+            // const generatedFilename = this.generateFilename();
+            const params = {
+              Bucket: this.aws_SecretKey.bucketName,
+              Key: fileName,
+              Body: file
+            };
+
+            return new Promise((resolve, reject) => {
+              s3.upload(params, (err: any, data: any) => {
+                if (err) {
+                  console.error('Error uploading file:', err);
+                  reject(err);
+                  this.isLoader = false;
+                } else {
+                  console.log('File uploaded successfully. File location:', data.Location);
+                  // const fileuri = "http://tnhb-noc-docs.s3-website.ap-south-1.amazonaws.com/" + fileName;
+                  const fileuri = "https://tnhb-land-docs.s3.amazonaws.com/" + fileName;
+
+
+                  console.log('fileuri', fileuri);
+                  // const filesdata = {
+                  //   filename: fileName,
+                  //   // appid: response.id,
+                  //   filepath: fileuri,
+                  //   // date: formattedDate
+                  // };
+                  if (tab == "fourOne") {
+                    const expansionPanel = this.expansionPanelsArray4.at(expansionPanelIndex) as FormGroup;
+
+                    if (fileType == "file1") {
+                      // fileName = `fourone_file_1.${fileExtension}`;
+
+                      expansionPanel.get(controlName)?.setValue(fileName);
+                      expansionPanel.get('v_FILE_1_FILEPATH')?.setValue(fileuri);
+                    } else {
+                      // fileName = `fourone_file_1.${fileExtension}`;
+
+                      expansionPanel.get(controlName)?.setValue(fileName);
+                      expansionPanel.get('v_FILE_2_FILEPATH')?.setValue(fileuri);
+                    }
+
+
+
+                  } else {
+                    const expansionPanelSixDD = this.expansionPanelsSixDD.at(expansionPanelIndex) as FormGroup;
+
+                    if (fileType == "file1") {
+                      // fileName = `sixdd_file_1.${fileExtension}`;
+
+                      expansionPanelSixDD.get(controlName)?.setValue(fileName);
+                      expansionPanelSixDD.get('v_FILE_1_FILEPATH')?.setValue(fileuri);
+
+                    } else {
+                      // fileName = `sixdd_file_2.${fileExtension}`;
+
+                      expansionPanelSixDD.get(controlName)?.setValue(fileName);
+                      expansionPanelSixDD.get('v_FILE_2_FILEPATH')?.setValue(fileuri);
+                    }
+
+                  }
+                  this.isLoader = false;
+
+
+                  // Add file data to database
+                  // this.customerService.sendS3Data(filesdata).subscribe(
+                  //   (response: any) => {
+                  //     console.log(response);
+                  //     resolve(response);
+                  //   },
+                  //   (error: any) => {
+                  //     console.error("ERROR : ", error);
+                  //     reject(error);
+                  //   }
+                  // );
+
+                }
+              });
+            });
+          } catch (error) {
+            // console.error(Error uploading ${fileName}:, error);
+            throw error;
+          }
+        } else {
+
+        }
       }
     } else {
       this.isLoader = false;
@@ -3656,124 +3668,133 @@ export class Addlandver2Component {
 
     const inputElement = event.target as HTMLInputElement;
     if (inputElement.files && inputElement.files.length > 0) {
-      const file = inputElement.files[0];
-      const originalFileName = file.name;
-      const fileExtension = originalFileName.split('.').pop();
-      var fileName: any;
-      if (type != 'DP' && type != 'RD' && type != 'CCD') {
-        fileName = `award_file${myId}.${fileExtension}`;
+      let checkExtension = inputElement.files[0].name.split('.');
+      if (checkExtension && checkExtension.length != 2) {
+        // this.message = "Please upload valid jpeg,jpg,png,pdf.";
+      } else {
+        if (inputElement.files[0].type == "application/pdf") {
+          const file = inputElement.files[0];
+          const originalFileName = file.name;
+          const fileExtension = originalFileName.split('.').pop();
+          var fileName: any;
+          if (type != 'DP' && type != 'RD' && type != 'CCD') {
+            fileName = `award_file${myId}.${fileExtension}`;
 
-      }
-      if (type == 'DP') {
-        fileName = `award_DP${myId}.${fileExtension}`;
+          }
+          if (type == 'DP') {
+            fileName = `award_DP${myId}.${fileExtension}`;
 
-      }
-      if (type == 'RD') {
-        fileName = `award_RD${myId}.${fileExtension}`;
+          }
+          if (type == 'RD') {
+            fileName = `award_RD${myId}.${fileExtension}`;
 
-      }
-      if (type == 'CCD') {
-        fileName = `award_CCD${myId}.${fileExtension}`;
+          }
+          if (type == 'CCD') {
+            fileName = `award_CCD${myId}.${fileExtension}`;
 
-      }
-      // if (type == 'lho') {
-      //   fileName = `award_${myId}.${fileExtension}`;
+          }
+          // if (type == 'lho') {
+          //   fileName = `award_${myId}.${fileExtension}`;
 
-      // }
+          // }
 
 
 
-      // const s3Direct = async (file: File, fileName: string) => {
-      try {
-        const s3 = new AWS.S3({
-          accessKeyId: this.aws_SecretKey.accessKeyId,
-          secretAccessKey: this.aws_SecretKey.secretKey,
-          region: this.aws_SecretKey.region
-        });
+          // const s3Direct = async (file: File, fileName: string) => {
+          try {
+            const s3 = new AWS.S3({
+              accessKeyId: this.aws_SecretKey.accessKeyId,
+              secretAccessKey: this.aws_SecretKey.secretKey,
+              region: this.aws_SecretKey.region
+            });
 
-        // const generatedFilename = this.generateFilename();
-        const params = {
-          Bucket: this.aws_SecretKey.bucketName,
-          Key: fileName,
-          Body: file
-        };
+            // const generatedFilename = this.generateFilename();
+            const params = {
+              Bucket: this.aws_SecretKey.bucketName,
+              Key: fileName,
+              Body: file
+            };
 
-        return new Promise((resolve, reject) => {
-          s3.upload(params, (err: any, data: any) => {
-            if (err) {
-              console.error('Error uploading file:', err);
+            return new Promise((resolve, reject) => {
+              s3.upload(params, (err: any, data: any) => {
+                if (err) {
+                  console.error('Error uploading file:', err);
+                  // this.isLoader = false;
+
+                  reject(err);
+                } else {
+                  console.log('File uploaded successfully. File location:', data.Location);
+                  // const fileuri = "http://tnhb-noc-docs.s3-website.ap-south-1.amazonaws.com/" + fileName;
+                  const fileuri = "https://tnhb-land-docs.s3.amazonaws.com/" + fileName;
+
+
+                  console.log('fileuri', fileuri);
+                  // const filesdata = {
+                  //   filename: fileName,
+                  //   // appid: response.id,
+                  //   filepath: fileuri,
+                  //   // date: formattedDate
+                  // };
+                  const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
+
+                  // expansionPanel.get(controlName)?.setValue(fileName);
+                  if (type != 'DP' && type != 'RD' && type != 'CCD') {
+                    if (controlName == 'v_FILE_NAME') {
+                      expansionPanel.get(controlName)?.setValue(fileName);
+
+                      expansionPanel.get('v_FILE_PATH')?.setValue(fileuri);
+                    }
+
+                    if (controlName == 'v_FILE_NAME_lho') {
+                      expansionPanel.get(controlName)?.setValue(fileName);
+
+                      expansionPanel.get('v_FILE_PATH_lho')?.setValue(fileuri);
+
+                    }
+                    if (controlName == 'v_LHO_FILE_NAME') {
+                      expansionPanel.get(controlName)?.setValue(fileName);
+
+                      expansionPanel.get('v_LHO_FILE_PATH')?.setValue(fileuri);
+
+                    }
+                  }
+
+
+                  if (type == 'DP') {
+                    const awardFieldsDirectFormArray = (expansionPanel.controls['awardDirectPaymentEntityValuesDetails'] as FormArray);
+                    const awarddirectpayField = awardFieldsDirectFormArray.at(fileIndex) as FormGroup;
+                    awarddirectpayField.controls['v_FILE_NAME'].setValue(fileName);
+                    awarddirectpayField.controls['v_FILE_PATH'].setValue(fileuri);
+
+                  }
+                  if (type == 'RD') {
+                    const awardFieldsRevenueFormArray = (expansionPanel.controls['awardRevenuePaymentEntityValuesDetails'] as FormArray);
+                    const awardrevenuepayField = awardFieldsRevenueFormArray.at(fileIndex) as FormGroup;
+                    awardrevenuepayField.controls['v_FILE_NAME'].setValue(fileName);
+                    awardrevenuepayField.controls['v_FILE_PATH'].setValue(fileuri);
+
+                  }
+                  if (type == 'CCD') {
+                    const awardFieldsCourtFormArray = (expansionPanel.controls['awardCourtDepositPaymentEntityValuesDetails'] as FormArray);
+                    const awardcourtpayField = awardFieldsCourtFormArray.at(fileIndex) as FormGroup;
+                    awardcourtpayField.controls['v_FILE_NAME'].setValue(fileName);
+                    awardcourtpayField.controls['v_FILE_PATH'].setValue(fileuri);
+
+                  }
+                }
+              });
               // this.isLoader = false;
 
-              reject(err);
-            } else {
-              console.log('File uploaded successfully. File location:', data.Location);
-              // const fileuri = "http://tnhb-noc-docs.s3-website.ap-south-1.amazonaws.com/" + fileName;
-              const fileuri = "https://tnhb-land-docs.s3.amazonaws.com/" + fileName;
+            });
+          } catch (error) {
+            // console.error(Error uploading ${fileName}:, error);
+            // this.isLoader = false;
 
+            throw error;
+          }
+        } else {
 
-              console.log('fileuri', fileuri);
-              // const filesdata = {
-              //   filename: fileName,
-              //   // appid: response.id,
-              //   filepath: fileuri,
-              //   // date: formattedDate
-              // };
-              const expansionPanel = this.expansionPanelsAward.at(expansionPanelIndex) as FormGroup;
-
-              // expansionPanel.get(controlName)?.setValue(fileName);
-              if (type != 'DP' && type != 'RD' && type != 'CCD') {
-                if (controlName == 'v_FILE_NAME') {
-                  expansionPanel.get(controlName)?.setValue(fileName);
-
-                  expansionPanel.get('v_FILE_PATH')?.setValue(fileuri);
-                }
-
-                if (controlName == 'v_FILE_NAME_lho') {
-                  expansionPanel.get(controlName)?.setValue(fileName);
-
-                  expansionPanel.get('v_FILE_PATH_lho')?.setValue(fileuri);
-
-                }
-                if (controlName == 'v_LHO_FILE_NAME') {
-                  expansionPanel.get(controlName)?.setValue(fileName);
-
-                  expansionPanel.get('v_LHO_FILE_PATH')?.setValue(fileuri);
-
-                }
-              }
-
-
-              if (type == 'DP') {
-                const awardFieldsDirectFormArray = (expansionPanel.controls['awardDirectPaymentEntityValuesDetails'] as FormArray);
-                const awarddirectpayField = awardFieldsDirectFormArray.at(fileIndex) as FormGroup;
-                awarddirectpayField.controls['v_FILE_NAME'].setValue(fileName);
-                awarddirectpayField.controls['v_FILE_PATH'].setValue(fileuri);
-
-              }
-              if (type == 'RD') {
-                const awardFieldsRevenueFormArray = (expansionPanel.controls['awardRevenuePaymentEntityValuesDetails'] as FormArray);
-                const awardrevenuepayField = awardFieldsRevenueFormArray.at(fileIndex) as FormGroup;
-                awardrevenuepayField.controls['v_FILE_NAME'].setValue(fileName);
-                awardrevenuepayField.controls['v_FILE_PATH'].setValue(fileuri);
-
-              }
-              if (type == 'CCD') {
-                const awardFieldsCourtFormArray = (expansionPanel.controls['awardCourtDepositPaymentEntityValuesDetails'] as FormArray);
-                const awardcourtpayField = awardFieldsCourtFormArray.at(fileIndex) as FormGroup;
-                awardcourtpayField.controls['v_FILE_NAME'].setValue(fileName);
-                awardcourtpayField.controls['v_FILE_PATH'].setValue(fileuri);
-
-              }
-            }
-          });
-          // this.isLoader = false;
-
-        });
-      } catch (error) {
-        // console.error(Error uploading ${fileName}:, error);
-        // this.isLoader = false;
-
-        throw error;
+        }
       }
     } else {
       // this.isLoader = false;
@@ -5426,7 +5447,33 @@ export class Addlandver2Component {
       }
     });
   }
+  inputValidate(evt, field) {
+    debugger
+    const theEvent = evt || window.event;
+    let key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    let regexValue = /[0-9.]/;
+    if (field == 'Name') {
+      regexValue = /[,0-9.a-zA-Z ()+&-]/;
+    } else if (field == 'unicode') {
+      regexValue = /[0-9 a-zA-Z]/;
 
+    } else if (field == 'numbersonly') {
+      regexValue = /[.0-9 ]/;
+    }
+
+
+    const regex = regexValue;
+    if (!regex.test(key)) {
+      theEvent.returnValue = false;
+      if (theEvent.preventDefault) {
+        theEvent.preventDefault();
+      }
+    }
+
+    // console.log('evt', evt.target.value);
+
+  }
 
 }
 

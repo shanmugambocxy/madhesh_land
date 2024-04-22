@@ -109,4 +109,32 @@ export class OtpComponent implements OnInit {
     );
   }
 
+  nameValidate(evt, field) {
+    debugger
+    const theEvent = evt || window.event;
+    let key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    let regexValue = /[a-zA-Z 0-9]/;
+    if (field == 'username') {
+      regexValue = /[a-zA-Z 0-9]/;
+    } else if (field == 'number') {
+      regexValue = /[0-9]/;
+    } else if (field == 'caps') {
+      regexValue = /[A-Z0-9]/;
+    } else {
+      regexValue = /[0-9]/;
+    }
+    const regex = regexValue;
+    if (!regex.test(key)) {
+      theEvent.returnValue = false;
+      if (theEvent.preventDefault) {
+        theEvent.preventDefault();
+      }
+    }
+
+    // console.log('evt', evt.target.value);
+
+
+  }
+
 }

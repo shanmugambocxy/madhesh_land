@@ -97,7 +97,8 @@
         <div class=" col">
           <mat-form-field class="example-full-width-100">
             <mat-label>Name of the Scheme:</mat-label>
-            <input matInput type="text" formControlName="v_NAME_OF_SCHEME" placeholder="" [readonly]="this.view">
+            <input matInput type="text" formControlName="v_NAME_OF_SCHEME" placeholder="" [readonly]="this.view"
+              maxlength="100" (keypress)="inputValidate($event,'Name')">
             <mat-error *ngIf="personalInfoFormGroup.controls['v_NAME_OF_SCHEME'].errors?.required">
               Scheme is <strong>required</strong>
             </mat-error>
@@ -134,14 +135,16 @@
             <div class="col">
               <mat-form-field class="example-full-width4_1">
                 <mat-label>Gazette Notification Ref. No</mat-label>
-                <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO">
+                <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO" maxlength="100"
+                  (keypress)="inputValidate($event,'Name')">
               </mat-form-field>
             </div>
             <div class="col">
 
               <mat-form-field class="example-full-width4_1">
                 <mat-label>4(1) G.O</mat-label>
-                <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_4_ONE_GO">
+                <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_4_ONE_GO" maxlength="100"
+                  (keypress)="inputValidate($event,'Name')">
 
               </mat-form-field>
             </div>
@@ -167,6 +170,7 @@
                 *ngIf="panel.get('v_FILE_1_FILEPATH')?.value && (edit ||view)">
                 <mat-icon style="color: red;">get_app</mat-icon>Download Attachment
               </a>
+              <br>
             </div>
             <div class="col mx-auto" style="    text-align: center;margin-top: 10px;" *ngIf="view">
 
@@ -195,7 +199,7 @@
               <mat-form-field class="example-full-width4_1" style="padding-left: 0px;">
                 <mat-label>Total Extent (in acres)</mat-label>
                 <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT"
-                  (keypress)="numberValidateWithDecimal($event)">
+                  (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
               </mat-form-field>
             </div>
             <div class="col">
@@ -238,13 +242,15 @@
             <div class="col">
               <mat-form-field class="example-full-width1">
                 <mat-label>Gazette Notification Ref. No</mat-label>
-                <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO">
+                <input matInput [readonly]="this.view" type="text" formControlName="v_GAZETTE_REF_NO" maxlength="100"
+                  (keypress)="inputValidate($event,'Name')">
               </mat-form-field>
             </div>
             <div class="col">
               <mat-form-field class="example-full-width1">
                 <mat-label>6DD G.O</mat-label>
-                <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_6DD_GO">
+                <input matInput type="text" [readonly]="this.view" formControlName="d_DATE_OF_6DD_GO" maxlength="100"
+                  (keypress)="inputValidate($event,'Name')">
 
               </mat-form-field>
             </div>
@@ -298,7 +304,7 @@
               <mat-form-field class="example-full-width1" style="padding-left: 0px;">
                 <mat-label>Total Extent (in acres)</mat-label>
                 <input matInput [readonly]="this.view" type="tel" formControlName="v_TOTAL_EXTENT"
-                  (keypress)="numberValidateWithDecimal($event)">
+                  (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
               </mat-form-field>
             </div>
             <div class="col">
@@ -355,7 +361,8 @@
             <div class="col">
               <mat-form-field>
                 <mat-label>Award Number</mat-label>
-                <input matInput [readonly]="this.view" type="text" formControlName="v_AWARD_NO">
+                <input matInput [readonly]="this.view" type="text" formControlName="v_AWARD_NO" maxlength="100"
+                  (keypress)="inputValidate($event,'Name')">
               </mat-form-field>
             </div>
 
@@ -373,13 +380,15 @@
             <div class="col">
               <mat-form-field>
                 <mat-label>Total Extent (in acres)</mat-label>
-                <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT">
+                <input matInput [readonly]="this.view" type="text" formControlName="v_TOTAL_EXTENT" maxlength="50"
+                  (keypress)="inputValidate($event,'numbersonly')">
               </mat-form-field>
             </div>
             <div class="col">
               <mat-form-field>
                 <mat-label>Total Award Amount</mat-label>
-                <input matInput [readonly]="this.view" type="text" formControlName="n_TOTAL_AWARD_AMOUNT">
+                <input matInput [readonly]="this.view" type="text" formControlName="n_TOTAL_AWARD_AMOUNT" maxlength="50"
+                  (keypress)="inputValidate($event,'numbersonly')">
               </mat-form-field>
 
 
@@ -457,7 +466,8 @@
 
                     <mat-form-field class="inputDeposit">
                       <mat-label>Amount</mat-label>
-                      <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT">
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT" maxlength="50"
+                        (keypress)="inputValidate($event,'numbersonly')">
                     </mat-form-field>
                   </div>
 
@@ -539,7 +549,8 @@
                   <div class="col-5">
                     <mat-form-field class="inputDeposit">
                       <mat-label>Amount</mat-label>
-                      <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT">
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT" maxlength="50"
+                        (keypress)="inputValidate($event,'numbersonly')">
                     </mat-form-field>
                   </div>
                   <div class="col-5" *ngIf="!view">
@@ -626,7 +637,8 @@
                   <div class="col-5">
                     <mat-form-field class="inputDeposit">
                       <mat-label>Amount</mat-label>
-                      <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT">
+                      <input matInput [readonly]="this.view" type="text" formControlName="v_AMOUNT" maxlength="50"
+                        (keypress)="inputValidate($event,'numbersonly')">
                     </mat-form-field>
                   </div>
                   <div class="col-5" *ngIf="!view">
@@ -711,7 +723,8 @@
               <mat-form-field>
                 <!-- <input matInput [readonly]="this.view" type="text" formControlName="v_LHO_EXTENT_ACRES"
                   (keypress)="numberValidateWithDecimal($event)"> -->
-                <input matInput [readonly]="this.view" type="text" formControlName="v_LHO_EXTENT_ACRES">
+                <input matInput [readonly]="view" type="text" formControlName="v_LHO_EXTENT_ACRES" maxlength="50"
+                  (keypress)="inputValidate($event,'numbersonly')">
 
               </mat-form-field>
 
@@ -779,7 +792,7 @@
               <mat-form-field>
 
                 <input matInput [readonly]="this.view" type="text" formControlName="v_LNHO_EXTENT_ACRES"
-                  (keypress)="numberValidateWithDecimal($event)">
+                  (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
               </mat-form-field>
 
 
@@ -824,7 +837,7 @@
 
               <mat-form-field class="btn-width">
                 <input matInput [readonly]="this.view" type="text" formControlName="utilisedExtent"
-                  (keypress)="numberValidateWithDecimal($event)">
+                  (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
               </mat-form-field>
             </div>
             <div class="col-2" *ngIf="!view">
@@ -871,7 +884,7 @@
                     <!-- <mat-label>Utilised for </mat-label> -->
 
                     <input matInput [readonly]="this.view" type="text" formControlName="v_EXTEND"
-                      (keypress)="numberValidateWithDecimal($event)">
+                      (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
                   </mat-form-field>
 
                 </div>
@@ -884,7 +897,7 @@
 
               <mat-form-field class="btn-width">
                 <input matInput [readonly]="this.view" type="text" formControlName="futureDevExtent"
-                  (keypress)="numberValidateWithDecimal($event)">
+                  (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
               </mat-form-field>
             </div>
 
@@ -900,8 +913,8 @@
               <mat-label>Not Utilised Extent </mat-label>
               <br>
               <mat-form-field class="btn-width">
-                <input matInput [readonly]="this.view" type="text" formControlName="notUtilisedLhoExtentList"
-                  (keypress)="numberValidateWithDecimal($event)">
+                <input matInput [readonly]="view" type="text" formControlName="notUtilisedLhoExtentList"
+                  (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
               </mat-form-field>
             </div>
             <div class="col-2" *ngIf="!view">
@@ -946,7 +959,7 @@
                   <mat-form-field class="btn-width">
                     <!-- <mat-label>Utilised for </mat-label> -->
                     <input matInput [readonly]="this.view" type="text" formControlName="v_EXTEND"
-                      (keypress)="numberValidateWithDecimal($event)">
+                      (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
                   </mat-form-field>
                 </div>
               </div>
@@ -965,7 +978,7 @@
                 <!-- <input matInput [readonly]="this.view" type="text" formControlName="lnhoExtent1"
                   (keypress)="numberValidateWithDecimal($event)"> -->
                 <!-- <input matInput readonly type="text" [(ngModel)]="lnhoextent" [ngModelOptions]="{standalone: true}"> -->
-                <input matInput readonly type="text" [value]="panel.get('v_LNHO_EXTENT_ACRES').value">
+                <input matInput readonly type="text" [value]="panel.get('v_LNHO_EXTENT_ACRES').value" maxlength="50">
 
               </mat-form-field>
             </div>
@@ -1008,17 +1021,19 @@
                 </mat-select>
               </mat-form-field>
             </div> -->
+
+
             <div class="col" style="padding-left: 0px;display: contents;flex: auto;">
               <div formArrayName="lnho_selected_extent_list" style="display: contents;">
                 <div class="col-2" *ngFor=" let field of panel.get('lnho_selected_extent_list').controls; let j=index"
                   [formGroupName]="j">
                   <mat-label style="text-wrap: nowrap;">{{field.get('v_LHONSELECTEDEXTENTINLIST').value}} Extent
                   </mat-label><br>
-                  <mat-form-field style="padding-right: 16px;">
+                  <mat-form-field class="btn-width">
                     <!-- <mat-label>Utilised for </mat-label> -->
 
                     <input matInput [readonly]="this.view" type="text" formControlName="v_EXTEND"
-                      (keypress)="numberValidateWithDecimal($event)">
+                      (keypress)="inputValidate($event,'numbersonly')" maxlength="50">
                   </mat-form-field>
                 </div>
               </div>

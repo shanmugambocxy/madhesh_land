@@ -14,22 +14,25 @@
                     <span class="row" style="font-size: x-large;font-weight: 700;margin: 10px;">Login to your
                         Account</span>
                     <form class="signin-form" [formGroup]="form" autocomplete="off">
-                        <div class="form-group mb-3">
+                        <!-- mb-3 -->
+                        <div class="form-group mrg_btm">
 
                             <mat-form-field class="example-full-width">
                                 <mat-label>Username</mat-label>
                                 <input matInput type="text" formControlName="username" placeholder=""
-                                    [disabled]="isDisabled">
+                                    [disabled]="isDisabled" maxlength="20"
+                                    (keypress)="nameValidate($event ,'username')">
                                 <mat-error *ngIf="form.controls['username'].errors?.required">
                                     Username is <strong>required</strong>
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mrg_btm">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Password</mat-label>
                                 <input matInput [type]="hide ? 'password' : 'text'" formControlName="password_encrypted"
-                                    [disabled]="isDisabled">
+                                    [disabled]="isDisabled" maxlength="20"
+                                    (keypress)="nameValidate($event ,'password')">
                                 <button mat-icon-button matSuffix (click)="hide = !hide"
                                     [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -37,6 +40,28 @@
                                 <mat-error *ngIf="form.controls['password_encrypted'].errors?.required">
                                     Password is <strong>required</strong>
                                 </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group mrg_btm" style="text-align: center;">
+                            <mat-label class="bg_captcha">{{randomNumber}}
+
+
+                            </mat-label>
+                            <mat-icon (click)="captchaRandomNumber()"
+                                style="vertical-align: sub;margin-left: 5px;">refresh</mat-icon>
+                            <mat-form-field class="example-full-width" style="margin-top: 5px;">
+                                <!-- <mat-label>Password</mat-label> -->
+
+                                <input matInput [(ngModel)]="captcha" maxlength="6"
+                                    (keypress)="nameValidate($event ,'caps')" (paste)="onPaste($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                <!-- <button mat-icon-button matSuffix (click)="hide = !hide"
+                                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button> -->
+                                <!-- <mat-error *ngIf="form.controls['password_encrypted'].errors?.required">
+                                    Password is <strong>required</strong>
+                                </mat-error> -->
                             </mat-form-field>
                         </div>
                         <div class="form-group" *ngIf="invalidLogin">

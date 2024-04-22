@@ -118,3 +118,15 @@ label {
   justify-content: center;
   font-weight: 600;
 }
+
+.bg_captcha {
+  background-image: url('../../assets/img/capchabg.png');
+
+  color: black;
+
+  font-size: 20px;
+}
+
+.mrg_btm {
+  margin-bottom: 0px !important;
+}
